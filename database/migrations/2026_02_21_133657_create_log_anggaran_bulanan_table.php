@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('log_m_aset_kantor', function (Blueprint $table) {
+        Schema::create('log_anggaran_bulanan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('maintenance_aset_kantor_id');
+            $table->foreignId('anggaran_bulanan_id');
             $table->foreignId('user_id');
             $table->text('keterangan');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('maintenance_aset_kantor_id')
+            $table->foreign('anggaran_bulanan_id')
                 ->references('id')
-                ->on('maintenance_aset_kantor')
+                ->on('anggaran_bulanan')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('log_m_aset_kantor');
+        Schema::dropIfExists('log_anggaran_bulanan');
     }
 };

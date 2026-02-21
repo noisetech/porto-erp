@@ -13,11 +13,20 @@ return new class extends Migration
     {
         Schema::create('kategori_anggaran', function (Blueprint $table) {
             $table->id();
-            // OPEX (Operational Expenditure), CAPEX (Capital Expenditure), atau SDM (Sumber Daya Manusia),
-            $table->string('kategori_anggaran');
+            $table->string('kode_kategori');
+            $table->string('nama_kategori');
+            $table->foreignId('coa_id');
             $table->string('slug')->nullable();
+            $table->boolean('aktif')->default(true);
+            $table->string('keterangan')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('coa_id')
+                ->references('id')
+                ->on('coa')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

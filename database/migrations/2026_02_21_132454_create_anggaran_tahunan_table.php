@@ -11,21 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('log_m_aset_kantor', function (Blueprint $table) {
+        Schema::create('anggaran_tahunan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('maintenance_aset_kantor_id');
-            $table->foreignId('user_id');
-            $table->text('keterangan');
+            $table->year('tahun_anggaran');
+            $table->enum('status', ['draft', 'diajukan', 'disetujui', 'ditolak'])->default('draft');
+            $table->foreignId('disetujui_oleh_id');
+            $table->timestamp('disetujui_pada')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('maintenance_aset_kantor_id')
-                ->references('id')
-                ->on('maintenance_aset_kantor')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->foreign('user_id')
+            $table->foreign('disetujui_oleh_id')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('cascade')
@@ -38,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('log_m_aset_kantor');
+        Schema::dropIfExists('anggaran_tahunan');
     }
 };

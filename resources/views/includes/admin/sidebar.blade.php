@@ -99,7 +99,7 @@
                         </ul>
                         <span class="submenu-opener"><i class="bi bi-chevron-right"></i></span>
                     </li>
-                    <li class="menu-item"><a href="contacts.html"> Chart Of Account</a></li>
+                    <li class="menu-item"><a href="{{ route('coa') }}"> Chart Of Account</a></li>
                     <li class="menu-item"><a href="contacts.html"> Partner (Customer & Supplier)</a></li>
 
                     <li class="menu-item"><a href="files.html"> Bank</a></li>

@@ -13,15 +13,21 @@ return new class extends Migration
     {
         Schema::create('l_sub_kategori_anggaran', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sub_kategori_anggran_id');
+            $table->foreignId('sub_kategori_anggaran_id');
             $table->foreignId('user_id');
             $table->text('keterangan');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('sub_kategori_anggran_id')
+            $table->foreign('sub_kategori_anggaran_id')
                 ->references('id')
-                ->on('sub_kategori_anggran')
+                ->on('sub_kategori_anggaran')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

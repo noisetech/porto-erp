@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Anggaran\KategoriAnggaranController;
 use App\Http\Controllers\Admin\Anggaran\SubKategoriAnggaranController;
 use App\Http\Controllers\Admin\AsetKantor\KategoriAsetController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Finance\CoaController;
 use App\Http\Controllers\Admin\HR\DapertemenController;
 use App\Http\Controllers\Admin\HR\JabatanController;
 use App\Http\Controllers\Admin\RoleControlelr;
@@ -107,6 +108,17 @@ Route::prefix('/admin')->group(function () {
         ->name('master.kategori_aset.hapus');
     Route::get('/master/kategori-aset', [KategoriAsetController::class, 'index'])
         ->name('kategori_aset_hr');
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route Bagian Manajemen COA
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/master/finance/coa', [CoaController::class, 'index'])
+        ->name('coa');
 
 
     /*
