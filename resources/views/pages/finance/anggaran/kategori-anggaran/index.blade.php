@@ -1,6 +1,6 @@
 @extends('layouts.be')
 
-@section('title', 'HR-Dapertemen')
+@section('title', 'Kategori Anggaran')
 @section('content')
 
 <style>
@@ -29,7 +29,7 @@
     <div class="inner-contents">
         <div class="page-header d-flex align-items-center justify-content-between mr-bottom-30">
             <div class="left-part">
-                <h2 class="text-dark">Manajemen Dapertemen</h2>
+                <h2 class="text-dark">Kategori Anggaran</h2>
             </div>
         </div>
 
@@ -47,8 +47,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kode</th>
-                                <th>Dapertemen</th>
+                                <th>Kategori Anggaran</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -64,7 +63,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Dapertemen</h5>
+                <h5 class="modal-title">Tambah Kategori Anggaran</h5>
                 <button type="button" class="btn-close TutupModalTambah"></button>
             </div>
             <div class="modal-body">
@@ -72,20 +71,11 @@
                     @csrf
 
                     <div class="form-group">
-                        <label for="">Kode:</label>
-                        <input name="kode" class="form-control"></input>
-                        <span id="kode_error" class="text-danger error-text my-2">
+                        <label for="">Kategori Anggaran:</label>
+                        <input name="kategori_anggaran" class="form-control"></input>
+                        <span id="kategori_anggaran_error" class="text-danger error-text my-2">
                         </span>
                     </div>
-
-                    <div class="form-group">
-                        <label for="">Dapertemen:</label>
-                        <input name="nama_dapertemen" class="form-control"></input>
-                        <span id="nama_dapertemen_error" class="text-danger error-text my-2">
-                        </span>
-                    </div>
-
-
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalTambah">Tutup</button>
@@ -155,7 +145,7 @@
 
             order: [],
             ajax: {
-                url: "{{ route('dapertemen.data') }}",
+                url: "{{ route('master.kategori_anggaran.data') }}",
                 type: "get",
             },
             columns: [{
@@ -163,14 +153,10 @@
                     name: 'no'
                 },
                 {
-                    data: 'kode',
-                    name: 'kode'
+                    data: 'kategori_anggaran',
+                    name: 'kategori_anggaran'
                 },
 
-                {
-                    data: 'nama_dapertemen',
-                    name: 'nama_dapertemen'
-                },
                 {
                     data: 'action',
                     name: 'action'
@@ -184,7 +170,7 @@
                 infoFiltered: "(difilter dari _MAX_ total data)",
                 zeroRecords: "Tidak ada data yang cocok",
                 emptyTable: "Tidak ada data tersedia",
-                lengthMenu: "Tampilkan _MENU_ data",
+                lengthMenu: "Tampilkan _MENU_",
                 search: "Cari:",
                 searchPlaceholder: "Berdasrkan nama atau npm",
                 paginate: {
@@ -203,7 +189,7 @@
             let formData = new FormData(this);
 
             $.ajax({
-                url: '{{ route("dapertemen.simpan") }}',
+                url: '{{ route("master.kategori_anggaran.simpan") }}',
                 method: 'POST',
                 data: formData,
                 processData: false,
@@ -275,18 +261,14 @@
         e.preventDefault();
         let id = $(this).attr('data-id');
         $.ajax({
-            url: '/admin/dapertemen/getDataById/' + id,
+            url: '/admin/master/kategori-anggaran/getDataById/' + id,
             method: "GET",
             processData: false,
             contentType: false,
             success: function(response) {
 
-                console.log(response.data.nama_dapertemen);
+                console.log(response);
 
-                $('#modalEdit').modal('show');
-                $('#id').val(response.data.id);
-                $('#kode').val(response.data.kode);
-                $('#nama_dapertemen').val(response.data.nama_dapertemen);
             },
         })
     });
@@ -352,7 +334,7 @@
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('dapertemen.hapus') }}",
+                    url: "{{ route('master.kategori_anggaran.hapus') }}",
                     data: {
                         id: id,
                         _token: "{{ csrf_token() }}"

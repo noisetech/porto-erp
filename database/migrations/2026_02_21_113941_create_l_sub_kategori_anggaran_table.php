@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sub_kategori_anggran', function (Blueprint $table) {
+        Schema::create('l_sub_kategori_anggaran', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kategori_anggaran_id');
-            $table->string('nama_sub_kategori_anggaran');
-            $table->string('komponen_sub_kategori_anggaran');
+            $table->foreignId('sub_kategori_anggran_id');
+            $table->foreignId('user_id');
+            $table->text('keterangan');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('kategori_anggaran_id')
+            $table->foreign('sub_kategori_anggran_id')
                 ->references('id')
-                ->on('kategori_anggaran')
+                ->on('sub_kategori_anggran')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sub_kategori_anggran');
+        Schema::dropIfExists('l_sub_kategori_anggaran');
     }
 };

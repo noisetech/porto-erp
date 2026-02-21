@@ -94,7 +94,7 @@
                     <li class="menu-item menu-item-has-children"><a href="#"> Anggaran</a>
                         <ul class="sub-menu">
                             <li class="menu-item"><a href="{{ route('master.kategori_anggaran') }}"> Kategori Anggaran</a></li>
-                            <li class="menu-item"><a href="project-details.html"> Sub Kategori Anggaran</a></li>
+                            <li class="menu-item"><a href="{{ route('master.sub-kategori_anggaran') }}"> Sub Kategori Anggaran</a></li>
                             <li class="menu-item"><a href="project-details.html"> Pembagian Anggaran</a></li>
                         </ul>
                         <span class="submenu-opener"><i class="bi bi-chevron-right"></i></span>

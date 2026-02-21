@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Anggaran\KategoriAnggaranController;
+use App\Http\Controllers\Admin\Anggaran\SubKategoriAnggaranController;
 use App\Http\Controllers\Admin\AsetKantor\KategoriAsetController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HR\DapertemenController;
@@ -116,6 +117,28 @@ Route::prefix('/admin')->group(function () {
 
     Route::get('/master/kategori-anggaran', [KategoriAnggaranController::class, 'index'])
         ->name('master.kategori_anggaran');
+    Route::get('/master/kategori-anggaran/data', [KategoriAnggaranController::class, 'data'])
+        ->name('master.kategori_anggaran.data');
+    Route::post('/master/kategori-anggaran/simpan', [KategoriAnggaranController::class, 'simpan'])
+        ->name('master.kategori_anggaran.simpan');
+    Route::get('/master/kategori-anggaran/getDataById/{id}', [KategoriAnggaranController::class, 'getDataById'])
+        ->name('master.kategori_anggaran.getDataById');
+    Route::post('/master/kategori-anggaran/hapus', [KategoriAnggaranController::class, 'hapus'])
+        ->name('master.kategori_anggaran.hapus');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route Bagian Sub Kategori Anggaran
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/master/sub-kategori-anggaran', [SubKategoriAnggaranController::class, 'index'])
+        ->name('master.sub-kategori_anggaran');
+    Route::get('/master/sub-kategori-anggaran/data', [SubKategoriAnggaranController::class, 'data'])
+        ->name('master.sub-kategori_anggaran.data');
+    Route::get('/master/sub-kategori-anggaran/listKategoriAnggaran', [SubKategoriAnggaranController::class, 'listKategoriAnggaran'])
+        ->name('master.sub-kategori_anggaran.listKategoriAnggaran');
 });
 
 /*

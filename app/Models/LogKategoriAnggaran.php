@@ -6,20 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SubKategoriAnggaran extends Model
+class LogKategoriAnggaran extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'sub_kategori_anggran';
+    protected $table = 'log_kategori_anggaran';
 
     protected $fillable = [
         'kategori_anggaran_id',
-        'nama_sub_kategori_anggaran',
-        'komponen_sub_kategori_anggaran'
+        'user_id',
+        'keterangan'
     ];
 
-    public function kategoriAnggaran()
+    public function kategori_anggaran()
     {
         return $this->belongsTo(KategoriAnggaran::class, 'kategori_anggaran_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
