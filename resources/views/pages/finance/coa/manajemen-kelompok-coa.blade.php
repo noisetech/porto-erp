@@ -1,6 +1,6 @@
 @extends('layouts.be')
 
-@section('title', 'Chart Of Account')
+@section('title', 'Kelompok Akun Coa')
 @section('content')
 
 <style>
@@ -29,7 +29,7 @@
     <div class="inner-contents">
         <div class="page-header d-flex align-items-center justify-content-between mr-bottom-30">
             <div class="left-part">
-                <h2 class="text-dark">Chart Of Account </h2>
+                <h4 class="text-dark">Kelompok Akun COA </h4>
             </div>
         </div>
 
@@ -47,7 +47,11 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kategori Anggaran</th>
+                                <th>Kode Kelompok</th>
+                                <th>Nama Kelompok</th>
+                                <th>keterangan</th>
+                                <th>Akun Induk</th>
+                                <th>Aktif</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -73,50 +77,40 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Kode Akun:</label>
-                                <input name="kategori_anggaran" class="form-control"></input>
-                                <span id="kategori_anggaran_error" class="text-danger error-text my-2">
+                                <label for="">Kode Kelompok:</label>
+                                <input name="kode_kelompok" class="form-control" placeholder="Masukan kode kelompok"></input>
+                                <span id="kode_kelompok_error" class="text-danger error-text my-2">
                                 </span>
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Nama Akun:</label>
-                                <input name="kategori_anggaran" class="form-control"></input>
-                                <span id="kategori_anggaran_error" class="text-danger error-text my-2">
+                                <label for="">Nama Kelompok:</label>
+                                <input name="nama_kelompok" class="form-control" placeholder="Masukan nama kelompok"></input>
+                                <span id="nama_kelompok_error" class="text-danger error-text my-2">
                                 </span>
                             </div>
                         </div>
                     </div>
 
+
                     <div class="row">
-                        <div class="col-md-4">
-                            <label for="">Jenis Akun</label>
-                            <select name="jenis_akun" class="form-control">
-                                <option value="">--Pilih-</option>
-                                <option value="aset">Aset</option>
-                                <option value="kewajiban">Kewajiban</option>
-                                <option value="modal">Modal</option>
-                                <option value="pendapatan">Pendapatan</option>
-                                <option value="beban">Beban</option>
-                            </select>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Akun Induk:</label>
+                                <select name="akun_induk" id="akun-induk" class="form-control select2-akun-induk" id=""></select>
+
+                            </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="">Kelompok Akun</label>
-                            <select name="kelompok_akun" class="form-control">
-                                <option value="">--Pilih-</option>
-                                <option value="Beban Operasional">Beban Operasional</option>
-                                <option value="Aset Tetap">Aset Tetap</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="">Akun Induk</label>
-                            <select name="akun_induk" class="form-control">
-                                <option value="">--Pilih-</option>
-                            </select>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Keternagan:</label>
+                                <textarea name="keterangan" class="form-control" placeholder="Masukan keterangan" style="height: 200px !important" id=""></textarea>
+                                <span id="keterangan_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -187,11 +181,11 @@
             fixedHeader: true,
             responsive: true,
             autoWidth: false,
-            pageLength: 5,
+            pageLength: 10,
 
             order: [],
             ajax: {
-                url: "{{ route('master.kategori_anggaran.data') }}",
+                url: "{{ route('kelompok_akun_coa.data') }}",
                 type: "get",
             },
             columns: [{
@@ -199,8 +193,24 @@
                     name: 'no'
                 },
                 {
-                    data: 'kategori_anggaran',
-                    name: 'kategori_anggaran'
+                    data: 'kode_kelompok',
+                    name: 'kode_kelompok'
+                },
+                {
+                    data: 'nama_kelompok',
+                    name: 'nama_kelompok'
+                },
+                {
+                    data: 'keterangan',
+                    name: 'keterangan'
+                },
+                {
+                    data: 'induk_akun',
+                    name: 'induk_akun'
+                },
+                {
+                    data: 'aktif',
+                    name: 'aktif'
                 },
 
                 {
@@ -235,7 +245,7 @@
             let formData = new FormData(this);
 
             $.ajax({
-                url: '{{ route("master.kategori_anggaran.simpan") }}',
+                url: '{{ route("kelompok_akun_coa.simpan") }}',
                 method: 'POST',
                 data: formData,
                 processData: false,
@@ -279,19 +289,50 @@
     $(document).on('click', '.TutupModalTambah', function() {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('#fakultas').val(null).trigger('change').empty();
-        $('#kode_error').text('');
-        $('#nama_dapertemen_error').text('');
+        $('.select2-akun-induk').val(null).trigger('change').empty();
+        $('#kode_kelompok_error').text('');
+        $('#nama_kelompok_error').text('');
+        $('#keterangan_error').text('');
     });
 
 
     $('#modalTambah').on('hidden.bs.modal', function(e) {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('#fakultas').val(null).trigger('change').empty();
-        $('#kode_error').text('');
-        $('#nama_dapertemen_error').text('');
+        $('.select2-akun-induk').val(null).trigger('change').empty();
+        $('#kode_kelompok_error').text('');
+        $('#nama_kelompok_error').text('');
+        $('#keterangan_error').text('');
     });
+
+    function initSelect2(selector, parent, route) {
+        $(selector).select2({
+            dropdownParent: $(parent),
+            placeholder: '-- Pilih --',
+            allowClear: true,
+            ajax: {
+                url: route,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    let data = {
+                        q: params.term
+                    };
+                    return data;
+                },
+                processResults: function(data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+    }
+
+    initSelect2('#akun-induk', '#modalTambah', "{{ route('kelompok_akun_coa.listAkunIndukCoa') }}");
+
+
 
 
     $(document).on('click', '.TutupModalEdit', function() {
@@ -380,7 +421,7 @@
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('master.kategori_anggaran.hapus') }}",
+                    url: "{{ route('kelompok_akun_coa.hapus') }}",
                     data: {
                         id: id,
                         _token: "{{ csrf_token() }}"

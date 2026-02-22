@@ -11,24 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('log_anggaran_dapertemen', function (Blueprint $table) {
+        Schema::create('log_kelompok_akun_coa', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('anggaran_dapertemen_id');
             $table->foreignId('user_id');
+            $table->foreignId('kelompok_akun_coa_id');
             $table->text('keterangan');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('anggaran_dapertemen_id')
-                ->references('id')
-                ->on('anggaran_dapertemen')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreign('kelompok_akun_coa_id')
+                ->references('id')
+                ->on('kelompok_akun_coa')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
@@ -39,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('log_anggaran_dapertemen');
+        Schema::dropIfExists('log_kelompok_akun_coa');
     }
 };

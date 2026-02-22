@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Anggaran\SubKategoriAnggaranController;
 use App\Http\Controllers\Admin\AsetKantor\KategoriAsetController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Finance\CoaController;
+use App\Http\Controllers\Admin\Finance\KelompokAkunCoaController;
 use App\Http\Controllers\Admin\HR\DapertemenController;
 use App\Http\Controllers\Admin\HR\JabatanController;
 use App\Http\Controllers\Admin\RoleControlelr;
@@ -113,12 +114,35 @@ Route::prefix('/admin')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | Route Bagian Kelompok Akun COA
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/master/finance/kelompok-akun-coa', [KelompokAkunCoaController::class, 'index'])
+        ->name('kelompok_akun_coa');
+    Route::get('/master/finance/kelompok-akun-coa/data', [KelompokAkunCoaController::class, 'data'])
+        ->name('kelompok_akun_coa.data');
+    Route::post('/master/finance/kelompok-akun-coa/simpan', [KelompokAkunCoaController::class, 'simpan'])
+        ->name('kelompok_akun_coa.simpan');
+    Route::get('/master/finance/kelompok-akun-coa/listAkunIndukCoa', [KelompokAkunCoaController::class, 'listAkunIndukCoa'])
+        ->name('kelompok_akun_coa.listAkunIndukCoa');
+    Route::post('/master/finance/kelompok-akun-coa/hapus', [KelompokAkunCoaController::class, 'hapus'])
+        ->name('kelompok_akun_coa.hapus');
+
+    /*
+    |--------------------------------------------------------------------------
     | Route Bagian Manajemen COA
     |--------------------------------------------------------------------------
     */
 
     Route::get('/master/finance/coa', [CoaController::class, 'index'])
         ->name('coa');
+    Route::get('/master/finance/coa/data', [CoaController::class, 'index'])
+        ->name('coa.data');
+    Route::get('/master/finance/coa/listAkunIndukCoa', [CoaController::class, 'listAkunIndukCoa'])
+        ->name('coa.listAkunIndukCoa');
+    Route::post('/master/finance/coa/simpan', [CoaController::class, 'simpan'])
+        ->name('coa.simpan');
 
 
     /*

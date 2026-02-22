@@ -91,15 +91,23 @@
             <li class="menu-item"><a href="typography.html"><span class="nav-icon flex-shrink-0"><i class="bi bi-hexagon fs-18"></i></span> <span class="nav-text">Dasboard</span></a></li>
             <li class="menu-item menu-item-has-children"><a href="#"> <span class="nav-icon flex-shrink-0"><i class="bi bi-kanban fs-18"></i></span> <span class="nav-text">Master Data</span></a>
                 <ul class="sub-menu" style="display: none;">
-                    <li class="menu-item menu-item-has-children"><a href="#"> Anggaran</a>
+
+                    <li class="menu-item menu-item-has-children"><a href="#"> Manejemen COA</a>
                         <ul class="sub-menu">
-                            <li class="menu-item"><a href="{{ route('master.kategori_anggaran') }}"> Kategori Anggaran</a></li>
-                            <li class="menu-item"><a href="{{ route('master.sub-kategori_anggaran') }}"> Sub Kategori Anggaran</a></li>
-                            <li class="menu-item"><a href="project-details.html"> Pembagian Anggaran</a></li>
+                            <li class="menu-item"><a href="{{ route('kelompok_akun_coa') }}"> Kelompok Akun</a></li>
+                            <li class="menu-item"><a href="{{ route('coa') }}"> COA</a></li>
                         </ul>
                         <span class="submenu-opener"><i class="bi bi-chevron-right"></i></span>
                     </li>
-                    <li class="menu-item"><a href="{{ route('coa') }}"> Chart Of Account</a></li>
+
+                    <li class="menu-item menu-item-has-children"><a href="#"> Manajemen Anggaran</a>
+                        <ul class="sub-menu">
+                            <li class="menu-item"><a href="{{ route('master.kategori_anggaran') }}"> Kategori Anggaran</a></li>
+                            <li class="menu-item"><a href="{{ route('master.sub-kategori_anggaran') }}"> Sub Kategori Anggaran</a></li>
+                        </ul>
+                        <span class="submenu-opener"><i class="bi bi-chevron-right"></i></span>
+                    </li>
+
                     <li class="menu-item"><a href="contacts.html"> Partner (Customer & Supplier)</a></li>
 
                     <li class="menu-item"><a href="files.html"> Bank</a></li>
