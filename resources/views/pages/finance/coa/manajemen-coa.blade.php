@@ -15,14 +15,6 @@
     .dt-type-numeric {
         text-align: left !important;
     }
-
-    th {
-        font-size: 14px !important;
-    }
-
-    td {
-        font-size: 14px !important;
-    }
 </style>
 
 <div class="container-fluid">
@@ -47,7 +39,13 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kategori Anggaran</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Jenis</th>
+                                <th>Kelompok</th>
+                                <th>Induk</th>
+                                <th>Aktif</th>
+                                <th>Keterangan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -71,20 +69,29 @@
                     @csrf
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Kode Akun:</label>
                                 <input name="kode_akun" class="form-control"></input>
-                                <span id="kategori_anggaran_error" class="text-danger error-text my-2">
+                                <span id="kode_akun_error" class="text-danger error-text my-2">
                                 </span>
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Nama Akun:</label>
                                 <input name="nama_akun" class="form-control"></input>
-                                <span id="kategori_anggaran_error" class="text-danger error-text my-2">
+                                <span id="nama_akun_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Keterangan:</label>
+                                <input name="keterangan" class="form-control"></input>
+                                <span id="keterangan_error" class="text-danger error-text my-2">
                                 </span>
                             </div>
                         </div>
@@ -101,15 +108,16 @@
                                 <option value="pendapatan">Pendapatan</option>
                                 <option value="beban">Beban</option>
                             </select>
+                            <span id="jenis_akun_error" class="text-danger error-text my-2">
+                            </span>
                         </div>
 
                         <div class="col-md-4">
                             <label for="">Kelompok Akun</label>
-                            <select name="kelompok_akun" class="form-control">
-                                <option value="">--Pilih-</option>
-                                <option value="Beban Operasional">Beban Operasional</option>
-                                <option value="Aset Tetap">Aset Tetap</option>
+                            <select name="kelompok_akun" id="kelompok-akun" class="form-control select2-kompok-akun">
                             </select>
+                            <span id="kelompok_akun_error" class="text-danger error-text my-2">
+                            </span>
                         </div>
 
                         <div class="col-md-4">
@@ -187,11 +195,11 @@
             fixedHeader: true,
             responsive: true,
             autoWidth: false,
-            pageLength: 5,
+            pageLength: 50,
 
             order: [],
             ajax: {
-                url: "{{ route('master.kategori_anggaran.data') }}",
+                url: "{{ route('coa.data') }}",
                 type: "get",
             },
             columns: [{
@@ -199,8 +207,32 @@
                     name: 'no'
                 },
                 {
-                    data: 'kategori_anggaran',
-                    name: 'kategori_anggaran'
+                    data: 'kode_akun',
+                    name: 'kode_akun'
+                },
+                {
+                    data: 'nama_akun',
+                    name: 'nama_akun'
+                },
+                {
+                    data: 'jenis_akun',
+                    name: 'jenis_akun'
+                },
+                {
+                    data: 'kelompok_akun',
+                    name: 'kelompok_akun'
+                },
+                {
+                    data: 'induk_akun',
+                    name: 'induk_akun'
+                },
+                {
+                    data: 'aktif',
+                    name: 'aktif'
+                },
+                {
+                    data: 'keterangan',
+                    name: 'keterangan'
                 },
 
                 {
@@ -279,7 +311,7 @@
     $(document).on('click', '.TutupModalTambah', function() {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('#fakultas').val(null).trigger('change').empty();
+        $('.select2-kompok-akun, select2-induk-akun-coa').val(null).trigger('change').empty();
         $('#kode_error').text('');
         $('#nama_dapertemen_error').text('');
     });
@@ -288,7 +320,7 @@
     $('#modalTambah').on('hidden.bs.modal', function(e) {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('#fakultas').val(null).trigger('change').empty();
+        $('.select2-kompok-akun, .select2-induk-akun-coa').val(null).trigger('change').empty();
         $('#kode_error').text('');
         $('#nama_dapertemen_error').text('');
     });
@@ -319,6 +351,7 @@
     }
 
     initSelect2('#induk-akun-coa', '#modalTambah', "{{ route('coa.listAkunIndukCoa') }}");
+    initSelect2('#kelompok-akun', '#modalTambah', "{{ route('coa.listKelompokAkun') }}");
 
 
 

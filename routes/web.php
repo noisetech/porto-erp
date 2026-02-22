@@ -33,8 +33,8 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('/admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard_admin');
+Route::prefix('/dashboard')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard_admin');
 
 
     Route::get('/role', [RoleControlelr::class, 'index'])
@@ -118,15 +118,15 @@ Route::prefix('/admin')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/master/finance/kelompok-akun-coa', [KelompokAkunCoaController::class, 'index'])
+    Route::get('/finance/kelompok-akun-coa', [KelompokAkunCoaController::class, 'index'])
         ->name('kelompok_akun_coa');
-    Route::get('/master/finance/kelompok-akun-coa/data', [KelompokAkunCoaController::class, 'data'])
+    Route::get('/finance/kelompok-akun-coa/data', [KelompokAkunCoaController::class, 'data'])
         ->name('kelompok_akun_coa.data');
-    Route::post('/master/finance/kelompok-akun-coa/simpan', [KelompokAkunCoaController::class, 'simpan'])
+    Route::post('/finance/kelompok-akun-coa/simpan', [KelompokAkunCoaController::class, 'simpan'])
         ->name('kelompok_akun_coa.simpan');
-    Route::get('/master/finance/kelompok-akun-coa/listAkunIndukCoa', [KelompokAkunCoaController::class, 'listAkunIndukCoa'])
+    Route::get('/finance/kelompok-akun-coa/listAkunIndukCoa', [KelompokAkunCoaController::class, 'listAkunIndukCoa'])
         ->name('kelompok_akun_coa.listAkunIndukCoa');
-    Route::post('/master/finance/kelompok-akun-coa/hapus', [KelompokAkunCoaController::class, 'hapus'])
+    Route::post('/finance/kelompok-akun-coa/hapus', [KelompokAkunCoaController::class, 'hapus'])
         ->name('kelompok_akun_coa.hapus');
 
     /*
@@ -135,13 +135,15 @@ Route::prefix('/admin')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/master/finance/coa', [CoaController::class, 'index'])
+    Route::get('/finance/coa', [CoaController::class, 'index'])
         ->name('coa');
-    Route::get('/master/finance/coa/data', [CoaController::class, 'index'])
+    Route::get('/finance/coa/data', [CoaController::class, 'data'])
         ->name('coa.data');
-    Route::get('/master/finance/coa/listAkunIndukCoa', [CoaController::class, 'listAkunIndukCoa'])
+    Route::get('/finance/coa/listAkunIndukCoa', [CoaController::class, 'listAkunIndukCoa'])
         ->name('coa.listAkunIndukCoa');
-    Route::post('/master/finance/coa/simpan', [CoaController::class, 'simpan'])
+    Route::get('/finance/coa/listKelompokAkun', [CoaController::class, 'listKelompokAkun'])
+        ->name('coa.listKelompokAkun');
+    Route::post('/finance/coa/simpan', [CoaController::class, 'simpan'])
         ->name('coa.simpan');
 
 

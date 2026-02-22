@@ -22,16 +22,28 @@ class KelompokAkunCoaController extends Controller
         $start  = $request->start;
         $length = $request->length;
         $draw   = $request->draw;
-        $search = $request->input('search.value');
 
-        // Query utama, join ke parent
+        $search = $request->input('search.value');
         $query = DB::table('kelompok_akun_coa as k')
-            ->leftJoin('kelompok_akun_coa as p', 'k.akun_induk_id', '=', 'p.id')
+            ->leftJoin(
+                'kelompok_akun_coa as p',
+                'k.akun_induk_id',
+                '=',
+                'p.id'
+            )
             ->whereNull('k.deleted_at')
             ->select(
-                'k.*',
-                'p.nama_kelompok as induk_akun'
-            );
+                'k.id',
+                'k.kode_kelompok',
+                'k.nama_kelompok',
+                'k.akun_induk_id',
+                'k.keterangan',
+                'k.aktif',
+                'p.kode_kelompok as induk_kode',
+                'p.nama_kelompok as induk_nama'
+            )
+            ->orderByRaw('COALESCE(p.kode_kelompok, k.kode_kelompok)')
+            ->orderBy('k.kode_kelompok');
 
         $recordsTotal = $query->count();
         if ($search) {
@@ -55,7 +67,7 @@ class KelompokAkunCoaController extends Controller
 
         foreach ($data as $row) {
 
-            $induk_akun = $row->induk_akun ? $row->induk_akun : '-';
+            $induk_kode = $row->induk_kode ? $row->induk_kode : '-';
 
             $action =  '
                     <a class="btn btn-secondary text-sm text-white"
@@ -68,7 +80,7 @@ class KelompokAkunCoaController extends Controller
                 'id'               => $row->id,
                 'kode_kelompok'    => $row->kode_kelompok,
                 'nama_kelompok'    => $row->nama_kelompok,
-                'induk_akun'  => $induk_akun,
+                'induk_akun'  => $induk_kode,
                 'keterangan'       => $row->keterangan,
                 'aktif'            => $row->aktif ? 'Ya' : 'Tidak',
                 'action'           => $action

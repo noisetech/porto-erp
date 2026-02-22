@@ -49,7 +49,7 @@
                                 <th>No</th>
                                 <th>Kode Kelompok</th>
                                 <th>Nama Kelompok</th>
-                                <th>keterangan</th>
+                                <th>Keterangan</th>
                                 <th>Akun Induk</th>
                                 <th>Aktif</th>
                                 <th>Aksi</th>

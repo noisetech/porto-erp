@@ -16,7 +16,7 @@ class COA extends Model
         'kode_akun',
         'nama_akun',
         'jenis_akun',
-        'kelompok_akun',
+        'kelompok_akun_coa_id',
         'akun_induk_id',
         'boleh_posting',
         'aktif',
