@@ -13,7 +13,15 @@ class KategoriAnggaran extends Model
     protected $table = 'kategori_anggaran';
 
     protected $fillable = [
-        'kategori_anggaran',
-        'slug'
+        'kode_kategori',
+        'nama_kategori',
+        'coa_id',
+        'slug',
+        'aktif',
+        'keterangan'
     ];
+
+    public function coa(){
+        return $this->belongsTo(COA::class, 'coa_id', 'id');
+    }
 }

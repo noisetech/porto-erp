@@ -102,7 +102,15 @@
 
                                    </div>
                                    <div class="card-footer p-3">
-                                       <a href="login.html" class="btn btn-outline-gray bg-transparent w-100 py-1 rounded-1 text-dark fs-14 fw-medium"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                                       <form action="{{ route('logout') }}" method="post">
+                                           @csrf
+
+                                           <button class="btn btn-outline-gray bg-transparent w-100 py-1 rounded-1 text-dark fs-14 fw-medium">
+                                               <i class="bi bi-box-arrow-right"></i> Logout
+
+                                           </button>
+                                       </form>
+
                                    </div>
                                </div>
                            </div>
