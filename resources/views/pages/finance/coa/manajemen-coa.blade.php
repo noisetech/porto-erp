@@ -15,6 +15,15 @@
     .dt-type-numeric {
         text-align: left !important;
     }
+
+
+    th {
+        font-size: 14px !important;
+    }
+
+    td {
+        font-size: 14px !important;
+    }
 </style>
 
 <div class="container-fluid">
@@ -24,6 +33,8 @@
                 <h2 class="text-dark">Chart Of Account </h2>
             </div>
         </div>
+
+
 
 
         <div class="d-flex justify-content-end">
@@ -67,7 +78,6 @@
             <div class="modal-body">
                 <form action="#" id="form-simpan" method="post">
                     @csrf
-
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -127,10 +137,6 @@
                             </select>
                         </div>
                     </div>
-
-
-
-
                     <div class="modal-footer mt-5">
                         <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalTambah">Tutup</button>
                         <button type="submit" class="btn btn-primary btn-sm  px-2">Simpan</button>
@@ -143,10 +149,10 @@
 </div>
 
 <div class="modal fade" id="modalEdit" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Dapertemen</h5>
+                <h5 class="modal-title">Edit Chart Of Account</h5>
                 <button type="button" class="btn-close TutupModalEdit"></button>
             </div>
             <div class="modal-body">
@@ -156,22 +162,69 @@
                     <input type="hidden" name="id" class="form-control" id="id">
 
 
-                    <div class="form-group">
-                        <label for="">Kode:</label>
-                        <input name="kode" id="kode" class="form-control"></input>
-                        <span id="kode_error_edit" class="text-danger error-text my-2 text-sm">
-                        </span>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Kode Akun:</label>
+                                <input name="kode_akun" class="form-control" id="kode_akun"></input>
+                                <span id="kode_akun_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Nama Akun:</label>
+                                <input name="nama_akun" class="form-control" id="nama_akun"></input>
+                                <span id="nama_akun_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Keterangan:</label>
+                                <input name="keterangan" class="form-control" id="keterangan"></input>
+                                <span id="keterangan_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="">Dapertemen:</label>
-                        <input name="nama_dapertemen" id="nama_dapertemen" class="form-control"></input>
-                        <span id="nama_dapertemen_error_edit" class="text-danger error-text my-2 text-sm">
-                        </span>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="">Jenis Akun</label>
+                            <select name="jenis_akun" class="form-control" id="jenis_akun">
+                                <option value="">--Pilih-</option>
+                                <option value="aset">Aset</option>
+                                <option value="kewajiban">Kewajiban</option>
+                                <option value="modal">Modal</option>
+                                <option value="pendapatan">Pendapatan</option>
+                                <option value="beban">Beban</option>
+                            </select>
+                            <span id="jenis_akun_error" class="text-danger error-text my-2">
+                            </span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="">Kelompok Akun</label>
+                            <select name="kelompok_akun" id="edit-kelompok-akun" class="form-control select2-kompok-akun">
+                            </select>
+                            <span id="kelompok_akun_error" class="text-danger error-text my-2">
+                            </span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="">Akun Induk</label>
+                            <select id="edit-induk-akun-coa" name="akun_induk" class="form-control select2-induk-akun-coa">
+                                <option value="">--Pilih-</option>
+                            </select>
+                        </div>
                     </div>
 
 
-                    <div class="modal-footer">
+                    <div class="modal-footer mt-5">
                         <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalEdit">Tutup</button>
                         <button type="submit" class="btn btn-primary btn-sm  px-2">Simpan</button>
                     </div>
@@ -188,9 +241,10 @@
 @push('script')
 <script>
     $(document).ready(function() {
+
         $('#datatable').DataTable({
             processing: true,
-            searching: false,
+            searching: true,
             serverSide: true,
             fixedHeader: true,
             responsive: true,
@@ -250,7 +304,7 @@
                 emptyTable: "Tidak ada data tersedia",
                 lengthMenu: "Tampilkan _MENU_",
                 search: "Cari:",
-                searchPlaceholder: "Berdasrkan nama atau npm",
+                searchPlaceholder: "Berdasrkan kode",
                 paginate: {
                     first: '',
                     last: '',
@@ -259,6 +313,7 @@
                 }
             },
         });
+
 
         $('#form-simpan').on('submit', function(e) {
 
@@ -313,16 +368,24 @@
         $('#form-simpan')[0].reset();
         $('.select2-kompok-akun, select2-induk-akun-coa').val(null).trigger('change').empty();
         $('#kode_error').text('');
-        $('#nama_dapertemen_error').text('');
+        $('#kode_akun_error').text('');
+        $('#nama_akun_error').text('');
+        $('#kelompok_akun_error').text('');
+        $('#keterangan_error').text('');
+        $('#jenis_akun_error').text('');
     });
 
 
     $('#modalTambah').on('hidden.bs.modal', function(e) {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('.select2-kompok-akun, .select2-induk-akun-coa').val(null).trigger('change').empty();
+        $('.select2-kompok-akun, select2-induk-akun-coa').val(null).trigger('change').empty();
         $('#kode_error').text('');
-        $('#nama_dapertemen_error').text('');
+        $('#kode_akun_error').text('');
+        $('#nama_akun_error').text('');
+        $('#kelompok_akun_error').text('');
+        $('#keterangan_error').text('');
+        $('#jenis_akun_error').text('');
     });
 
     function initSelect2(selector, parent, route) {
@@ -352,9 +415,8 @@
 
     initSelect2('#induk-akun-coa', '#modalTambah', "{{ route('coa.listAkunIndukCoa') }}");
     initSelect2('#kelompok-akun', '#modalTambah', "{{ route('coa.listKelompokAkun') }}");
-
-
-
+    initSelect2('#edit-induk-akun-coa', '#modalEdit', "{{ route('coa.listAkunIndukCoa') }}");
+    initSelect2('#edit-kelompok-akun', '#modalEdit', "{{ route('coa.listKelompokAkun') }}");
 
     $(document).on('click', '.TutupModalEdit', function() {
         $('#modalEdit').modal('hide');
@@ -369,14 +431,29 @@
         e.preventDefault();
         let id = $(this).attr('data-id');
         $.ajax({
-            url: '/admin/master/kategori-anggaran/getDataById/' + id,
+            url: '/dashboard/finance/coa/getDayaById/' + id,
             method: "GET",
             processData: false,
             contentType: false,
             success: function(response) {
+                $('#modalEdit').modal('show');
+                $('#id').val(response.data.id);
+                $('#kode_akun').val(response.data.kode_akun);
+                $('#nama_akun').val(response.data.nama_akun);
+                $('#keterangan').val(response.data.keterangan);
+                $('#jenis_akun').val(response.data.jenis_akun);
 
-                console.log(response);
+                let optF = new Option(response.data.kode_kelompok ||
+                    '--Pili--', response.data.kelompok_akun_coa_id, true, true);
+                $('#edit-kelompok-akun').append(optF).trigger('change');
+                let optI = new Option(
+                    response.data.induk_akun || '--Pilih--',
+                    response.data.akun_induk_id,
+                    true,
+                    true
+                );
 
+                $('#edit-induk-akun-coa').append(optI).trigger('change');
             },
         })
     });
@@ -391,7 +468,7 @@
         let formData = new FormData(this);
 
         $.ajax({
-            url: '{{ route("dapertemen.update") }}',
+            url: '{{ route("coa.update") }}',
             method: 'POST',
             data: formData,
             processData: false,
@@ -442,7 +519,7 @@
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('master.kategori_anggaran.hapus') }}",
+                    url: "{{ route('coa.hapus') }}",
                     data: {
                         id: id,
                         _token: "{{ csrf_token() }}"

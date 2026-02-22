@@ -297,7 +297,7 @@
         e.preventDefault();
         let id = $(this).attr('data-id');
         $.ajax({
-            url: '/admin/hr/jabatan/getDataById/' + id,
+            url: '/dashboard/hr/jabatan/getDataById/' + id,
             method: "GET",
             processData: false,
             contentType: false,

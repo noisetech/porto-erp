@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('dashboard_admin');
+    return redirect()->route('login');
 });
 
 /*
@@ -145,6 +145,12 @@ Route::prefix('/dashboard')->group(function () {
         ->name('coa.listKelompokAkun');
     Route::post('/finance/coa/simpan', [CoaController::class, 'simpan'])
         ->name('coa.simpan');
+    Route::post('/finance/coa/update', [CoaController::class, 'update'])
+        ->name('coa.update');
+    Route::get('/finance/coa/getDayaById/{id}', [CoaController::class, 'getDataById'])
+        ->name('coa.getDataById');
+    Route::post('/finance/coa/hapus', [CoaController::class, 'hapus'])
+        ->name('coa.hapus');
 
 
     /*

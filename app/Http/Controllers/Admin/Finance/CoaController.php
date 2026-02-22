@@ -39,16 +39,15 @@ class CoaController extends Controller
         $recordsTotal = $query->count();
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('k.kode_akun', 'ILIKE', "%$search%")
-                    ->orWhere('k.nama_akun', 'ILIKE', "%$search%")
-                    ->orWhere('p.nama_kelompok', 'ILIKE', "%$search%");
+                $q->where('k.kode_akun', 'LIKE', "%$search%")
+                    ->orWhere('k.nama_akun', 'LIKE', "%$search%");
             });
         }
 
         $recordsFiltered = $query->count();
 
         $data = $query
-            // ->orderBy('k.kode_akun', 'ASC')
+
             ->skip($start)
             ->take($length)
             ->get();
@@ -61,10 +60,15 @@ class CoaController extends Controller
             $induk_akun = $row->induk_akun ? $row->induk_akun : '-';
 
             $action =  '
-                    <a class="btn btn-secondary text-sm text-white"
-                       href="javascript:void(0)" id="hapus" data-id="' . $row->id . '">
-                       <i class="bi bi-trash px-1"></i> Hapus
-                    </a>';
+                <a class="btn btn-secondary text-sm text-white"
+                                    href="javascript:void(0)" id="edit" data-id="' . $row->id . '">
+                                    <i class="bi bi-pencil px-1"></i> Edit
+                </a>
+
+                <a class="btn btn-secondary text-sm text-white"
+                    href="javascript:void(0)" id="hapus" data-id="' . $row->id . '">
+                    <i class="bi bi-trash px-1"></i> Hapus
+                </a>';
 
             $result[] = [
                 'no'               => $no++,
@@ -118,6 +122,7 @@ class CoaController extends Controller
         DB::beginTransaction();
 
         try {
+
             $coa = new COA();
             $coa->kode_akun = $request->kode_akun;
             $coa->nama_akun = $request->nama_akun;
@@ -126,6 +131,7 @@ class CoaController extends Controller
             $coa->akun_induk_id = $request->akun_induk;
             $coa->keterangan = $request->keterangan;
             $coa->save();
+
 
             $log_coa = new LogCoa();
             $log_coa->coa_id = $coa->id;
@@ -147,6 +153,86 @@ class CoaController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'kode_akun' => 'required|unique:coa,kode_akun, ' . $request->id,
+            'nama_akun' => 'required',
+            'jenis_akun' => 'required',
+            'kelompok_akun' => 'required',
+            'keterangan' => 'required'
+        ], [
+            'kode_akun.required' => 'Kode akun tidak boleh kosong',
+            'kode_akun.unique' => 'Kode akun sudah ada',
+            'nama_akun.required' => 'Nama akun tidak boleh kosong',
+            'jenis_akun.required' => 'Jenis akun tidak boleh kosong',
+            'kelompok_akun.required' => 'Kelompok akun tidak boleh kosong',
+            'keterangan.required' => 'Keterangan tidak boleh kosong'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            $coa = COA::find($request->id);
+            $coa->kode_akun = $request->kode_akun;
+            $coa->nama_akun = $request->nama_akun;
+            $coa->jenis_akun = $request->jenis_akun;
+            $coa->kelompok_akun_coa_id = $request->kelompok_akun;
+            $coa->akun_induk_id = $request->akun_induk;
+            $coa->keterangan = $request->keterangan;
+            $coa->save();
+
+
+            $log_coa = new LogCoa();
+            $log_coa->coa_id = $coa->id;
+            $log_coa->user_id = Auth::user()->id;
+            $log_coa->keterangan = 'mengubah data coa';
+            $log_coa->save();
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data diubah'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getDataById($id)
+    {
+        $query = DB::table('coa as k')
+            ->join('kelompok_akun_coa', 'kelompok_akun_coa.id', '=', 'k.kelompok_akun_coa_id')
+            ->leftJoin('coa as p', 'k.akun_induk_id', '=', 'p.id')
+            ->select(
+                'k.*',
+                'kelompok_akun_coa.kode_kelompok as kode_kelompok',
+                'p.kode_akun as induk_akun'
+            )
+            ->where('k.id', $id)
+            ->first();
+
+        return response()->json([
+            'status' => 'succes',
+            'message' => 'Data ditemukan',
+            'data' => $query
+        ], 200);
     }
 
 
@@ -230,33 +316,21 @@ class CoaController extends Controller
     }
 
 
-    public function hapu(Request $request)
+    public function hapus(Request $request)
     {
         $coa = COA::find($request->id);
 
-        if ($coa) {
-            DB::beginTransaction();
+        $coa->delete();
 
-            try {
-                $coa->delete();
+        $log_coa = new LogCoa();
+        $log_coa->user_id = Auth::user()->id;
+        $log_coa->coa_id = $coa->id;
+        $log_coa->keterangan = 'menghapus data';
+        $log_coa->save();
 
-                $log_coa = new LogCoa();
-                $log_coa->user_id = Auth::user()->id;
-                $log_coa->coa_id = $coa->id;
-                $log_coa->keterangan = 'menghapus data';
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Data dihapus'
-                ], 200);
-            } catch (\Exception $e) {
-                DB::rollBack();
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => $e->getMessage()
-                ], 500);
-            }
-        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data dihapus'
+        ], 200);
     }
 }

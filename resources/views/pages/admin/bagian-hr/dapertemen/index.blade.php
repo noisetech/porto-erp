@@ -275,7 +275,7 @@
         e.preventDefault();
         let id = $(this).attr('data-id');
         $.ajax({
-            url: '/admin/dapertemen/getDataById/' + id,
+            url: '/dashboard/dapertemen/getDataById/' + id,
             method: "GET",
             processData: false,
             contentType: false,
