@@ -97,6 +97,7 @@ class CoaController extends Controller
 
     public function simpan(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'kode_akun' => 'required|unique:coa,kode_akun',
             'nama_akun' => 'required',

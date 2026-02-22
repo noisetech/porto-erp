@@ -102,7 +102,7 @@
 
                     <li class="menu-item menu-item-has-children"><a href="#"> Manajemen Anggaran</a>
                         <ul class="sub-menu">
-                            <li class="menu-item"><a href="{{ route('master.kategori_anggaran') }}"> Kategori Anggaran</a></li>
+                            <li class="menu-item"><a href="{{ route('finance.kategori_anggaran') }}"> Kategori Anggaran</a></li>
                             <li class="menu-item"><a href="{{ route('master.sub-kategori_anggaran') }}"> Sub Kategori Anggaran</a></li>
                         </ul>
                         <span class="submenu-opener"><i class="bi bi-chevron-right"></i></span>

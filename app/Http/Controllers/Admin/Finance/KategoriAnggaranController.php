@@ -13,9 +13,73 @@ use Illuminate\Support\Str;
 
 class KategoriAnggaranController extends Controller
 {
-    public function index() {}
+    public function index()
+    {
+        return view('pages.finance.anggaran.kategori-anggaran');
+    }
 
-    public function data(Request $request) {}
+    public function data(Request $request)
+    {
+        $start  = $request->start;
+        $length = $request->length;
+        $draw   = $request->draw;
+        $search = $request->input('search.value');
+
+
+        $query = DB::table('kategori_anggaran')
+            ->join(
+                'coa',
+                'coa.id',
+                '=',
+                'kategori_anggaran.coa_id'
+            )
+            ->where('kategori_anggaran.deleted_at', null);
+        $recordsTotal = $query->count();
+
+        if ($search) {
+            $query->where('kategori_anggaran.kode_kategori', 'ILIKE', "%$search%");
+        }
+
+        $recordsFiltered = (clone $query)->count();
+
+        $data = $query
+            ->orderBy('kategori_anggaran.kode_kategori', 'ASC')
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $result = [];
+        $no = $start + 1;
+
+        foreach ($data as $row) {
+
+            $action =  '<a class="btn btn-secondary text-sm text-white"
+                       href="javascript:void(0)" id="edit" data-id="' . $row->id . '">
+                       <i class="bi bi-pencil px-1"></i> Edit
+                    </a>
+                    <a class="btn btn-secondary text-sm text-white"
+                       href="javascript:void(0)" id="hapus" data-id="' . $row->id . '">
+                       <i class="bi bi-trash px-1"></i> Hapus
+                    </a>';
+
+            $result[] = [
+                'no'       => $no++,
+                'id'       => $row->id,
+                'kode_kategori'       => $row->kode_kategori,
+                'nama_kategori'     => $row->nama_kategori,
+                'action'   => $action
+            ];
+        }
+
+        return response()->json([
+            "status" => 'success',
+            'message' => 'Berhasil menampilkan data',
+            "draw"            => intval($draw),
+            "recordsTotal"    => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data"            => $result
+        ]);
+    }
 
     public function simpan(Request $request)
     {

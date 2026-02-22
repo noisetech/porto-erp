@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\Anggaran\KategoriAnggaranController;
+
 use App\Http\Controllers\Admin\Anggaran\SubKategoriAnggaranController;
 use App\Http\Controllers\Admin\AsetKantor\KategoriAsetController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Finance\CoaController;
+use App\Http\Controllers\Admin\Finance\KategoriAnggaranController;
 use App\Http\Controllers\Admin\Finance\KelompokAkunCoaController;
 use App\Http\Controllers\Admin\HR\DapertemenController;
 use App\Http\Controllers\Admin\HR\JabatanController;
@@ -159,16 +160,18 @@ Route::prefix('/dashboard')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/master/kategori-anggaran', [KategoriAnggaranController::class, 'index'])
-        ->name('master.kategori_anggaran');
-    Route::get('/master/kategori-anggaran/data', [KategoriAnggaranController::class, 'data'])
-        ->name('master.kategori_anggaran.data');
-    Route::post('/master/kategori-anggaran/simpan', [KategoriAnggaranController::class, 'simpan'])
-        ->name('master.kategori_anggaran.simpan');
-    Route::get('/master/kategori-anggaran/getDataById/{id}', [KategoriAnggaranController::class, 'getDataById'])
-        ->name('master.kategori_anggaran.getDataById');
-    Route::post('/master/kategori-anggaran/hapus', [KategoriAnggaranController::class, 'hapus'])
-        ->name('master.kategori_anggaran.hapus');
+    Route::get('/finance/kategori-anggaran', [KategoriAnggaranController::class, 'index'])
+        ->name('finance.kategori_anggaran');
+    Route::get('/finance/kategori-anggaran/data', [KategoriAnggaranController::class, 'data'])
+        ->name('finance.kategori_anggaran.data');
+    Route::post('/finance/kategori-anggaran/simpan', [KategoriAnggaranController::class, 'simpan'])
+        ->name('finance.kategori_anggaran.simpan');
+    Route::get('/finance/kategori-anggaran/getDataById/{id}', [KategoriAnggaranController::class, 'getDataById'])
+        ->name('finance.kategori_anggaran.getDataById');
+    Route::get('/finance/kategori-anggaran/listCoa', [KategoriAnggaranController::class, 'listCoa'])
+        ->name('finance.kategori_anggaran.listCoa');
+    Route::post('/finance/kategori-anggaran/hapus', [KategoriAnggaranController::class, 'hapus'])
+        ->name('finance.kategori_anggaran.hapus');
 
 
     /*
