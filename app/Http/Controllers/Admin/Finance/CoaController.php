@@ -28,7 +28,7 @@ class CoaController extends Controller
         $query = DB::table('coa as k')
             ->join('kelompok_akun_coa', 'kelompok_akun_coa.id', '=', 'k.kelompok_akun_coa_id')
             ->leftJoin('coa as p', 'k.akun_induk_id', '=', 'p.id')
-            ->where('k.deleted_at', null)
+            ->whereNull('k.deleted_at')
             ->select(
                 'k.*',
                 'kelompok_akun_coa.kode_kelompok as kode_kelompok',
@@ -39,12 +39,13 @@ class CoaController extends Controller
 
         $recordsTotal = $query->count();
         if ($search) {
+            $search = strtolower($search);
+
             $query->where(function ($q) use ($search) {
-                $q->where('k.kode_akun', 'LIKE', "%$search%")
-                    ->orWhere('k.nama_akun', 'LIKE', "%$search%");
+                $q->whereRaw('LOWER(k.kode_akun) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('LOWER(k.nama_akun) LIKE ?', ["%{$search}%"]);
             });
         }
-
         $recordsFiltered = $query->count();
 
         $data = $query
