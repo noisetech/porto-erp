@@ -17,7 +17,161 @@ class SubKategoriAnggaranController extends Controller
         return view('pages.finance.anggaran.sub-kategori-anggaran');
     }
 
-    public function data(Request $request) {}
+    public function data(Request $request)
+    {
+        $length = $request->input('length', 10);
+        $start  = $request->input('start', 0);
+        $draw   = $request->input('draw', 1);
+        $search = $request->input('search.value');
+
+        /*
+    |--------------------------------------------------------------------------
+    | BASE QUERY (DATA UTAMA)
+    |--------------------------------------------------------------------------
+    */
+        $baseQuery = DB::table('sub_kategori_anggaran')
+            ->leftJoin(
+                'mapping_sub_kategori_coa',
+                'sub_kategori_anggaran.id',
+                '=',
+                'mapping_sub_kategori_coa.sub_kategori_anggaran_id'
+            )
+            ->leftJoin(
+                'coa',
+                'coa.id',
+                '=',
+                'mapping_sub_kategori_coa.coa_id'
+            )
+            ->select(
+                'sub_kategori_anggaran.id',
+                'sub_kategori_anggaran.kode_sub_kategori',
+                'sub_kategori_anggaran.nama_sub_kategori',
+                'sub_kategori_anggaran.keterangan',
+                'sub_kategori_anggaran.created_at',
+                DB::raw("
+                        STRING_AGG(
+                            coa.kode_akun || ' | ' || coa.nama_akun,
+                            ','
+                        ) as kode_akun_coa
+                    ")
+            )
+            ->groupBy(
+                'sub_kategori_anggaran.id',
+                'sub_kategori_anggaran.kode_sub_kategori',
+                'sub_kategori_anggaran.nama_sub_kategori',
+                'sub_kategori_anggaran.keterangan',
+                'sub_kategori_anggaran.created_at'
+            );
+
+        /*
+    |--------------------------------------------------------------------------
+    | TOTAL RECORD (tanpa filter)
+    |--------------------------------------------------------------------------
+    */
+        $recordsTotal = DB::table('sub_kategori_anggaran')->count();
+
+        /*
+    |--------------------------------------------------------------------------
+    | SEARCH FILTER
+    |--------------------------------------------------------------------------
+    */
+        if (!empty($search)) {
+            $baseQuery->where(function ($q) use ($search) {
+                $q->where('sub_kategori_anggaran.nama_sub_kategori', 'ILIKE', "%{$search}%")
+                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%");
+            });
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | RECORDS FILTERED
+    |--------------------------------------------------------------------------
+    */
+        $filteredQuery = DB::table('sub_kategori_anggaran')
+            ->leftJoin(
+                'mapping_sub_kategori_coa',
+                'sub_kategori_anggaran.id',
+                '=',
+                'mapping_sub_kategori_coa.sub_kategori_anggaran_id'
+            )
+            ->leftJoin(
+                'coa',
+                'coa.id',
+                '=',
+                'mapping_sub_kategori_coa.coa_id'
+            );
+
+        if (!empty($search)) {
+            $filteredQuery->where(function ($q) use ($search) {
+                $q->where('sub_kategori_anggaran.nama_sub_kategori', 'ILIKE', "%{$search}%")
+                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%");
+            });
+        }
+
+        $recordsFiltered = $filteredQuery
+            ->distinct('sub_kategori_anggaran.id')
+            ->count('sub_kategori_anggaran.id');
+
+        /*
+    |--------------------------------------------------------------------------
+    | PAGINATION
+    |--------------------------------------------------------------------------
+    */
+        $data = $baseQuery
+            ->offset($start)
+            ->limit($length)
+            ->get();
+
+        /*
+    |--------------------------------------------------------------------------
+    | FORMAT DATA
+    |--------------------------------------------------------------------------
+    */
+        $result = [];
+        $no = $start + 1;
+
+        foreach ($data as $row) {
+
+            // COA badge
+            $coaHtml = '<div class="d-flex flex-wrap">';
+            if (!empty($row->kode_akun_coa)) {
+                foreach (explode(',', $row->kode_akun_coa) as $kode) {
+                    $coaHtml .= '<span class="badge bg-primary text-white m-1">'
+                        . e($kode) .
+                        '</span>';
+                }
+            }
+            $coaHtml .= '</div>';
+
+            $action = '<a class="badge bg-secondary text-white"
+                        data-id="' . $row->id . '"
+                        id="edit">
+                        <i class="bi bi-pencil"></i> Ubah
+                   </a>';
+
+            $result[] = [
+                'no'       => $no++,
+                'id'     => $row->id,
+                'kode'   => $row->kode_sub_kategori,
+                'nama'   => $row->nama_sub_kategori,
+                'keterangan' => $row->keterangan,
+                'coa'    => $coaHtml,
+                'action' => $action
+            ];
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | RESPONSE
+    |--------------------------------------------------------------------------
+    */
+        return response()->json([
+            "draw"            => intval($draw),
+            "recordsTotal"    => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data"            => $result
+        ]);
+    }
 
 
     public function listKategoriAnggaran(Request $request)
@@ -140,6 +294,8 @@ class SubKategoriAnggaranController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
+
+        DB::beginTransaction();
 
         try {
 

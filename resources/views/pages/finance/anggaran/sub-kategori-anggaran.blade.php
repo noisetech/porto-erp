@@ -60,7 +60,9 @@
                             <tr>
                                 <th>No</th>
                                 <th>Kode</th>
-                                <th>Dapertemen</th>
+                                <th>Nama</th>
+                                <th>Keterangan</th>
+                                <th>Coa</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -164,7 +166,7 @@
 
             order: [],
             ajax: {
-                url: "{{ route('dapertemen.data') }}",
+                url: "{{ route('finance.sub_kategori_anggaran.data') }}",
                 type: "get",
             },
             columns: [{
@@ -175,11 +177,20 @@
                     data: 'kode',
                     name: 'kode'
                 },
-
                 {
-                    data: 'nama_dapertemen',
-                    name: 'nama_dapertemen'
+                    data: 'nama',
+                    name: 'nama'
                 },
+                {
+                    data: 'keterangan',
+                    name: 'keterangan'
+                },
+                {
+                    data: 'coa',
+                    name: 'coa'
+                },
+
+
                 {
                     data: 'action',
                     name: 'action'
@@ -294,16 +305,14 @@
     $(document).on('click', '.TutupModalTambah', function() {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('#fakultas').val(null).trigger('change').empty();
+        $('#kategori-anggaran, #coa').val(null).trigger('change').empty();
         $('#kode_error').text('');
-        $('#nama_dapertemen_error').text('');
     });
 
 
     $('#modalTambah').on('hidden.bs.modal', function(e) {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('#fakultas').val(null).trigger('change').empty();
         $('#kode_error').text('');
         $('#nama_dapertemen_error').text('');
     });
