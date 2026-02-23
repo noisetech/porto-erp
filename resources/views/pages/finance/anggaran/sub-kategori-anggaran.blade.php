@@ -394,6 +394,11 @@
     $(document).on('click', '#hapus', function(e) {
         e.preventDefault();
         let id = $(this).attr('data-id');
+
+        console.log(id);
+
+
+
         Swal.fire({
             title: 'Hapus data?',
             text: "Data akan terhapus!",
@@ -408,7 +413,7 @@
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('dapertemen.hapus') }}",
+                    url: "{{ route('finance.sub_kategori_anggaran.hapus') }}",
                     data: {
                         id: id,
                         _token: "{{ csrf_token() }}"

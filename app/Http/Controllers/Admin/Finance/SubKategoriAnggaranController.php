@@ -55,6 +55,7 @@ class SubKategoriAnggaranController extends Controller
                         ) as kode_akun_coa
                     ")
             )
+            ->whereNull('sub_kategori_anggaran.deleted_at')
             ->groupBy(
                 'sub_kategori_anggaran.id',
                 'sub_kategori_anggaran.kode_sub_kategori',
@@ -99,7 +100,8 @@ class SubKategoriAnggaranController extends Controller
                 'coa.id',
                 '=',
                 'mapping_sub_kategori_coa.coa_id'
-            );
+            )
+            ->whereNull('sub_kategori_anggaran.deleted_at');
 
         if (!empty($search)) {
             $filteredQuery->where(function ($q) use ($search) {
@@ -145,8 +147,8 @@ class SubKategoriAnggaranController extends Controller
 
             $action = '<a class="badge bg-secondary text-white"
                         data-id="' . $row->id . '"
-                        id="edit">
-                        <i class="bi bi-pencil"></i> Ubah
+                        id="hapus">
+                        <i class="bi bi-trash2"></i> Hapus
                    </a>';
 
             $result[] = [
@@ -334,5 +336,37 @@ class SubKategoriAnggaranController extends Controller
 
     public function update(Request $request) {}
 
-    public function hapus(Request $request) {}
+    public function hapus(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $subKategori = SubKategoriAnggaran::findOrFail($request->id);
+
+
+            $subKategori->coa()->detach();
+
+            $log_sub_kategori_anggaran = new LogSubKategoriAnggaran();
+            $log_sub_kategori_anggaran->user_id = Auth::user()->id;
+            $log_sub_kategori_anggaran->sub_kategori_anggaran_id = $subKategori->id;
+            $log_sub_kategori_anggaran->keterangan = 'menghapus data';
+            $log_sub_kategori_anggaran->save();
+
+            $subKategori->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Data berhasil dihapus'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
