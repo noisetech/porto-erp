@@ -10,7 +10,7 @@ class SubKategoriAnggaran extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'sub_kategori_anggran';
+    protected $table = 'sub_kategori_anggaran';
 
     protected $fillable = [
         'kategori_anggaran_id',

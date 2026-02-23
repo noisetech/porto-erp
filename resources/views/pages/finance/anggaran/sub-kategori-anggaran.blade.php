@@ -27,6 +27,14 @@
     .paginate_button .last {
         display: none !important;
     }
+
+
+
+    .select2-container--default .select2-selection--multiple {
+        min-height: 38px;
+        padding: 6px 8px;
+        /* font-size: 12px !; */
+    }
 </style>
 
 <div class="container-fluid">
@@ -99,6 +107,8 @@
                     <div class="form-group">
                         <label for="">Keterangan:</label>
                         <textarea name="keterangan" class="form-control" placeholder="Masukan keterangan" id=""></textarea>
+                        <span id="keterangan_error" class="text-danger error-text my-2">
+                        </span>
                     </div>
 
                     <div class="row mt-3 mb-3">
@@ -106,13 +116,17 @@
                             <div class="form-group">
                                 <label for="">Kategori Anggaran:</label>
                                 <select name="kategori_anggaran" class="form-control select2-kategori-anggaran" id="kategori-anggaran"></select>
+                                <span id="kategori_anggaran_error" class="text-danger error-text my-2">
+                                </span>
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Coa:</label>
-                                <select name="coa" class="form-control select2-coa" id="coa"></select>
+                                <select name="coa[]" class="form-control select2-coa" id="coa"></select>
+                                <span id="coa_error" class="text-danger error-text my-2">
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -198,7 +212,7 @@
             let formData = new FormData(this);
 
             $.ajax({
-                url: '{{ route("dapertemen.simpan") }}',
+                url: '{{ route("finance.sub_kategori_anggaran.simpan") }}',
                 method: 'POST',
                 data: formData,
                 processData: false,
@@ -231,17 +245,24 @@
         });
 
 
-        function initSelect2(selector, parent, route, placeholderText) {
+        function initSelect2(
+            selector,
+            parent,
+            route,
+            placeholderText,
+            isMultiple = false
+        ) {
             $(selector).select2({
                 dropdownParent: $(parent),
                 placeholder: placeholderText,
-                minimumInputLength: 2,
+                minimumInputLength: 1,
+                multiple: isMultiple,
                 language: {
                     inputTooShort: function(args) {
                         return 'Silakan ketik minimal ' + args.minimum + ' karakter';
                     }
                 },
-                allowClear: true,
+                allowClear: !isMultiple,
                 ajax: {
                     url: route,
                     dataType: 'json',
@@ -260,8 +281,8 @@
                 }
             });
         }
-        initSelect2('#kategori-anggaran', '#modalTambah', "{{ route('coa.listAkunIndukCoa') }}", '-- Kode/Kategori Anggaran --');
-        initSelect2('#coa', '#modalTambah', "{{ route('coa.listAkunIndukCoa') }}", '-- Kode/Kelompok dari COA --');
+        initSelect2('#kategori-anggaran', '#modalTambah', "{{ route('finance.sub_kategori_anggaran.listKategoriAnggaran') }}", '-- Cari berdasarkan Kode --');
+        initSelect2('#coa', '#modalTambah', "{{ route('finance.sub_kategori_anggaran.listCoa') }}", '-- Cari berdaskaran kode/kelompok --', true);
     });
 
     $(document).on('click', '.tambah', function(e) {

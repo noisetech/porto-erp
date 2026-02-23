@@ -178,6 +178,12 @@ Route::prefix('/dashboard')->group(function () {
 
     Route::get('/finance/sub-kategori-anggaran', [SubKategoriAnggaranController::class, 'index'])
         ->name('finance.sub_kategori_anggaran');
+    Route::get('/finance/sub-kategori-anggaran/listCoa', [SubKategoriAnggaranController::class, 'listCoa'])
+        ->name('finance.sub_kategori_anggaran.listCoa');
+    Route::get('/finance/sub-kategori-anggaran/listKategoriAnggaran', [SubKategoriAnggaranController::class, 'listKategoriAnggaran'])
+        ->name('finance.sub_kategori_anggaran.listKategoriAnggaran');
+    Route::post('/finance/sub-kategori-anggaran/simpan', [SubKategoriAnggaranController::class, 'simpan'])
+        ->name('finance.sub_kategori_anggaran.simpan');
 });
 
 /*

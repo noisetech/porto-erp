@@ -17,12 +17,66 @@ class SubKategoriAnggaranController extends Controller
         return view('pages.finance.anggaran.sub-kategori-anggaran');
     }
 
-    public function data(Request $request){
-        
-    }
+    public function data(Request $request) {}
 
 
     public function listKategoriAnggaran(Request $request)
+    {
+        if ($request->has('q')) {
+            $search = $request->q;
+
+            $result = [];
+            $data = DB::table('kategori_anggaran')
+                ->select(
+                    'kategori_anggaran.id as id',
+                    'kategori_anggaran.nama_kategori as nama_kategori',
+                    'kategori_anggaran.kode_kategori as kode_kategori'
+                )
+                ->whereNull('deleted_at')
+                ->where(
+                    'kategori_anggaran.kode_kategori',
+                    'LIKE',
+                    "%$search%"
+                )
+                ->orWhere(
+                    'kategori_anggaran.nama_kategori',
+                    'LIKE',
+                    "%$search%"
+                )
+                ->get();
+
+            foreach ($data as $d) {
+                $result[] = [
+                    'id' => $d->id,
+                    'text' => $d->kode_kategori . ' | ' . $d->nama_kategori
+                ];
+            }
+
+            return response()->json($result);
+        } else {
+            $result = [];
+            $data = DB::table('coa')
+                ->select(
+                    'kategori_anggaran.id as id',
+                    'kategori_anggaran.nama_kategori as nama_kategori',
+                    'kategori_anggaran.kode_kategori as kode_kategori'
+                )
+                ->whereNull('deleted_at')
+                ->get();
+
+
+            foreach ($data as $d) {
+                $result[] = [
+                    'id' => $d->id,
+                    'text' => $d->kode_akun . ' | ' . $d->nama_akun
+                ];
+            }
+
+            return response()->json($result);
+        }
+    }
+
+    public function listCoa(Request $request)
     {
         if ($request->has('q')) {
             $search = $request->q;
@@ -32,6 +86,7 @@ class SubKategoriAnggaranController extends Controller
                 ->select('*')
                 ->where('coa.deleted_at', null)
                 ->where('coa.kode_akun', 'LIKE', "%$search%")
+                ->orWhere('coa.nama_akun', 'LIKE', "%$search%")
                 ->get();
 
             foreach ($data as $d) {
@@ -62,18 +117,21 @@ class SubKategoriAnggaranController extends Controller
     }
 
 
+
     public function simpan(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'kategori_anggaran' => 'required',
             'kode' => 'required',
             'nama' => 'required',
-            'keterangan' => 'required'
+            'keterangan' => 'required',
+            'coa' => "required"
         ], [
             'kategori_anggaran.required' => 'Kategori anggaran tidak boleh kosong',
             'kode.required' => 'Kategori tidak boleh kosong',
             'nama.required' => 'Nama tidak boleh kosong',
-            'keterangan.required' => 'Keterangan tidak boleh kosong'
+            'keterangan.required' => 'Keterangan tidak boleh kosong',
+            'coa.required' => 'Coa tidak boleh kosong'
         ]);
 
         if ($validator->fails()) {
@@ -87,7 +145,7 @@ class SubKategoriAnggaranController extends Controller
 
             $sub_kategori_anggaran = new SubKategoriAnggaran();
             $sub_kategori_anggaran->kategori_anggaran_id = $request->kategori_anggaran;
-            $sub_kategori_anggaran->kode_sub_kategori = $request->kategori;
+            $sub_kategori_anggaran->kode_sub_kategori = $request->kode;
             $sub_kategori_anggaran->nama_sub_kategori = $request->nama;
             $sub_kategori_anggaran->keterangan = $request->keterangan;
             $sub_kategori_anggaran->save();
