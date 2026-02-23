@@ -20,9 +20,9 @@ class CoaController extends Controller
 
     public function data(Request $request)
     {
-        $start  = $request->start;
-        $length = $request->length;
-        $draw   = $request->draw;
+    $start  = $request->start;
+    $length = $request->length;
+    $draw   = $request->draw;
 
         $search = $request->input('search.value');
         $query = DB::table('coa as k')

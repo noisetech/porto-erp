@@ -158,7 +158,7 @@
     $(document).ready(function() {
         $('#datatable').DataTable({
             processing: true,
-            searching: false,
+            searching: true,
             serverSide: true,
             fixedHeader: true,
             responsive: true,
@@ -217,7 +217,7 @@
                 emptyTable: "Tidak ada data tersedia",
                 lengthMenu: "Tampilkan _MENU_ data",
                 search: "Cari:",
-                searchPlaceholder: "Berdasrkan nama atau npm",
+                searchPlaceholder: "silahkan ketik",
                 paginate: {
                     first: '',
                     last: '',
@@ -267,13 +267,7 @@
         });
 
 
-        function initSelect2(
-            selector,
-            parent,
-            route,
-            placeholderText,
-            isMultiple = false
-        ) {
+        function initSelect2(selector, parent, route, placeholderText, isMultiple = false) {
             $(selector).select2({
                 dropdownParent: $(parent),
                 placeholder: placeholderText,
@@ -303,8 +297,12 @@
                 }
             });
         }
-        initSelect2('#kategori-anggaran', '#modalTambah', "{{ route('finance.sub_kategori_anggaran.listKategoriAnggaran') }}", '-- Cari berdasarkan Kode --');
-        initSelect2('#coa', '#modalTambah', "{{ route('finance.sub_kategori_anggaran.listCoa') }}", '-- Cari berdaskaran kode/kelompok --', true);
+        initSelect2('#kategori-anggaran', '#modalTambah',
+            "{{ route('finance.sub_kategori_anggaran.listKategoriAnggaran') }}",
+            '-- Cari berdasarkan Kode --');
+        initSelect2('#coa', '#modalTambah',
+            "{{ route('finance.sub_kategori_anggaran.listCoa') }}",
+            '-- Cari berdaskaran kode/kelompok --', true);
     });
 
     $(document).on('click', '.tambah', function(e) {

@@ -19,10 +19,10 @@ class SubKategoriAnggaranController extends Controller
 
     public function data(Request $request)
     {
-        $length = $request->input('length', 10);
-        $start  = $request->input('start', 0);
-        $draw   = $request->input('draw', 1);
-        $search = $request->input('search.value');
+        $start  = (int) $request->start;
+        $length = (int) $request->length;
+        $draw   = (int) $request->draw;
+        $search = $request->search['value'] ?? null;
 
         /*
     |--------------------------------------------------------------------------
@@ -54,16 +54,13 @@ class SubKategoriAnggaranController extends Controller
                 'sub_kategori_anggaran.nama_sub_kategori',
                 'sub_kategori_anggaran.keterangan',
                 'sub_kategori_anggaran.created_at',
-
-                // alias BOLEH di select
                 'kategori_anggaran.kode_kategori as kode_kategori_anggaran',
-
                 DB::raw("
-            STRING_AGG(
-                coa.kode_akun || ' | ' || coa.nama_akun,
-                ','
-            ) as kode_akun_coa
-        ")
+                STRING_AGG(
+                    coa.kode_akun || ' | ' || coa.nama_akun,
+                    ','
+                ) as kode_akun_coa
+            ")
             )
             ->whereNull('sub_kategori_anggaran.deleted_at')
             ->groupBy(
@@ -72,16 +69,8 @@ class SubKategoriAnggaranController extends Controller
                 'sub_kategori_anggaran.nama_sub_kategori',
                 'sub_kategori_anggaran.keterangan',
                 'sub_kategori_anggaran.created_at',
-                // TANPA alias
                 'kategori_anggaran.kode_kategori'
             );
-
-        /*
-    |--------------------------------------------------------------------------
-    | TOTAL RECORD (tanpa filter)
-    |--------------------------------------------------------------------------
-    */
-        $recordsTotal = DB::table('sub_kategori_anggaran')->count();
 
         /*
     |--------------------------------------------------------------------------
@@ -91,9 +80,20 @@ class SubKategoriAnggaranController extends Controller
         if (!empty($search)) {
             $baseQuery->where(function ($q) use ($search) {
                 $q->where('sub_kategori_anggaran.nama_sub_kategori', 'ILIKE', "%{$search}%")
-                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%");
+                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
+                    ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
             });
         }
+
+        /*
+    |--------------------------------------------------------------------------
+    | TOTAL RECORD (TANPA FILTER)
+    |--------------------------------------------------------------------------
+    */
+        $recordsTotal = DB::table('sub_kategori_anggaran')
+            ->whereNull('deleted_at')
+            ->distinct('id')
+            ->count('id');
 
         /*
     |--------------------------------------------------------------------------
@@ -118,7 +118,8 @@ class SubKategoriAnggaranController extends Controller
         if (!empty($search)) {
             $filteredQuery->where(function ($q) use ($search) {
                 $q->where('sub_kategori_anggaran.nama_sub_kategori', 'ILIKE', "%{$search}%")
-                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%");
+                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
+                    ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
             });
         }
 
@@ -146,37 +147,33 @@ class SubKategoriAnggaranController extends Controller
 
         foreach ($data as $row) {
 
-            // Default kalau tidak ada COA
             $coaHtml = '-';
 
             if (!empty($row->kode_akun_coa)) {
-
                 $coaHtml = '<div class="d-flex flex-wrap">';
-
-                foreach (explode(',', $row->kode_akun_coa) as $kode) {
+                foreach (explode(',', $row->kode_akun_coa) as $item) {
                     $coaHtml .= '<span class="badge bg-primary text-white m-1">'
-                        . e($kode) .
+                        . e($item) .
                         '</span>';
                 }
-
                 $coaHtml .= '</div>';
             }
 
             $action = '<a class="badge bg-secondary text-white"
-                data-id="' . $row->id . '"
-                id="hapus">
-                <i class="bi bi-trash2"></i> Hapus
-               </a>';
+                    data-id="' . $row->id . '"
+                    id="hapus">
+                    <i class="bi bi-trash2"></i> Hapus
+                   </a>';
 
             $result[] = [
-                'no'         => $no++,
-                'id'         => $row->id,
-                'kode'       => $row->kode_sub_kategori,
-                'nama'       => $row->nama_sub_kategori,
-                'keterangan' => $row->keterangan,
+                'no'                     => $no++,
+                'id'                     => $row->id,
+                'kode'                   => $row->kode_sub_kategori,
+                'nama'                   => $row->nama_sub_kategori,
+                'keterangan'             => $row->keterangan,
                 'kode_kategori_anggaran' => $row->kode_kategori_anggaran,
-                'coa'        => $coaHtml,
-                'action'     => $action
+                'coa'                    => $coaHtml,
+                'action'                 => $action
             ];
         }
 
@@ -186,7 +183,7 @@ class SubKategoriAnggaranController extends Controller
     |--------------------------------------------------------------------------
     */
         return response()->json([
-            "draw"            => intval($draw),
+            "draw"            => $draw,
             "recordsTotal"    => $recordsTotal,
             "recordsFiltered" => $recordsFiltered,
             "data"            => $result
