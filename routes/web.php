@@ -180,6 +180,8 @@ Route::prefix('/dashboard')->group(function () {
         ->name('finance.sub_kategori_anggaran');
     Route::get('/finance/sub-kategori-anggaran/data', [SubKategoriAnggaranController::class, 'data'])
         ->name('finance.sub_kategori_anggaran.data');
+    Route::get('/finance/sub-kategori-anggaran/getDataById/{id}', [SubKategoriAnggaranController::class, 'getDataById'])
+        ->name('finance.sub_kategori_anggaran.getDataById');
     Route::get('/finance/sub-kategori-anggaran/listCoa', [SubKategoriAnggaranController::class, 'listCoa'])
         ->name('finance.sub_kategori_anggaran.listCoa');
     Route::get('/finance/sub-kategori-anggaran/listKategoriAnggaran', [SubKategoriAnggaranController::class, 'listKategoriAnggaran'])

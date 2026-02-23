@@ -159,7 +159,13 @@ class SubKategoriAnggaranController extends Controller
                 $coaHtml .= '</div>';
             }
 
-            $action = '<a class="badge bg-secondary text-white"
+            $action = '
+            <a class="badge bg-secondary text-white"
+                    data-id="' . $row->id . '"
+                    id="edit">
+                    <i class="bi bi-pencil"></i> Edit
+                   </a>
+            <a class="badge bg-secondary text-white"
                     data-id="' . $row->id . '"
                     id="hapus">
                     <i class="bi bi-trash2"></i> Hapus
@@ -345,7 +351,80 @@ class SubKategoriAnggaranController extends Controller
         }
     }
 
-    public function getDataById($id) {}
+    public function getDataById($id)
+    {
+
+        $rows = DB::table('sub_kategori_anggaran')
+            ->join(
+                'kategori_anggaran',
+                'kategori_anggaran.id',
+                '=',
+                'sub_kategori_anggaran.kategori_anggaran_id'
+            )
+            ->leftJoin(
+                'mapping_sub_kategori_coa',
+                'sub_kategori_anggaran.id',
+                '=',
+                'mapping_sub_kategori_coa.sub_kategori_anggaran_id'
+            )
+            ->leftJoin(
+                'coa',
+                'coa.id',
+                '=',
+                'mapping_sub_kategori_coa.coa_id'
+            )
+            ->where('sub_kategori_anggaran.id', $id)
+            ->whereNull('sub_kategori_anggaran.deleted_at')
+            ->select(
+                'sub_kategori_anggaran.id',
+                'sub_kategori_anggaran.kode_sub_kategori',
+                'sub_kategori_anggaran.nama_sub_kategori',
+                'sub_kategori_anggaran.keterangan',
+                'kategori_anggaran.kode_kategori as kode_kategori_anggaran',
+                'kategori_anggaran.id as id_kategori_anggaran',
+                'coa.id as coa_id',
+                'coa.kode_akun',
+                'coa.nama_akun'
+            )
+            ->get();
+
+        if ($rows->isEmpty()) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Data tidak ditemukan'
+            ], 404);
+        }
+
+        $first = $rows->first();
+
+        $result = [
+            'id_sub_kategori_anggaran'               => $first->id,
+            'kode_sub_kategori_anggaran' => $first->kode_sub_kategori,
+            'nama_sub_kategori_angaran' => $first->nama_sub_kategori,
+            'keterangan_sub_kategori_anggaran'       => $first->keterangan,
+            'kategori_anggaran' => [
+                'id_kategori_anggaran' => $first->id_kategori_anggaran,
+                'kode_kategori_anggaran' => $first->kode_kategori_anggaran
+            ],
+            'coa' => []
+        ];
+
+        foreach ($rows as $row) {
+            if ($row->coa_id) {
+                $result['coa'][] = [
+                    'id'        => $row->coa_id,
+                    'kode_akun_coa' => $row->kode_akun,
+                    'nama_akun_coa' => $row->nama_akun
+                ];
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'mesage' => 'Data ditemukan',
+            'data' => $result
+        ], 200, [], JSON_UNESCAPED_SLASHES);
+    }
 
     public function update(Request $request) {}
 

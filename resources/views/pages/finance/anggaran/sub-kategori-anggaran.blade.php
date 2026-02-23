@@ -133,14 +133,81 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalTambah">Tutup</button>
+                        <button type="submit" class="btn btn-primary btn-sm  px-2">Simpan</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEdit" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Dapertemen</h5>
+                <button type="button" class="btn-close TutupModalEdit"></button>
+            </div>
+            <div class="modal-body">
+                <form action="#" id="form-update" method="post">
+                    @csrf
+
+                    <input type="hidden" name="id" class="form-control" id="id">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Kode:</label>
+                                <input name="kode" class="form-control" placeholder="Masukan kode"></input>
+                                <span id="kode_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Nama:</label>
+                                <input name="nama" class="form-control" placeholder="Masukan nama" id="nama"></input>
+                                <span id="nama_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
 
+                    <div class="form-group">
+                        <label for="">Keterangan:</label>
+                        <textarea name="keterangan" class="form-control" placeholder="Masukan keterangan" id=""></textarea>
+                        <span id="keterangan_error" class="text-danger error-text my-2">
+                        </span>
+                    </div>
 
+                    <div class="row mt-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Kategori Anggaran:</label>
+                                <select name="kategori_anggaran" class="form-control select2-kategori-anggaran" id="kategori-anggaran"></select>
+                                <span id="kategori_anggaran_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Coa:</label>
+                                <select name="coa[]" class="form-control select2-coa" id="coa"></select>
+                                <span id="coa_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalTambah">Tutup</button>
+                        <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalEdit">Tutup</button>
                         <button type="submit" class="btn btn-primary btn-sm  px-2">Simpan</button>
                     </div>
                 </form>
@@ -340,18 +407,17 @@
         e.preventDefault();
         let id = $(this).attr('data-id');
         $.ajax({
-            url: '/dashboard/dapertemen/getDataById/' + id,
+            url: '/dashboard/finance/sub-kategori-anggaran/getDataById/' + id,
             method: "GET",
             processData: false,
             contentType: false,
             success: function(response) {
+                $('#kode').val(response.data.kode_sub_kategori_anggaran);
+                $('#nama').val(response.data.nama_sub_kategori_angaran);
 
-                console.log(response.data.nama_dapertemen);
-
+                console.log(response);
                 $('#modalEdit').modal('show');
-                $('#id').val(response.data.id);
-                $('#kode').val(response.data.kode);
-                $('#nama_dapertemen').val(response.data.nama_dapertemen);
+
             },
         })
     });
@@ -403,10 +469,6 @@
     $(document).on('click', '#hapus', function(e) {
         e.preventDefault();
         let id = $(this).attr('data-id');
-
-        console.log(id);
-
-
 
         Swal.fire({
             title: 'Hapus data?',
