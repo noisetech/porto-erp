@@ -16,7 +16,6 @@
         text-align: left !important;
     }
 
-
     th {
         font-size: 14px !important;
     }
@@ -56,6 +55,7 @@
                                 <th>Kelompok</th>
                                 <th>Induk</th>
                                 <th>Aktif</th>
+                                <th>Posting</th>
                                 <th>Keterangan</th>
                                 <th>Aksi</th>
                             </tr>
@@ -107,8 +107,8 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-4">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
                             <label for="">Jenis Akun</label>
                             <select name="jenis_akun" class="form-control">
                                 <option value="">--Pilih-</option>
@@ -122,15 +122,27 @@
                             </span>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="">Kelompok Akun</label>
                             <select name="kelompok_akun" id="kelompok-akun" class="form-control select2-kompok-akun">
                             </select>
                             <span id="kelompok_akun_error" class="text-danger error-text my-2">
                             </span>
                         </div>
+                    </div>
 
-                        <div class="col-md-4">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label for="">Boleh Posting:</label>
+                            <select name="boleh_posting" class="form-control" id="">
+                                <option value="">--Pilih--</option>
+                                <option value="1">Ya</option>
+                                <option value="0">Tidak</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
                             <label for="">Akun Induk</label>
                             <select id="induk-akun-coa" name="akun_induk" class="form-control select2-induk-akun-coa">
                                 <option value="">--Pilih-</option>
@@ -192,8 +204,8 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-4">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <label for="">Jenis Akun</label>
                             <select name="jenis_akun" class="form-control" id="jenis_akun">
                                 <option value="">--Pilih-</option>
@@ -207,15 +219,27 @@
                             </span>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="">Kelompok Akun</label>
                             <select name="kelompok_akun" id="edit-kelompok-akun" class="form-control select2-kompok-akun">
                             </select>
                             <span id="kelompok_akun_error" class="text-danger error-text my-2">
                             </span>
                         </div>
+                    </div>
 
-                        <div class="col-md-4">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label for="">Boleh Posting:</label>
+                            <select name="" class="form-control" id="">
+                                <option value="">--Pilih--</option>
+                                <option value="1">ya</option>
+                                <option value="0">tidak</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
                             <label for="">Akun Induk</label>
                             <select id="edit-induk-akun-coa" name="akun_induk" class="form-control select2-induk-akun-coa">
                                 <option value="">--Pilih-</option>
@@ -242,6 +266,45 @@
 <script>
     $(document).ready(function() {
 
+        $('#form-simpan').on('submit', function(e) {
+
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: '{{ route("coa.simpan") }}',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            title: 'Berhasil',
+                            text: 'Data disimpan',
+                            icon: 'success',
+                            timer: 3000,
+                        });
+                        $('#modalTambah').modal('hide');
+                        $('#form-simpan')[0].reset();
+                        $('#datatable').DataTable().ajax.reload();
+                        $('.select2-kompok-akun, .select2-induk-akun-coa').val(null).trigger('change');
+                    }
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            $('#' + key + '_error').text(value);
+                        });
+                    }
+                }
+            });
+        });
+
         $('#datatable').DataTable({
             processing: true,
             searching: true,
@@ -249,8 +312,7 @@
             fixedHeader: true,
             responsive: true,
             autoWidth: false,
-            pageLength: 50,
-
+            pageLength: 5,
             order: [],
             ajax: {
                 url: "{{ route('coa.data') }}",
@@ -285,6 +347,10 @@
                     name: 'aktif'
                 },
                 {
+                    data: 'posting',
+                    name: 'posting'
+                },
+                {
                     data: 'keterangan',
                     name: 'keterangan'
                 },
@@ -315,46 +381,35 @@
         });
 
 
-        $('#form-simpan').on('submit', function(e) {
-
-            e.preventDefault();
-
-            let formData = new FormData(this);
-
-            $.ajax({
-                url: '{{ route("coa.simpan") }}',
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.status === 'success') {
-                        Swal.fire({
-                            title: 'Berhasil',
-                            text: 'Data disimpan',
-                            icon: 'success',
-                            timer: 3000,
-                        });
-                        $('#modalTambah').modal('hide');
-                        $('#form-simpan')[0].reset();
-
-                        $('#datatable').DataTable().ajax.reload();
-                    }
-                },
-                error: function(xhr) {
-                    console.log(xhr);
-
-                    if (xhr.status === 422) {
-                        let errors = xhr.responseJSON.errors;
-                        $.each(errors, function(key, value) {
-                            $('#' + key + '_error').text(value);
-                        });
-                    }
+        function initSelect2(selector, parent, route) {
+            $(selector).select2({
+                dropdownParent: $(parent),
+                placeholder: '-- Pilih --',
+                allowClear: true,
+                ajax: {
+                    url: route,
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        let data = {
+                            q: params.term
+                        };
+                        return data;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
                 }
             });
-        });
+        }
 
-
+        initSelect2('#induk-akun-coa', '#modalTambah', "{{ route('coa.listAkunIndukCoa') }}");
+        initSelect2('#kelompok-akun', '#modalTambah', "{{ route('coa.listKelompokAkun') }}");
+        initSelect2('#edit-induk-akun-coa', '#modalEdit', "{{ route('coa.listAkunIndukCoa') }}");
+        initSelect2('#edit-kelompok-akun', '#modalEdit', "{{ route('coa.listKelompokAkun') }}");
     });
 
     $(document).on('click', '.tambah', function(e) {
@@ -366,7 +421,7 @@
     $(document).on('click', '.TutupModalTambah', function() {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('.select2-kompok-akun, select2-induk-akun-coa').val(null).trigger('change').empty();
+        $('.select2-kompok-akun, .select2-induk-akun-coa').val(null).trigger('change');
         $('#kode_error').text('');
         $('#kode_akun_error').text('');
         $('#nama_akun_error').text('');
@@ -379,7 +434,7 @@
     $('#modalTambah').on('hidden.bs.modal', function(e) {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('.select2-kompok-akun, select2-induk-akun-coa').val(null).trigger('change').empty();
+        $('.select2-kompok-akun, .select2-induk-akun-coa').val(null).trigger('change');
         $('#kode_error').text('');
         $('#kode_akun_error').text('');
         $('#nama_akun_error').text('');
@@ -388,35 +443,7 @@
         $('#jenis_akun_error').text('');
     });
 
-    function initSelect2(selector, parent, route) {
-        $(selector).select2({
-            dropdownParent: $(parent),
-            placeholder: '-- Pilih --',
-            allowClear: true,
-            ajax: {
-                url: route,
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    let data = {
-                        q: params.term
-                    };
-                    return data;
-                },
-                processResults: function(data) {
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            }
-        });
-    }
 
-    initSelect2('#induk-akun-coa', '#modalTambah', "{{ route('coa.listAkunIndukCoa') }}");
-    initSelect2('#kelompok-akun', '#modalTambah', "{{ route('coa.listKelompokAkun') }}");
-    initSelect2('#edit-induk-akun-coa', '#modalEdit', "{{ route('coa.listAkunIndukCoa') }}");
-    initSelect2('#edit-kelompok-akun', '#modalEdit', "{{ route('coa.listKelompokAkun') }}");
 
     $(document).on('click', '.TutupModalEdit', function() {
         $('#modalEdit').modal('hide');
@@ -457,9 +484,6 @@
             },
         })
     });
-
-
-
 
     $('#form-update').on('submit', function(e) {
 

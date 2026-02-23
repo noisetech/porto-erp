@@ -42,8 +42,7 @@ class KelompokAkunCoaController extends Controller
                 'p.kode_kelompok as induk_kode',
                 'p.nama_kelompok as induk_nama'
             )
-            ->orderByRaw('COALESCE(p.kode_kelompok, k.kode_kelompok)')
-            ->orderBy('k.kode_kelompok');
+            ->orderByRaw('COALESCE(p.kode_kelompok, k.kode_kelompok)');
 
         $recordsTotal = $query->count();
         if ($search) {

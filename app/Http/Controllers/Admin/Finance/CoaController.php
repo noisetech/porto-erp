@@ -34,7 +34,8 @@ class CoaController extends Controller
                 'kelompok_akun_coa.kode_kelompok as kode_kelompok',
                 'p.kode_akun as induk_akun'
             )
-            ->orderByRaw('COALESCE(p.kode_akun, k.kode_akun)');
+            // ->orderByRaw('COALESCE(p.kode_akun, k.kode_akun)')
+            ->orderBy('k.kode_akun', 'ASC');
 
         $recordsTotal = $query->count();
         if ($search) {
@@ -79,6 +80,9 @@ class CoaController extends Controller
                 'jenis_akun' => $row->jenis_akun,
                 'kelompok_akun' => $row->kode_kelompok,
                 'keterangan'       => $row->keterangan,
+                'posting' => $row->boleh_posting
+                    ? '<i class="bi bi-check-circle-fill text-success"></i>'
+                    : '<i class="bi bi-x-circle-fill text-danger"></i>',
                 'aktif'            => $row->aktif ? 'Ya' : 'Tidak',
                 'action'           => $action
             ];
@@ -97,13 +101,12 @@ class CoaController extends Controller
 
     public function simpan(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'kode_akun' => 'required|unique:coa,kode_akun',
             'nama_akun' => 'required',
             'jenis_akun' => 'required',
             'kelompok_akun' => 'required',
-            'keterangan' => 'required'
+            'keterangan' => 'required',
         ], [
             'kode_akun.required' => 'Kode akun tidak boleh kosong',
             'kode_akun.unique' => 'Kode akun sudah ada',
@@ -131,6 +134,7 @@ class CoaController extends Controller
             $coa->kelompok_akun_coa_id = $request->kelompok_akun;
             $coa->akun_induk_id = $request->akun_induk;
             $coa->keterangan = $request->keterangan;
+            $coa->boleh_posting = $request->boleh_posting;
             $coa->save();
 
 
@@ -280,15 +284,21 @@ class CoaController extends Controller
     public function listKelompokAkun(Request $request)
     {
         if ($request->has('q')) {
+
             $search = $request->q;
 
-            $result = [];
             $data = DB::table('kelompok_akun_coa')
-                ->select('*')
-                ->where('kelompok_akun_coa.deleted_at', null)
-                ->where('kelompok_akun_coa.kode_kelompok', 'LIKE', "%$search%")
+                ->select('id', 'kode_kelompok', 'nama_kelompok')
+                ->whereNull('deleted_at')
+                ->when($search, function ($query) use ($search) {
+                    $query->where(function ($q) use ($search) {
+                        $q->whereRaw('LOWER(kode_kelompok) LIKE ?', ["%{$search}%"])
+                            ->orWhereRaw('LOWER(nama_kelompok) LIKE ?', ["%{$search}%"]);
+                    });
+                })
                 ->get();
 
+            $result = [];
             foreach ($data as $d) {
                 $result[] = [
                     'id' => $d->id,
@@ -301,7 +311,7 @@ class CoaController extends Controller
             $result = [];
             $data = DB::table('kelompok_akun_coa')
                 ->select('*')
-                ->where('kelompok_akun_coa.deleted_at', null)
+                ->whereNull('deleted_at')
                 ->get();
 
 
