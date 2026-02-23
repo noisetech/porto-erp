@@ -27,12 +27,7 @@ class KategoriAnggaranController extends Controller
 
 
         $query = DB::table('kategori_anggaran')
-            ->join(
-                'coa',
-                'coa.id',
-                '=',
-                'kategori_anggaran.coa_id'
-            )
+            ->select('kategori_anggaran.*')
             ->where('kategori_anggaran.deleted_at', null);
         $recordsTotal = $query->count();
 
@@ -53,10 +48,7 @@ class KategoriAnggaranController extends Controller
 
         foreach ($data as $row) {
 
-            $action =  '<a class="btn btn-secondary text-sm text-white"
-                       href="javascript:void(0)" id="edit" data-id="' . $row->id . '">
-                       <i class="bi bi-pencil px-1"></i> Edit
-                    </a>
+            $action =  '
                     <a class="btn btn-secondary text-sm text-white"
                        href="javascript:void(0)" id="hapus" data-id="' . $row->id . '">
                        <i class="bi bi-trash px-1"></i> Hapus
@@ -67,6 +59,8 @@ class KategoriAnggaranController extends Controller
                 'id'       => $row->id,
                 'kode_kategori'       => $row->kode_kategori,
                 'nama_kategori'     => $row->nama_kategori,
+                'keterangan' => $row->keterangan,
+                'aktif' => $row->aktif ? 'Ya' : 'Tidak',
                 'action'   => $action
             ];
         }
@@ -83,39 +77,47 @@ class KategoriAnggaranController extends Controller
 
     public function simpan(Request $request)
     {
+
+        // dd($request->all());
+
         $validator = Validator::make($request->all(), [
-            'kode_kategori' => 'required',
             'nama_kategori' => 'required',
-            'coa' => 'required',
+            'kode_kategori' => 'required',
+            'keterangan' => 'required'
         ], [
-            'kode_kategori.required' => 'Kode kategori tidak boleh kosong',
             'nama_kategori.required' => 'Nama kategori tidak boleh kosong',
-            'coa.required' => 'Coa tidak boleh kosong'
+            'kode_kategori' => 'Kode kategori tidak boleh kosong',
+            'keterangan.required' => 'Keterangan tidak boleh kosong'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'success',
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
         DB::beginTransaction();
 
         try {
+            $kategori_anggaran = new KategoriAnggaran();
+            $kategori_anggaran->kode_kategori = $request->kode_kategori;
+            $kategori_anggaran->nama_kategori = $request->nama_kategori;
+            $kategori_anggaran->keterangan = $request->keterangan;
+            $kategori_anggaran->save();
 
-            $kategori_anggaran = DB::table('kategori_anggaran')
-                ->insertGetId([
-                    'kode_kategori' => $request->kode_kategori,
-                    'nama_kategori' => $request->nama_kategori,
-                    'slug' => Str::slug($request->nama_kategori),
-                    'keterangan' => $request->keterangan
-                ]);
 
-            DB::table('log_kategori_anggaran')
-                ->insert([
-                    'kategori_anggaran_id' => $kategori_anggaran,
-                    'user_id' => Auth::user()->id,
-                    'keterangan' => 'menambah data'
-                ]);
+            $log_kategori_anggaran = new LogKategoriAnggaran();
+            $log_kategori_anggaran->user_id = Auth::user()->id;
+            $log_kategori_anggaran->kategori_anggaran_id = $kategori_anggaran->id;
+            $log_kategori_anggaran->keterangan = 'menambah data';
+            $log_kategori_anggaran->save();
+
             DB::commit();
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Data disimpan',
+                'message' => 'Data disimpan'
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -127,70 +129,26 @@ class KategoriAnggaranController extends Controller
         }
     }
 
-    public function listCoa(Request $request)
-    {
-        if ($request->has('q')) {
-            $search = $request->q;
-
-            $result = [];
-            $data = DB::table('coa')
-                ->select('*')
-                ->where('coa.deleted_at', null)
-                ->where('coa.kode_akun', 'LIKE', "%$search%")
-                ->get();
-
-            foreach ($data as $d) {
-                $result[] = [
-                    'id' => $d->id,
-                    'text' => $d->kode_akun . ' | ' . $d->nama_akun
-                ];
-            }
-
-            return response()->json($result);
-        } else {
-            $result = [];
-            $data = DB::table('coa')
-                ->select('*')
-                ->where('coa.deleted_at', null)
-                ->get();
-
-
-            foreach ($data as $d) {
-                $result[] = [
-                    'id' => $d->id,
-                    'text' => $d->kode_akun . ' | ' . $d->nama_akun
-                ];
-            }
-
-            return response()->json($result);
-        }
-    }
-
-    public function getDataByID($id) {}
-
-    public function update(Request $request) {}
-
     public function hapus(Request $request)
     {
         DB::beginTransaction();
 
         try {
-
-            $kategori_anggaran = KategoriAnggaran::find($request->id);
+            $kategori_anggaran = KategoriAnggaran::findOrFail($request->id);
             $kategori_anggaran->delete();
 
-            $log_kategori_anggaran = new LogKategoriAnggaran();
-            $log_kategori_anggaran->user_id = Auth::user()->id;
-            $log_kategori_anggaran->kategori_anggaran = $kategori_anggaran->id;
-            $log_kategori_anggaran->keterangan = 'menghapus data';
-            $log_kategori_anggaran->save();
+            LogKategoriAnggaran::create([
+                'user_id' => Auth::id(),
+                'kategori_anggaran_id' => $request->id,
+                'keterangan' => 'menghapus data'
+            ]);
 
             DB::commit();
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Data disimpan',
-            ], 200);
+                'message' => 'Data dihapus'
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
 

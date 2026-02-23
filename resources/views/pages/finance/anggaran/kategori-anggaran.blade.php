@@ -47,7 +47,10 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kategori Anggaran</th>
+                                <th>Kategori</th>
+                                <th>Nama</th>
+                                <th>Aktif</th>
+                                <th>Keterangan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -90,22 +93,12 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">COA:</label>
-                                <select name="coa" class="form-control select2-coa" id="coa"></select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">Keterangan:</label>
-                                <textarea name="" class="form-control" style="height: 200px !important;" placeholder="Masukan keterangan" id=""></textarea>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="">Keterangan:</label>
+                        <textarea name="keterangan" class="form-control" style="height: 200px !important;" placeholder="Masukan keterangan" id=""></textarea>
+                        <span id="keterangan_error" class="text-danger error-text my-2">
+                        </span>
                     </div>
-
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalTambah">Tutup</button>
@@ -143,8 +136,20 @@
                     name: 'no'
                 },
                 {
-                    data: 'kategori_anggaran',
-                    name: 'kategori_anggaran'
+                    data: 'kode_kategori',
+                    name: 'kode_kategori'
+                },
+                {
+                    data: 'nama_kategori',
+                    name: 'nama_kategori'
+                },
+                {
+                    data: 'aktif',
+                    name: 'aktif'
+                },
+                {
+                    data: 'keterangan',
+                    name: 'keterangan'
                 },
 
                 {
@@ -181,32 +186,86 @@
         });
 
 
-        function initSelect2(selector, parent, route) {
-            $(selector).select2({
-                dropdownParent: $(parent),
-                placeholder: '-- Pilih --',
-                allowClear: true,
-                ajax: {
-                    url: route,
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        let data = {
-                            q: params.term
-                        };
-                        return data;
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: data
-                        };
-                    },
-                    cache: true
+        $('#form-simpan').on('submit', function(e) {
+
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: '{{ route("finance.kategori_anggaran.simpan") }}',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            title: 'Berhasil',
+                            text: 'Data disimpan',
+                            icon: 'success',
+                            timer: 3000,
+                        });
+                        $('#modalTambah').modal('hide');
+                        $('#form-simpan')[0].reset();
+
+                        $('#datatable').DataTable().ajax.reload();
+                    }
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            $('#' + key + '_error').text(value);
+                        });
+                    }
                 }
             });
-        }
+        });
 
-        initSelect2('#coa', '#modalTambah', "{{ route('finance.kategori_anggaran.listCoa') }}");
+
+
+        $(document).on('click', '#hapus', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Hapus data?',
+                text: "Data akan terhapus!",
+                icon: 'warning',
+                confirmButton: true,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('finance.kategori_anggaran.hapus') }}",
+                        data: {
+                            id: id,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(respose) {
+                            if (respose.status == 'success') {
+                                Swal.fire({
+                                    title: 'Berhasil',
+                                    text: 'Data dihapus',
+                                    icon: 'success',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+
+                                $('#datatable').DataTable().ajax.reload();
+                            }
+                        },
+                    })
+                }
+            });
+        });
 
 
     });

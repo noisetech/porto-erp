@@ -325,40 +325,49 @@
                 },
                 {
                     data: 'kode_akun',
-                    name: 'kode_akun'
+                    name: 'kode_akun',
+                    orderable: false
                 },
                 {
                     data: 'nama_akun',
-                    name: 'nama_akun'
+                    name: 'nama_akun',
+                    orderable: false
                 },
                 {
                     data: 'jenis_akun',
-                    name: 'jenis_akun'
+                    name: 'jenis_akun',
+                    orderable: false
                 },
                 {
                     data: 'kelompok_akun',
-                    name: 'kelompok_akun'
+                    name: 'kelompok_akun',
+                    orderable: false
                 },
                 {
                     data: 'induk_akun',
-                    name: 'induk_akun'
+                    name: 'induk_akun',
+                    orderable: false
                 },
                 {
                     data: 'aktif',
-                    name: 'aktif'
+                    name: 'aktif',
+                    orderable: false
                 },
                 {
                     data: 'posting',
-                    name: 'posting'
+                    name: 'posting',
+                    orderable: false
                 },
                 {
                     data: 'keterangan',
-                    name: 'keterangan'
+                    name: 'keterangan',
+                    orderable: false
                 },
 
                 {
                     data: 'action',
-                    name: 'action'
+                    name: 'action',
+                    orderable: false
                 },
             ],
             pagingType: "full_numbers",
@@ -559,5 +568,8 @@
             }
         });
     });
+
+
+
 </script>
 @endpush

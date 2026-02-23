@@ -34,7 +34,6 @@ class CoaController extends Controller
                 'kelompok_akun_coa.kode_kelompok as kode_kelompok',
                 'p.kode_akun as induk_akun'
             )
-            // ->orderByRaw('COALESCE(p.kode_akun, k.kode_akun)')
             ->orderBy('k.kode_akun', 'ASC');
 
         $recordsTotal = $query->count();

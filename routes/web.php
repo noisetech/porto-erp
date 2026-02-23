@@ -1,10 +1,10 @@
 <?php
 
 
-use App\Http\Controllers\Admin\Anggaran\SubKategoriAnggaranController;
 use App\Http\Controllers\Admin\AsetKantor\KategoriAsetController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Finance\CoaController;
+use App\Http\Controllers\Admin\Finance\SubKategoriAnggaranController;
 use App\Http\Controllers\Admin\Finance\KategoriAnggaranController;
 use App\Http\Controllers\Admin\Finance\KelompokAkunCoaController;
 use App\Http\Controllers\Admin\HR\DapertemenController;
@@ -166,10 +166,6 @@ Route::prefix('/dashboard')->group(function () {
         ->name('finance.kategori_anggaran.data');
     Route::post('/finance/kategori-anggaran/simpan', [KategoriAnggaranController::class, 'simpan'])
         ->name('finance.kategori_anggaran.simpan');
-    Route::get('/finance/kategori-anggaran/getDataById/{id}', [KategoriAnggaranController::class, 'getDataById'])
-        ->name('finance.kategori_anggaran.getDataById');
-    Route::get('/finance/kategori-anggaran/listCoa', [KategoriAnggaranController::class, 'listCoa'])
-        ->name('finance.kategori_anggaran.listCoa');
     Route::post('/finance/kategori-anggaran/hapus', [KategoriAnggaranController::class, 'hapus'])
         ->name('finance.kategori_anggaran.hapus');
 
@@ -180,12 +176,8 @@ Route::prefix('/dashboard')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/master/sub-kategori-anggaran', [SubKategoriAnggaranController::class, 'index'])
-        ->name('master.sub-kategori_anggaran');
-    Route::get('/master/sub-kategori-anggaran/data', [SubKategoriAnggaranController::class, 'data'])
-        ->name('master.sub-kategori_anggaran.data');
-    Route::get('/master/sub-kategori-anggaran/listKategoriAnggaran', [SubKategoriAnggaranController::class, 'listKategoriAnggaran'])
-        ->name('master.sub-kategori_anggaran.listKategoriAnggaran');
+    Route::get('/finance/sub-kategori-anggaran', [SubKategoriAnggaranController::class, 'index'])
+        ->name('finance.sub_kategori_anggaran');
 });
 
 /*

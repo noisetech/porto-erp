@@ -1,6 +1,6 @@
 @extends('layouts.be')
 
-@section('title', 'Sub Kategori Anggaran')
+@section('title', 'HR-Dapertemen')
 @section('content')
 
 <style>
@@ -29,7 +29,7 @@
     <div class="inner-contents">
         <div class="page-header d-flex align-items-center justify-content-between mr-bottom-30">
             <div class="left-part">
-                <h2 class="text-dark">Sub Kategori Anggaran</h2>
+                <h2 class="text-dark">Manajemen Dapertemen</h2>
             </div>
         </div>
 
@@ -47,7 +47,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kategori Anggaran</th>
+                                <th>Kode</th>
+                                <th>Dapertemen</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -60,10 +61,10 @@
 
 
 <div class="modal fade" id="modalTambah" tabindex="-1">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Sub Kategori Anggaran</h5>
+                <h5 class="modal-title">Tambah Dapertemen</h5>
                 <button type="button" class="btn-close TutupModalTambah"></button>
             </div>
             <div class="modal-body">
@@ -71,34 +72,20 @@
                     @csrf
 
                     <div class="form-group">
-                        <label for="">Kategori Anggaran:</label>
-                        <select name="dapertemen" id="dapertemen" class="form-control select2-dapertemen"></select>
-                        <span id="dapertemen_error" class="text-danger error-text my-2">
+                        <label for="">Kode:</label>
+                        <input name="kode" class="form-control"></input>
+                        <span id="kode_error" class="text-danger error-text my-2">
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Dapertemen:</label>
+                        <input name="nama_dapertemen" class="form-control"></input>
+                        <span id="nama_dapertemen_error" class="text-danger error-text my-2">
                         </span>
                     </div>
 
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">Nama Sub Anggaran:</label>
-                                <input name="nama_sub_anggaran" class="form-control"></input>
-                                <span id="nama_sub_anggaran_error" class="text-danger error-text my-2">
-                                </span>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">Komponen Sub Anggaran:</label>
-                                <input name="komponen_sub_anggaran" class="form-control"></input>
-                                <span id="komponen_sub_anggaran_error" class="text-danger error-text my-2">
-                                </span>
-                            </div>
-
-                        </div>
-                    </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalTambah">Tutup</button>
@@ -111,9 +98,9 @@
     </div>
 </div>
 
-<div class="modal fade " id="modalEdit" tabindex="-1">
+<div class="modal fade" id="modalEdit" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content ">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Dapertemen</h5>
                 <button type="button" class="btn-close TutupModalEdit"></button>
@@ -168,7 +155,7 @@
 
             order: [],
             ajax: {
-                url: "{{ route('master.sub-kategori_anggaran.data') }}",
+                url: "{{ route('dapertemen.data') }}",
                 type: "get",
             },
             columns: [{
@@ -176,10 +163,14 @@
                     name: 'no'
                 },
                 {
-                    data: 'kategori_anggaran',
-                    name: 'kategori_anggaran'
+                    data: 'kode',
+                    name: 'kode'
                 },
 
+                {
+                    data: 'nama_dapertemen',
+                    name: 'nama_dapertemen'
+                },
                 {
                     data: 'action',
                     name: 'action'
@@ -193,7 +184,7 @@
                 infoFiltered: "(difilter dari _MAX_ total data)",
                 zeroRecords: "Tidak ada data yang cocok",
                 emptyTable: "Tidak ada data tersedia",
-                lengthMenu: "Tampilkan _MENU_",
+                lengthMenu: "Tampilkan _MENU_ data",
                 search: "Cari:",
                 searchPlaceholder: "Berdasrkan nama atau npm",
                 paginate: {
@@ -212,7 +203,7 @@
             let formData = new FormData(this);
 
             $.ajax({
-                url: '{{ route("master.kategori_anggaran.simpan") }}',
+                url: '{{ route("dapertemen.simpan") }}',
                 method: 'POST',
                 data: formData,
                 processData: false,
@@ -270,34 +261,6 @@
         $('#nama_dapertemen_error').text('');
     });
 
-    function initSelect2(selector, parent, route) {
-        $(selector).select2({
-            dropdownParent: $(parent),
-            placeholder: '-- Pilih --',
-            allowClear: true,
-            ajax: {
-                url: route,
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    let data = {
-                        q: params.term
-                    };
-                    return data;
-                },
-                processResults: function(data) {
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            }
-        });
-    }
-
-    initSelect2('#dapertemen', '#modalTambah', "{{ route('master.sub-kategori_anggaran.listKategoriAnggaran') }}");
-
-
 
     $(document).on('click', '.TutupModalEdit', function() {
         $('#modalEdit').modal('hide');
@@ -312,14 +275,18 @@
         e.preventDefault();
         let id = $(this).attr('data-id');
         $.ajax({
-            url: '/admin/master/kategori-anggaran/getDataById/' + id,
+            url: '/dashboard/dapertemen/getDataById/' + id,
             method: "GET",
             processData: false,
             contentType: false,
             success: function(response) {
 
-                console.log(response);
+                console.log(response.data.nama_dapertemen);
 
+                $('#modalEdit').modal('show');
+                $('#id').val(response.data.id);
+                $('#kode').val(response.data.kode);
+                $('#nama_dapertemen').val(response.data.nama_dapertemen);
             },
         })
     });
@@ -385,7 +352,7 @@
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('master.kategori_anggaran.hapus') }}",
+                    url: "{{ route('dapertemen.hapus') }}",
                     data: {
                         id: id,
                         _token: "{{ csrf_token() }}"
