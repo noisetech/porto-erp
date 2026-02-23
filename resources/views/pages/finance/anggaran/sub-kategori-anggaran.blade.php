@@ -61,6 +61,7 @@
                                 <th>No</th>
                                 <th>Kode</th>
                                 <th>Nama</th>
+                                <th>Kategori Anggaran</th>
                                 <th>Keterangan</th>
                                 <th>Coa</th>
                                 <th>Aksi</th>
@@ -171,29 +172,39 @@
             },
             columns: [{
                     data: 'no',
-                    name: 'no'
+                    name: 'no',
+                    orderable: false
                 },
                 {
                     data: 'kode',
-                    name: 'kode'
+                    name: 'kode',
+                    orderable: false
                 },
                 {
                     data: 'nama',
-                    name: 'nama'
+                    name: 'nama',
+                },
+                {
+                    data: 'kode_kategori_anggaran',
+                    name: 'kode_kategori_anggaran',
+                    orderable: false
                 },
                 {
                     data: 'keterangan',
-                    name: 'keterangan'
+                    name: 'keterangan',
+                    orderable: false
                 },
                 {
                     data: 'coa',
-                    name: 'coa'
+                    name: 'coa',
+                    orderable: false
                 },
 
 
                 {
                     data: 'action',
-                    name: 'action'
+                    name: 'action',
+                    orderable: false
                 },
             ],
             pagingType: "full_numbers",

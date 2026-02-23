@@ -30,6 +30,12 @@ class SubKategoriAnggaranController extends Controller
     |--------------------------------------------------------------------------
     */
         $baseQuery = DB::table('sub_kategori_anggaran')
+            ->join(
+                'kategori_anggaran',
+                'kategori_anggaran.id',
+                '=',
+                'sub_kategori_anggaran.kategori_anggaran_id'
+            )
             ->leftJoin(
                 'mapping_sub_kategori_coa',
                 'sub_kategori_anggaran.id',
@@ -48,12 +54,16 @@ class SubKategoriAnggaranController extends Controller
                 'sub_kategori_anggaran.nama_sub_kategori',
                 'sub_kategori_anggaran.keterangan',
                 'sub_kategori_anggaran.created_at',
+
+                // alias BOLEH di select
+                'kategori_anggaran.kode_kategori as kode_kategori_anggaran',
+
                 DB::raw("
-                        STRING_AGG(
-                            coa.kode_akun || ' | ' || coa.nama_akun,
-                            ','
-                        ) as kode_akun_coa
-                    ")
+            STRING_AGG(
+                coa.kode_akun || ' | ' || coa.nama_akun,
+                ','
+            ) as kode_akun_coa
+        ")
             )
             ->whereNull('sub_kategori_anggaran.deleted_at')
             ->groupBy(
@@ -61,7 +71,9 @@ class SubKategoriAnggaranController extends Controller
                 'sub_kategori_anggaran.kode_sub_kategori',
                 'sub_kategori_anggaran.nama_sub_kategori',
                 'sub_kategori_anggaran.keterangan',
-                'sub_kategori_anggaran.created_at'
+                'sub_kategori_anggaran.created_at',
+                // TANPA alias
+                'kategori_anggaran.kode_kategori'
             );
 
         /*
@@ -134,31 +146,37 @@ class SubKategoriAnggaranController extends Controller
 
         foreach ($data as $row) {
 
-            // COA badge
-            $coaHtml = '<div class="d-flex flex-wrap">';
+            // Default kalau tidak ada COA
+            $coaHtml = '-';
+
             if (!empty($row->kode_akun_coa)) {
+
+                $coaHtml = '<div class="d-flex flex-wrap">';
+
                 foreach (explode(',', $row->kode_akun_coa) as $kode) {
                     $coaHtml .= '<span class="badge bg-primary text-white m-1">'
                         . e($kode) .
                         '</span>';
                 }
+
+                $coaHtml .= '</div>';
             }
-            $coaHtml .= '</div>';
 
             $action = '<a class="badge bg-secondary text-white"
-                        data-id="' . $row->id . '"
-                        id="hapus">
-                        <i class="bi bi-trash2"></i> Hapus
-                   </a>';
+                data-id="' . $row->id . '"
+                id="hapus">
+                <i class="bi bi-trash2"></i> Hapus
+               </a>';
 
             $result[] = [
-                'no'       => $no++,
-                'id'     => $row->id,
-                'kode'   => $row->kode_sub_kategori,
-                'nama'   => $row->nama_sub_kategori,
+                'no'         => $no++,
+                'id'         => $row->id,
+                'kode'       => $row->kode_sub_kategori,
+                'nama'       => $row->nama_sub_kategori,
                 'keterangan' => $row->keterangan,
-                'coa'    => $coaHtml,
-                'action' => $action
+                'kode_kategori_anggaran' => $row->kode_kategori_anggaran,
+                'coa'        => $coaHtml,
+                'action'     => $action
             ];
         }
 
@@ -281,13 +299,11 @@ class SubKategoriAnggaranController extends Controller
             'kode' => 'required',
             'nama' => 'required',
             'keterangan' => 'required',
-            'coa' => "required"
         ], [
             'kategori_anggaran.required' => 'Kategori anggaran tidak boleh kosong',
             'kode.required' => 'Kategori tidak boleh kosong',
             'nama.required' => 'Nama tidak boleh kosong',
             'keterangan.required' => 'Keterangan tidak boleh kosong',
-            'coa.required' => 'Coa tidak boleh kosong'
         ]);
 
         if ($validator->fails()) {
