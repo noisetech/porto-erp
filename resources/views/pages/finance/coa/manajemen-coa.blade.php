@@ -23,6 +23,10 @@
     td {
         font-size: 14px !important;
     }
+
+    #datatable_filter {
+        margin-right: 50px !important;
+    }
 </style>
 
 <div class="container-fluid">
@@ -110,7 +114,7 @@
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <label for="">Jenis Akun</label>
-                            <select name="jenis_akun" class="form-control">
+                            <select name="jenis_akun" class="form-control form-select">
                                 <option value="">--Pilih-</option>
                                 <option value="aset">Aset</option>
                                 <option value="kewajiban">Kewajiban</option>
@@ -135,7 +139,7 @@
 
                         <div class="col-md-6">
                             <label for="">Boleh Posting:</label>
-                            <select name="boleh_posting" class="form-control" id="">
+                            <select name="boleh_posting" class="form-control form-select" id="">
                                 <option value="">--Pilih--</option>
                                 <option value="1">Ya</option>
                                 <option value="0">Tidak</option>
@@ -170,10 +174,7 @@
             <div class="modal-body">
                 <form action="#" id="form-update" method="post">
                     @csrf
-
                     <input type="hidden" name="id" class="form-control" id="id">
-
-
 
                     <div class="row">
                         <div class="col-md-4">
@@ -207,7 +208,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="">Jenis Akun</label>
-                            <select name="jenis_akun" class="form-control" id="jenis_akun">
+                            <select name="jenis_akun" class="form-control form-select" id="jenis_akun">
                                 <option value="">--Pilih-</option>
                                 <option value="aset">Aset</option>
                                 <option value="kewajiban">Kewajiban</option>
@@ -232,7 +233,7 @@
 
                         <div class="col-md-6">
                             <label for="">Boleh Posting:</label>
-                            <select name="" class="form-control" id="">
+                            <select name="boleh_posting" class="form-control form-select" id="boleh_posting_edit">
                                 <option value="">--Pilih--</option>
                                 <option value="1">ya</option>
                                 <option value="0">tidak</option>
@@ -370,7 +371,7 @@
                 emptyTable: "Tidak ada data tersedia",
                 lengthMenu: "Tampilkan _MENU_",
                 search: "Cari:",
-                searchPlaceholder: "Berdasrkan kode",
+                searchPlaceholder: "kode atau nama",
                 paginate: {
                     first: '',
                     last: '',
@@ -469,18 +470,11 @@
                 $('#nama_akun').val(response.data.nama_akun);
                 $('#keterangan').val(response.data.keterangan);
                 $('#jenis_akun').val(response.data.jenis_akun);
-
-                let optF = new Option(response.data.kode_kelompok ||
-                    '--Pili--', response.data.kelompok_akun_coa_id, true, true);
-                $('#edit-kelompok-akun').append(optF).trigger('change');
-                let optI = new Option(
-                    response.data.induk_akun || '--Pilih--',
-                    response.data.akun_induk_id,
-                    true,
-                    true
-                );
-
-                $('#edit-induk-akun-coa').append(optI).trigger('change');
+                $('#boleh_posting_edit').val(response.data.boleh_posting ? '1' : '0');
+                let optKelompokAkun= new Option(response.data.kode_kelompok || '--Pilih--', response.data.kelompok_akun_coa_id, true, true);
+                $('#edit-kelompok-akun').append(optKelompokAkun).trigger('change');
+                let optIndukAkun = new Option(response.data.induk_akun || '--Pilih--', response.data.akun_induk_id, true, true);
+                $('#edit-induk-akun-coa').append(optIndukAkun).trigger('change');
             },
         })
     });

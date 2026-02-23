@@ -78,7 +78,7 @@ class CoaController extends Controller
                 'kode_akun'    => $row->kode_akun,
                 'nama_akun'    => $row->nama_akun,
                 'induk_akun'  => $induk_akun,
-                'jenis_akun' => $row->jenis_akun,
+                'jenis_akun' => Str::ucfirst($row->jenis_akun),
                 'kelompok_akun' => $row->kode_kelompok,
                 'keterangan'       => $row->keterangan,
                 'posting' => $row->boleh_posting
@@ -163,6 +163,8 @@ class CoaController extends Controller
 
     public function update(Request $request)
     {
+
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'kode_akun' => 'required|unique:coa,kode_akun, ' . $request->id,
             'nama_akun' => 'required',
@@ -196,6 +198,7 @@ class CoaController extends Controller
             $coa->kelompok_akun_coa_id = $request->kelompok_akun;
             $coa->akun_induk_id = $request->akun_induk;
             $coa->keterangan = $request->keterangan;
+            $coa->boleh_posting = $request->boleh_posting;
             $coa->save();
 
 
