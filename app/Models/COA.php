@@ -32,4 +32,9 @@ class COA extends Model
     {
         return $this->hasMany(COA::class, 'akun_induk_id');
     }
+
+    public function sub_kategori_anggaran()
+    {
+        return $this->belongsToMany(SubKategoriAnggaran::class, 'mapping_sub_kategori_coa', 'sub_kategori_anggaran_id', 'coa_id');
+    }
 }

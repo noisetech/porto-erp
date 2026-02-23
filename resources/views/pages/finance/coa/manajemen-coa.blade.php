@@ -27,6 +27,10 @@
     #datatable_filter {
         margin-right: 50px !important;
     }
+
+    .paginate_button .last {
+        display: none !important;
+    }
 </style>
 
 <div class="container-fluid">
@@ -380,7 +384,7 @@
                 emptyTable: "Tidak ada data tersedia",
                 lengthMenu: "Tampilkan _MENU_",
                 search: "Cari:",
-                searchPlaceholder: "kode atau nama",
+                searchPlaceholder: "silahkan cari data",
                 paginate: {
                     first: '',
                     last: '',
@@ -480,7 +484,7 @@
                 $('#keterangan').val(response.data.keterangan);
                 $('#jenis_akun').val(response.data.jenis_akun);
                 $('#boleh_posting_edit').val(response.data.boleh_posting ? '1' : '0');
-                let optKelompokAkun= new Option(response.data.kode_kelompok || '--Pilih--', response.data.kelompok_akun_coa_id, true, true);
+                let optKelompokAkun = new Option(response.data.kode_kelompok || '--Pilih--', response.data.kelompok_akun_coa_id, true, true);
                 $('#edit-kelompok-akun').append(optKelompokAkun).trigger('change');
                 let optIndukAkun = new Option(response.data.induk_akun || '--Pilih--', response.data.akun_induk_id, true, true);
                 $('#edit-induk-akun-coa').append(optIndukAkun).trigger('change');
@@ -568,8 +572,5 @@
             }
         });
     });
-
-
-
 </script>
 @endpush

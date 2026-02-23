@@ -1,6 +1,6 @@
 @extends('layouts.be')
 
-@section('title', 'HR-Dapertemen')
+@section('title', 'Sub Kategori Anggaran')
 @section('content')
 
 <style>
@@ -23,13 +23,17 @@
     td {
         font-size: 14px !important;
     }
+
+    .paginate_button .last {
+        display: none !important;
+    }
 </style>
 
 <div class="container-fluid">
     <div class="inner-contents">
         <div class="page-header d-flex align-items-center justify-content-between mr-bottom-30">
             <div class="left-part">
-                <h2 class="text-dark">Manajemen Dapertemen</h2>
+                <h4 class="text-dark">Sub Kategori Anggaran</h4>
             </div>
         </div>
 
@@ -61,74 +65,65 @@
 
 
 <div class="modal fade" id="modalTambah" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Dapertemen</h5>
+                <h5 class="modal-title">Tambah Sub Kategori Anggaran</h5>
                 <button type="button" class="btn-close TutupModalTambah"></button>
             </div>
             <div class="modal-body">
                 <form action="#" id="form-simpan" method="post">
                     @csrf
 
-                    <div class="form-group">
-                        <label for="">Kode:</label>
-                        <input name="kode" class="form-control"></input>
-                        <span id="kode_error" class="text-danger error-text my-2">
-                        </span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Kode:</label>
+                                <input name="kode" class="form-control" placeholder="Masukan kode"></input>
+                                <span id="kode_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Nama:</label>
+                                <input name="nama" class="form-control" placeholder="Masukan nama"></input>
+                                <span id="nama_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
+
                     <div class="form-group">
-                        <label for="">Dapertemen:</label>
-                        <input name="nama_dapertemen" class="form-control"></input>
-                        <span id="nama_dapertemen_error" class="text-danger error-text my-2">
-                        </span>
+                        <label for="">Keterangan:</label>
+                        <textarea name="keterangan" class="form-control" placeholder="Masukan keterangan" id=""></textarea>
                     </div>
+
+                    <div class="row mt-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Kategori Anggaran:</label>
+                                <select name="kategori_anggaran" class="form-control select2-kategori-anggaran" id="kategori-anggaran"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Coa:</label>
+                                <select name="coa" class="form-control select2-coa" id="coa"></select>
+                            </div>
+                        </div>
+                    </div>
+
+
+
 
 
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalTambah">Tutup</button>
-                        <button type="submit" class="btn btn-primary btn-sm  px-2">Simpan</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modalEdit" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Dapertemen</h5>
-                <button type="button" class="btn-close TutupModalEdit"></button>
-            </div>
-            <div class="modal-body">
-                <form action="#" id="form-update" method="post">
-                    @csrf
-
-                    <input type="hidden" name="id" class="form-control" id="id">
-
-
-                    <div class="form-group">
-                        <label for="">Kode:</label>
-                        <input name="kode" id="kode" class="form-control"></input>
-                        <span id="kode_error_edit" class="text-danger error-text my-2 text-sm">
-                        </span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Dapertemen:</label>
-                        <input name="nama_dapertemen" id="nama_dapertemen" class="form-control"></input>
-                        <span id="nama_dapertemen_error_edit" class="text-danger error-text my-2 text-sm">
-                        </span>
-                    </div>
-
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalEdit">Tutup</button>
                         <button type="submit" class="btn btn-primary btn-sm  px-2">Simpan</button>
                     </div>
                 </form>
@@ -236,6 +231,37 @@
         });
 
 
+        function initSelect2(selector, parent, route, placeholderText) {
+            $(selector).select2({
+                dropdownParent: $(parent),
+                placeholder: placeholderText,
+                minimumInputLength: 2,
+                language: {
+                    inputTooShort: function(args) {
+                        return 'Silakan ketik minimal ' + args.minimum + ' karakter';
+                    }
+                },
+                allowClear: true,
+                ajax: {
+                    url: route,
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
+        }
+        initSelect2('#kategori-anggaran', '#modalTambah', "{{ route('coa.listAkunIndukCoa') }}", '-- Kode/Kategori Anggaran --');
+        initSelect2('#coa', '#modalTambah', "{{ route('coa.listAkunIndukCoa') }}", '-- Kode/Kelompok dari COA --');
     });
 
     $(document).on('click', '.tambah', function(e) {

@@ -14,12 +14,27 @@ class SubKategoriAnggaran extends Model
 
     protected $fillable = [
         'kategori_anggaran_id',
-        'nama_sub_kategori_anggaran',
-        'komponen_sub_kategori_anggaran'
+        'kode_sub_kategori',
+        'nama_sub_kategori',
+        'keterangan'
     ];
 
     public function kategoriAnggaran()
     {
-        return $this->belongsTo(KategoriAnggaran::class, 'kategori_anggaran_id', 'id');
+        return $this->belongsTo(
+            KategoriAnggaran::class,
+            'kategori_anggaran_id',
+            'id'
+        );
+    }
+
+    public function coa()
+    {
+        return $this->belongsToMany(
+            COA::class,
+            'mapping_sub_kategori_coa',
+            'sub_kategori_anggaran_id',
+            'coa_id'
+        );
     }
 }

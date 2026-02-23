@@ -42,7 +42,8 @@ class CoaController extends Controller
 
             $query->where(function ($q) use ($search) {
                 $q->whereRaw('LOWER(k.kode_akun) LIKE ?', ["%{$search}%"])
-                    ->orWhereRaw('LOWER(k.nama_akun) LIKE ?', ["%{$search}%"]);
+                    ->orWhereRaw('LOWER(k.nama_akun) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('LOWER(kelompok_akun_coa.nama_kelompok) LIKE ?', ["%{$search}%"]);
             });
         }
         $recordsFiltered = $query->count();
