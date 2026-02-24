@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Finance\CoaController;
 use App\Http\Controllers\Admin\Finance\SubKategoriAnggaranController;
 use App\Http\Controllers\Admin\Finance\KategoriAnggaranController;
 use App\Http\Controllers\Admin\Finance\KelompokAkunCoaController;
+use App\Http\Controllers\Admin\Finance\MasterBankController;
 use App\Http\Controllers\Admin\Finance\MasterPeriodeAnggaranController;
 use App\Http\Controllers\Admin\HR\DapertemenController;
 use App\Http\Controllers\Admin\HR\JabatanController;
@@ -206,6 +207,18 @@ Route::prefix('/dashboard')->group(function () {
         ->name('finance.master_periode_anggaran.data');
     Route::post('/finance/master-periode-anggaran/simpan', [MasterPeriodeAnggaranController::class, 'simpan'])
         ->name('finance.master_periode_anggaran.simpan');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route Bagian Master Bank
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/finance/master-bank', [MasterBankController::class, 'index'])
+        ->name('finance.master-bank');
+    Route::get('/finance/master-bank/data', [MasterBankController::class, 'data'])
+        ->name('finance.master-bank.data');
+    Route::post('/finance/master-bank/simpan', [MasterBankController::class, 'simpan'])
+        ->name('finance.master-bank.simpan');
 });
 
 
