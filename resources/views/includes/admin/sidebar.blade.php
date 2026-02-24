@@ -114,7 +114,7 @@
                     <li class="menu-item menu-item-has-children"><a href="#"> Manejemen Bank</a>
                         <ul class="sub-menu">
                             <li class="menu-item"><a href="{{ route('finance.master-bank') }}"> Master Bank</a></li>
-                            <li class="menu-item"><a href="{{ route('coa') }}"> Rekening Bank</a></li>
+                            <li class="menu-item"><a href="{{ route('finance.rekening-bank') }}"> Rekening Bank</a></li>
                         </ul>
                         <span class="submenu-opener"><i class="bi bi-chevron-right"></i></span>
                     </li>

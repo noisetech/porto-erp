@@ -219,6 +219,15 @@ Route::prefix('/dashboard')->group(function () {
         ->name('finance.master-bank.data');
     Route::post('/finance/master-bank/simpan', [MasterBankController::class, 'simpan'])
         ->name('finance.master-bank.simpan');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route Bagian Rekening Bank
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/finance/rekening-bank', [MasterBankController::class, 'index'])
+        ->name('finance.rekening-bank');
 });
 
 
