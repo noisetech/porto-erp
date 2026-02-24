@@ -98,46 +98,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalEdit" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Dapertemen</h5>
-                <button type="button" class="btn-close TutupModalEdit"></button>
-            </div>
-            <div class="modal-body">
-                <form action="#" id="form-update" method="post">
-                    @csrf
-
-                    <input type="hidden" name="id" class="form-control" id="id">
-
-
-                    <div class="form-group">
-                        <label for="">Kode:</label>
-                        <input name="kode" id="kode" class="form-control"></input>
-                        <span id="kode_error_edit" class="text-danger error-text my-2 text-sm">
-                        </span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Dapertemen:</label>
-                        <input name="nama_dapertemen" id="nama_dapertemen" class="form-control"></input>
-                        <span id="nama_dapertemen_error_edit" class="text-danger error-text my-2 text-sm">
-                        </span>
-                    </div>
-
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalEdit">Tutup</button>
-                        <button type="submit" class="btn btn-primary btn-sm  px-2">Simpan</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-
 
 @endsection
 
@@ -218,7 +178,8 @@
                         });
                         $('#modalTambah').modal('hide');
                         $('#form-simpan')[0].reset();
-
+                        $('#kode_bank_error').text('');
+                        $('#nama_bank_error').text('');
                         $('#datatable').DataTable().ajax.reload();
                     }
                 },
@@ -247,132 +208,16 @@
     $(document).on('click', '.TutupModalTambah', function() {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('#fakultas').val(null).trigger('change').empty();
-        $('#kode_error').text('');
-        $('#nama_dapertemen_error').text('');
+        $('#kode_bank_error').text('');
+        $('#nama_bank_error').text('');
     });
 
 
     $('#modalTambah').on('hidden.bs.modal', function(e) {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
-        $('#fakultas').val(null).trigger('change').empty();
-        $('#kode_error').text('');
-        $('#nama_dapertemen_error').text('');
-    });
-
-
-    $(document).on('click', '.TutupModalEdit', function() {
-        $('#modalEdit').modal('hide');
-        $('#form-update')[0].reset();
-        $('#kode_error_edit').text('');
-        $('#nama_dapertemen_error_edit').text('');
-    });
-
-
-
-    $(document).on('click', '#edit', function(e) {
-        e.preventDefault();
-        let id = $(this).attr('data-id');
-        $.ajax({
-            url: '/dashboard/dapertemen/getDataById/' + id,
-            method: "GET",
-            processData: false,
-            contentType: false,
-            success: function(response) {
-
-                console.log(response.data.nama_dapertemen);
-
-                $('#modalEdit').modal('show');
-                $('#id').val(response.data.id);
-                $('#kode').val(response.data.kode);
-                $('#nama_dapertemen').val(response.data.nama_dapertemen);
-            },
-        })
-    });
-
-
-
-
-    $('#form-update').on('submit', function(e) {
-
-        e.preventDefault();
-
-        let formData = new FormData(this);
-
-        $.ajax({
-            url: '{{ route("dapertemen.update") }}',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                if (response.status === 'success') {
-                    Swal.fire({
-                        title: 'Berhasil',
-                        text: 'Data diubah',
-                        icon: 'success',
-                        timer: 3000,
-                    });
-                    $('#modalEdit').modal('hide');
-                    $('#form-update')[0].reset();
-                    $('#kode_error').text('');
-                    $('#nama_dapertemen_error').text('');
-                    $('#datatable').DataTable().ajax.reload();
-                }
-            },
-            error: function(xhr) {
-                if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    $.each(errors, function(key, value) {
-                        $('#' + key + '_error' + '_edit').text(value);
-                    });
-                }
-            }
-        });
-    });
-
-
-
-
-    $(document).on('click', '#hapus', function(e) {
-        e.preventDefault();
-        let id = $(this).attr('data-id');
-        Swal.fire({
-            title: 'Hapus data?',
-            text: "Data akan terhapus!",
-            icon: 'warning',
-            confirmButton: true,
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.value) {
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('dapertemen.hapus') }}",
-                    data: {
-                        id: id,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(respose) {
-                        if (respose.status == 'success') {
-                            Swal.fire({
-                                title: 'Berhasil',
-                                text: 'Data dihapus',
-                                icon: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-
-                            $('#datatable').DataTable().ajax.reload();
-                        }
-                    },
-                })
-            }
-        });
+        $('#kode_bank_error').text('');
+        $('#nama_bank_error').text('');
     });
 </script>
 @endpush
