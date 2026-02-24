@@ -14,9 +14,20 @@ class RekeningBank extends Model
 
     protected $fillable = [
         'bank_master_id',
-        'coa_d',
+        'coa_id',
         'nama_rekening',
         'nama_pemilik',
         'mata_uang'
     ];
+
+
+    public function bank_master()
+    {
+        return $this->belongsTo(MasterBank::class, 'bank_master_id', 'id');
+    }
+
+    public function coa()
+    {
+        return $this->belongsTo(COA::class, 'coa_id', 'id');
+    }
 }

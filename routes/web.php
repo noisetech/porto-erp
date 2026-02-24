@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Finance\KategoriAnggaranController;
 use App\Http\Controllers\Admin\Finance\KelompokAkunCoaController;
 use App\Http\Controllers\Admin\Finance\MasterBankController;
 use App\Http\Controllers\Admin\Finance\MasterPeriodeAnggaranController;
+use App\Http\Controllers\Admin\Finance\RekeningBankController;
 use App\Http\Controllers\Admin\HR\DapertemenController;
 use App\Http\Controllers\Admin\HR\JabatanController;
 use App\Http\Controllers\Admin\RoleControlelr;
@@ -228,6 +229,10 @@ Route::prefix('/dashboard')->group(function () {
     */
     Route::get('/finance/rekening-bank', [MasterBankController::class, 'index'])
         ->name('finance.rekening-bank');
+    Route::get('/finance/listCoa', [RekeningBankController::class, 'listCoa'])
+        ->name('finance.listCoa');
+    Route::get('/finance/rekening-bank/simpan', [MasterBankController::class, 'simpan'])
+        ->name('finance.rekening-bank.simpan');
 });
 
 
