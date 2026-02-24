@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Finance\CoaController;
 use App\Http\Controllers\Admin\Finance\SubKategoriAnggaranController;
 use App\Http\Controllers\Admin\Finance\KategoriAnggaranController;
 use App\Http\Controllers\Admin\Finance\KelompokAkunCoaController;
+use App\Http\Controllers\Admin\Finance\MasterPeriodeAnggaranController;
 use App\Http\Controllers\Admin\HR\DapertemenController;
 use App\Http\Controllers\Admin\HR\JabatanController;
 use App\Http\Controllers\Admin\RoleControlelr;
@@ -192,32 +193,21 @@ Route::prefix('/dashboard')->group(function () {
         ->name('finance.sub_kategori_anggaran.update');
     Route::post('/finance/sub-kategori-anggaran/hapus', [SubKategoriAnggaranController::class, 'hapus'])
         ->name('finance.sub_kategori_anggaran.hapus');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route Bagian Master Periode Anggaran
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/finance/master-periode-anggaran', [MasterPeriodeAnggaranController::class, 'index'])
+        ->name('finance.master_periode_anggaran');
+    Route::get('/finance/master-periode-anggaran/data', [MasterPeriodeAnggaranController::class, 'data'])
+        ->name('finance.master_periode_anggaran.data');
+    Route::post('/finance/master-periode-anggaran/simpan', [MasterPeriodeAnggaranController::class, 'simpan'])
+        ->name('finance.master_periode_anggaran.simpan');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Route Finance
-|--------------------------------------------------------------------------
-*/
-
-/*
-|--------------------------------------------------------------------------
-| Route Gudang
-|--------------------------------------------------------------------------
-*/
-
-
-/*
-|--------------------------------------------------------------------------
-| Route KOL
-|--------------------------------------------------------------------------
-*/
-
-/*
-|--------------------------------------------------------------------------
-| Route Produksi
-|--------------------------------------------------------------------------
-*/
 
 Auth::routes();
 

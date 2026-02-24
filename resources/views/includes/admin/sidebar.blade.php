@@ -104,7 +104,7 @@
                         <ul class="sub-menu">
                             <li class="menu-item"><a href="{{ route('finance.kategori_anggaran') }}"> Kategori Anggaran</a></li>
                             <li class="menu-item"><a href="{{ route('finance.sub_kategori_anggaran') }}"> Sub Kategori Anggaran</a></li>
-                            <li class="menu-item"><a href="{{ route('finance.sub_kategori_anggaran') }}"> Master Periode Anggaran</a></li>
+                            <li class="menu-item"><a href="{{ route('finance.master_periode_anggaran') }}"> Master Periode Anggaran</a></li>
                         </ul>
                         <span class="submenu-opener"><i class="bi bi-chevron-right"></i></span>
                     </li>
