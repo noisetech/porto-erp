@@ -162,7 +162,7 @@
                             <div class="form-group">
                                 <label for="">Kode:</label>
                                 <input name="kode" class="form-control" placeholder="Masukan kode" id="kode"></input>
-                                <span id="kode_error" class="text-danger error-text my-2">
+                                <span id="kode_error_edit" class="text-danger error-text my-2">
                                 </span>
                             </div>
                         </div>
@@ -171,7 +171,7 @@
                             <div class="form-group">
                                 <label for="">Nama:</label>
                                 <input name="nama" class="form-control" placeholder="Masukan nama" id="nama"></input>
-                                <span id="nama_error" class="text-danger error-text my-2">
+                                <span id="nama_error_edit" class="text-danger error-text my-2">
                                 </span>
                             </div>
                         </div>
@@ -181,7 +181,7 @@
                     <div class="form-group">
                         <label for="">Keterangan:</label>
                         <textarea name="keterangan" class="form-control" placeholder="Masukan keterangan" id="keterangan"></textarea>
-                        <span id="keterangan_error" class="text-danger error-text my-2">
+                        <span id="keterangan_error_edit" class="text-danger error-text my-2">
                         </span>
                     </div>
 
@@ -190,7 +190,7 @@
                             <div class="form-group">
                                 <label for="">Kategori Anggaran:</label>
                                 <select name="kategori_anggaran" class="form-control select2-kategori-anggaran" id="kategori-anggaran-edit"></select>
-                                <span id="kategori_anggaran_error" class="text-danger error-text my-2">
+                                <span id="kategori_anggaran_error_edit" class="text-danger error-text my-2">
                                 </span>
                             </div>
                         </div>
@@ -199,8 +199,6 @@
                             <div class="form-group">
                                 <label for="">Coa:</label>
                                 <select name="coa[]" class="form-control select2-coa" id="coa-edit"></select>
-                                <span id="coa_error" class="text-danger error-text my-2">
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -383,22 +381,41 @@
         $('#form-simpan')[0].reset();
         $('#kategori-anggaran, #coa').val(null).trigger('change').empty();
         $('#kode_error').text('');
+        $('#nama_error').text('');
+        $('#keterangan_error').text('');
+        $('#kategori_anggaran_error').text('');
     });
 
 
     $('#modalTambah').on('hidden.bs.modal', function(e) {
         $('#modalTambah').modal('hide');
         $('#form-simpan')[0].reset();
+        $('#kategori-anggaran, #coa').val(null).trigger('change').empty();
         $('#kode_error').text('');
-        $('#nama_dapertemen_error').text('');
+        $('#nama_error').text('');
+        $('#keterangan_error').text('');
+        $('#kategori_anggaran_error').text('');
     });
 
 
     $(document).on('click', '.TutupModalEdit', function() {
         $('#modalEdit').modal('hide');
+        $('#kategori-anggaran-edit, #coa-edit').val(null).trigger('change').empty();
         $('#form-update')[0].reset();
         $('#kode_error_edit').text('');
-        $('#nama_dapertemen_error_edit').text('');
+        $('#nama_error_edit').text('');
+        $('#keterangan_error_edit').text('');
+        $('#kategori_anggaran_error_edit').text('');
+    });
+
+    $('#TutupModalEdit').on('hidden.bs.modal', function(e) {
+        $('#modalEdit').modal('hide');
+        $('#kategori-anggaran-edit, #coa-edit').val(null).trigger('change').empty();
+        $('#form-update')[0].reset();
+        $('#kode_error_edit').text('');
+        $('#nama_error_edit').text('');
+        $('#keterangan_error_edit').text('');
+        $('#kategori_anggaran_error_edit').text('');
     });
 
 

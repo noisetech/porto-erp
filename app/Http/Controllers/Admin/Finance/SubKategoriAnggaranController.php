@@ -55,12 +55,7 @@ class SubKategoriAnggaranController extends Controller
                 'sub_kategori_anggaran.keterangan',
                 'sub_kategori_anggaran.created_at',
                 'kategori_anggaran.kode_kategori as kode_kategori_anggaran',
-                DB::raw("
-                STRING_AGG(
-                    coa.kode_akun || ' | ' || coa.nama_akun,
-                    ','
-                ) as kode_akun_coa
-            ")
+                DB::raw("STRING_AGG(coa.kode_akun || ' | ' || coa.nama_akun, ',') as kode_akun_coa")
             )
             ->whereNull('sub_kategori_anggaran.deleted_at')
             ->groupBy(
@@ -428,8 +423,6 @@ class SubKategoriAnggaranController extends Controller
 
     public function update(Request $request)
     {
-        // dd($request->all());
-
         $validator = Validator::make($request->all(), [
             'kategori_anggaran' => 'required',
             'kode' => 'required',
