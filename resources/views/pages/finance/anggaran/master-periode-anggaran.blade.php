@@ -48,10 +48,9 @@
                             <tr>
                                 <th>No</th>
                                 <th>Tahun</th>
+                                <th>Tanggal Mulai</th>
+                                <th>Tanggal Selesai</th>
                                 <th>Status</th>
-                                <th>Tanggal mulai</th>
-                                <th>Tanggal selesai</th>
-                                <th>Tanggal dikatifkan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -176,25 +175,40 @@
 
             order: [],
             ajax: {
-                url: "{{ route('dapertemen.data') }}",
+                url: "{{ route('finance.master_periode_anggaran.data') }}",
                 type: "get",
             },
             columns: [{
                     data: 'no',
-                    name: 'no'
+                    name: 'no',
+                    orderable: false
                 },
                 {
-                    data: 'kode',
-                    name: 'kode'
+                    data: 'tahun',
+                    name: 'tahun',
+                    orderable: false
                 },
 
                 {
-                    data: 'nama_dapertemen',
-                    name: 'nama_dapertemen'
+                    data: 'tanggal_mulai',
+                    name: 'tanggal_mulai',
+                    orderable: false
                 },
                 {
+                    data: 'tanggal_selesai',
+                    name: 'tanggal_selesai',
+                    orderable: false
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    orderable: false
+                },
+
+                {
                     data: 'action',
-                    name: 'action'
+                    name: 'action',
+                    orderable: false
                 },
             ],
             pagingType: "full_numbers",
