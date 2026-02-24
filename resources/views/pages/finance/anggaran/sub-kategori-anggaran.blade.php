@@ -161,7 +161,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Kode:</label>
-                                <input name="kode" class="form-control" placeholder="Masukan kode"></input>
+                                <input name="kode" class="form-control" placeholder="Masukan kode" id="kode"></input>
                                 <span id="kode_error" class="text-danger error-text my-2">
                                 </span>
                             </div>
@@ -180,7 +180,7 @@
 
                     <div class="form-group">
                         <label for="">Keterangan:</label>
-                        <textarea name="keterangan" class="form-control" placeholder="Masukan keterangan" id=""></textarea>
+                        <textarea name="keterangan" class="form-control" placeholder="Masukan keterangan" id="keterangan"></textarea>
                         <span id="keterangan_error" class="text-danger error-text my-2">
                         </span>
                     </div>
@@ -189,7 +189,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Kategori Anggaran:</label>
-                                <select name="kategori_anggaran" class="form-control select2-kategori-anggaran" id="kategori-anggaran"></select>
+                                <select name="kategori_anggaran" class="form-control select2-kategori-anggaran" id="kategori-anggaran-edit"></select>
                                 <span id="kategori_anggaran_error" class="text-danger error-text my-2">
                                 </span>
                             </div>
@@ -198,7 +198,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Coa:</label>
-                                <select name="coa[]" class="form-control select2-coa" id="coa"></select>
+                                <select name="coa[]" class="form-control select2-coa" id="coa-edit"></select>
                                 <span id="coa_error" class="text-danger error-text my-2">
                                 </span>
                             </div>
@@ -364,12 +364,12 @@
                 }
             });
         }
-        initSelect2('#kategori-anggaran', '#modalTambah',
-            "{{ route('finance.sub_kategori_anggaran.listKategoriAnggaran') }}",
-            '-- Cari berdasarkan Kode --');
-        initSelect2('#coa', '#modalTambah',
-            "{{ route('finance.sub_kategori_anggaran.listCoa') }}",
-            '-- Cari berdaskaran kode/kelompok --', true);
+
+
+        initSelect2('#kategori-anggaran-edit', '#modalEdit', "{{ route('finance.sub_kategori_anggaran.listKategoriAnggaran') }}", '-- Cari berdasarkan Kode --');
+        initSelect2('#kategori-anggaran', '#modalTambah', "{{ route('finance.sub_kategori_anggaran.listKategoriAnggaran') }}", '-- Cari berdasarkan Kode --');
+        initSelect2('#coa', '#modalTambah', "{{ route('finance.sub_kategori_anggaran.listCoa') }}", '-- Cari berdaskaran kode/kelompok --', true);
+        initSelect2('#coa-edit', '#modalEdit', "{{ route('finance.sub_kategori_anggaran.listCoa') }}", '-- Cari berdaskaran kode/kelompok --', true);
     });
 
     $(document).on('click', '.tambah', function(e) {
@@ -414,10 +414,21 @@
             success: function(response) {
                 $('#kode').val(response.data.kode_sub_kategori_anggaran);
                 $('#nama').val(response.data.nama_sub_kategori_angaran);
+                $('#keterangan').val(response.data.keterangan_sub_kategori_anggaran);
 
-                console.log(response);
+                $('#coa-edit').empty().trigger('change');
+                response.data.coa.forEach(function(coa) {
+                    let text = coa.kode_akun_coa + ' | ' + coa.nama_akun_coa;
+
+                    let option = new Option(text, coa.id, true, true);
+                    $('#coa-edit').append(option).trigger('change');
+                });
+
+                $('#kategori-anggaran-edit').empty().trigger('change');
+                let kategori = response.data.kategori_anggaran;
+                let optionKategori = new Option(kategori.kode_kategori_anggaran, kategori.id_kategori_anggaran, true, true);
+                $('#kategori-anggaran-edit').append(optionKategori).trigger('change');
                 $('#modalEdit').modal('show');
-
             },
         })
     });

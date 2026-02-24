@@ -426,7 +426,9 @@ class SubKategoriAnggaranController extends Controller
         ], 200, [], JSON_UNESCAPED_SLASHES);
     }
 
-    public function update(Request $request) {}
+    public function update(Request $request) {
+        
+    }
 
     public function hapus(Request $request)
     {
