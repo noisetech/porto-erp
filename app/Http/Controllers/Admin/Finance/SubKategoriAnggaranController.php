@@ -426,8 +426,59 @@ class SubKategoriAnggaranController extends Controller
         ], 200, [], JSON_UNESCAPED_SLASHES);
     }
 
-    public function update(Request $request) {
-        
+    public function update(Request $request)
+    {
+        // dd($request->all());
+
+        $validator = Validator::make($request->all(), [
+            'kategori_anggaran' => 'required',
+            'kode' => 'required',
+            'nama' => 'required',
+            'keterangan' => 'required',
+        ], [
+            'kategori_anggaran.required' => 'Kategori anggaran tidak boleh kosong',
+            'kode.required' => 'Kategori tidak boleh kosong',
+            'nama.required' => 'Nama tidak boleh kosong',
+            'keterangan.required' => 'Keterangan tidak boleh kosong',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $sub_kategori_anggaran = SubKategoriAnggaran::findOrFail($request->id);
+            $sub_kategori_anggaran->kategori_anggaran_id = $request->kategori_anggaran;
+            $sub_kategori_anggaran->kode_sub_kategori = $request->kode;
+            $sub_kategori_anggaran->nama_sub_kategori = $request->nama;
+            $sub_kategori_anggaran->keterangan = $request->keterangan;
+            $sub_kategori_anggaran->save();
+
+            $sub_kategori_anggaran->coa()->sync($request->coa);
+
+            $log_sub_kategori_anggaran = new LogSubKategoriAnggaran();
+            $log_sub_kategori_anggaran->user_id = Auth::user()->id;
+            $log_sub_kategori_anggaran->sub_kategori_anggaran_id = $sub_kategori_anggaran->id;
+            $log_sub_kategori_anggaran->keterangan = 'mengubah data';
+            $log_sub_kategori_anggaran->save();
+
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data disimpan'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function hapus(Request $request)

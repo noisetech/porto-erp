@@ -148,7 +148,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Dapertemen</h5>
+                <h5 class="modal-title">Edit Sub Kategori Anggaran</h5>
                 <button type="button" class="btn-close TutupModalEdit"></button>
             </div>
             <div class="modal-body">
@@ -412,6 +412,7 @@
             processData: false,
             contentType: false,
             success: function(response) {
+                $('#id').val(response.data.id_sub_kategori_anggaran);
                 $('#kode').val(response.data.kode_sub_kategori_anggaran);
                 $('#nama').val(response.data.nama_sub_kategori_angaran);
                 $('#keterangan').val(response.data.keterangan_sub_kategori_anggaran);
@@ -443,7 +444,7 @@
         let formData = new FormData(this);
 
         $.ajax({
-            url: '{{ route("dapertemen.update") }}',
+            url: '{{ route("finance.sub_kategori_anggaran.update") }}',
             method: 'POST',
             data: formData,
             processData: false,
