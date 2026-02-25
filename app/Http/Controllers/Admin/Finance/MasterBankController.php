@@ -3,15 +3,22 @@
 namespace App\Http\Controllers\Admin\Finance;
 
 use App\Http\Controllers\Controller;
-use App\Models\LogMasterBank;
-use App\Models\MasterBank;
+use App\Http\Requests\MasterBankSimpanRequest;
+use App\Http\Requests\MasterBankUpdateRequest;
+use App\Services\MasterBankService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class MasterBankController extends Controller
 {
+
+    protected MasterBankService $master_bank_service;
+
+    public function __construct(MasterBankService $master_bank_service)
+    {
+        $this->master_bank_service = $master_bank_service;
+    }
+
     public function index()
     {
         return view('pages.finance.bank.manajemen-master-bank');
@@ -59,54 +66,24 @@ class MasterBankController extends Controller
         ]);
     }
 
-    public function simpan(Request $request)
+    public function simpan(MasterBankSimpanRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'kode_bank' => 'required',
-            'nama_bank' => 'required'
-        ], [
-            'kode_bank.required' => 'Kode bank tidak boleh kosong',
-            'nama_bank.required' => 'Nama bank tidak boleh kosong'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        DB::beginTransaction();
-
         try {
-            $master_bank = new MasterBank();
-            $master_bank->kode_bank = $request->kode_bank;
-            $master_bank->nama_bank = $request->nama_bank;
-            $master_bank->save();
-
-            $log_master_bank = new LogMasterBank();
-            $log_master_bank->user_id = Auth::user()->id;
-            $log_master_bank->bank_master_id = $master_bank->id;
-            $log_master_bank->keterangan = 'menambah data';
-            $log_master_bank->save();
-
-            DB::commit();
-
+            $master_bank = $this->master_bank_service->simpan($request->validated());
             return response()->json([
-                'status' => 'success',
-                'message' => 'Data disimpan'
+                'status'  => 'success',
+                'message' => 'Data disimpan',
+                'data'    => $master_bank
             ], 200);
         } catch (\Exception $e) {
-            DB::rollBack();
-
             return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
+                'status'  => 'error',
+                'message' => 'Gagal menyimpan data'
             ], 500);
         }
     }
 
-    public function update(Request $request) {}
+    public function update(MasterBankUpdateRequest $request, int $id) {}
 
     public function hapus(Request $request) {}
 }

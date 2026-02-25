@@ -3,19 +3,20 @@
 namespace App\Services;
 
 use App\Models\COA;
-use App\Models\RekeningBank;
 use App\Models\LogRekeningBank;
-use App\Models\MasterBank;
+use App\Models\ModelMasterBank;
+use App\Models\ModelRekeningBank;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RekeningBankService
 {
-    public function simpan(array $data): RekeningBank
+    public function simpan(array $data): ModelRekeningBank
     {
         return DB::transaction(function () use ($data) {
 
-            $rekeningBank = RekeningBank::create([
+            $rekeningBank = ModelRekeningBank::create([
                 'bank_master_id' => $data['bank_master'],
                 'coa_id'         => $data['coa'],
                 'nama_rekening'  => $data['nama_rekening'],
@@ -35,7 +36,7 @@ class RekeningBankService
 
     public function listMasterBank(?string $search = null): array
     {
-        $query = MasterBank::query()->select('id', 'kode_bank', 'nama_bank');
+        $query = ModelMasterBank::query()->select('id', 'kode_bank', 'nama_bank');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -73,9 +74,9 @@ class RekeningBankService
 
 
     //  ini bisa balikan null data ketika menggunakan ? sebelum model
-    public function getDataById(int $id): ?RekeningBank
+    public function getDataById(int $id): ?ModelRekeningBank
     {
-        return RekeningBank::with([
+        return ModelRekeningBank::with([
             'bank_master',
             'coa'
         ])
@@ -84,7 +85,28 @@ class RekeningBankService
             ->first();
     }
 
-    public function hapus(int $id){
+    public function update(int $id, array $data): ModelRekeningBank
+    {
+        $rekening = ModelRekeningBank::find($id);
 
+        if (!$rekening) {
+            throw new ModelNotFoundException('Rekening bank tidak ditemukan');
+        }
+
+        $rekening->update([
+            'bank_master_id' => $data['bank_master_id'],
+            'coa_id'         => $data['coa_id'],
+            'nama_rekening'  => $data['nama_rekening'],
+            'nama_pemilik'   => $data['nama_pemilik'],
+            'mata_uang'      => $data['mata_uang'] ?? 'IDR',
+        ]);
+
+        LogRekeningBank::create([
+            'user_id' => Auth::user()->id,
+            'rekening_bank_id' => $rekening->id,
+            'keterangan' => 'mengubah data'
+        ]);
+
+        return $rekening;
     }
 }
