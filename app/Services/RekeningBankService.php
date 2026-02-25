@@ -74,7 +74,7 @@ class RekeningBankService
 
 
     //  ini bisa balikan null data ketika menggunakan ? sebelum model
-    public function getDataById(int $id): ?ModelRekeningBank
+    public function queryBedasarkanId(int $id): ?ModelRekeningBank
     {
         return ModelRekeningBank::with([
             'bank_master',

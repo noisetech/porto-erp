@@ -336,7 +336,6 @@
             $(selector).select2({
                 dropdownParent: $(parent),
                 placeholder: placeholderText,
-                minimumInputLength: 1,
                 multiple: isMultiple,
                 language: {
                     inputTooShort: function(args) {
@@ -355,7 +354,7 @@
                     },
                     processResults: function(data) {
                         return {
-                            results: data
+                            results: data.data
                         };
                     },
                     cache: true
@@ -429,24 +428,33 @@
             processData: false,
             contentType: false,
             success: function(response) {
-                $('#id').val(response.data.id_sub_kategori_anggaran);
-                $('#kode').val(response.data.kode_sub_kategori_anggaran);
-                $('#nama').val(response.data.nama_sub_kategori_angaran);
-                $('#keterangan').val(response.data.keterangan_sub_kategori_anggaran);
+                $('#modalEdit').modal('show');
+                $('#id').val(response.data.id);
+                $('#kode').val(response.data.kode_sub_kategori);
+                $('#nama').val(response.data.nama_sub_kategori);
+                $('#keterangan').val(response.data.keterangan);
 
                 $('#coa-edit').empty().trigger('change');
+
                 response.data.coa.forEach(function(coa) {
-                    let text = coa.kode_akun_coa + ' | ' + coa.nama_akun_coa;
+                    let text = coa.kode_akun + ' | ' + coa.nama_akun;
 
                     let option = new Option(text, coa.id, true, true);
-                    $('#coa-edit').append(option).trigger('change');
+                    $('#coa-edit').append(option);
                 });
 
+                $('#coa-edit').trigger('change');
+
                 $('#kategori-anggaran-edit').empty().trigger('change');
+
+
                 let kategori = response.data.kategori_anggaran;
-                let optionKategori = new Option(kategori.kode_kategori_anggaran, kategori.id_kategori_anggaran, true, true);
-                $('#kategori-anggaran-edit').append(optionKategori).trigger('change');
-                $('#modalEdit').modal('show');
+
+                let textKategori = kategori.kode_kategori + ' | ' + kategori.nama_kategori;
+
+                let optionKategori = new Option(textKategori, kategori.id, true, true);
+
+                $('#kategori-anggaran-edit').empty().append(optionKategori).trigger('change');
             },
         })
     });
@@ -512,8 +520,8 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    type: "POST",
-                    url: "{{ route('finance.sub_kategori_anggaran.hapus') }}",
+                    type: "DELETE",
+                    url: "{{ route('finance.sub_kategori_anggaran.hapus', ['id' => 'ID_PLACEHOLDER']) }}".replace('ID_PLACEHOLDER', id),
                     data: {
                         id: id,
                         _token: "{{ csrf_token() }}"

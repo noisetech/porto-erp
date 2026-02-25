@@ -25,7 +25,7 @@ class RekeningUpdateRequest extends FormRequest
             'bank_master'   => 'required',
             'coa'           => 'required',
             'nama_rekening' => 'required|string|max:100',
-            'nomor_rekening' => 'required|unique:rekening_bank,nomor_rekening,' . $this->route('id'),
+            'nomor_rekening' => 'required|unique:rekening_bank,nomor_rekening',
             'nama_pemilik'  => 'required|string|max:100',
         ];
     }
