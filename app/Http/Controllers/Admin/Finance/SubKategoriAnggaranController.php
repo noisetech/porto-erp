@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Finance;
 use App\Http\Controllers\Controller;
 use App\Models\LogSubKategoriAnggaran;
 use App\Models\SubKategoriAnggaran;
+use App\Services\SubKategoriAnggaranService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,14 @@ use Illuminate\Support\Facades\Validator;
 
 class SubKategoriAnggaranController extends Controller
 {
+
+    protected SubKategoriAnggaranService $subKategoriAnggaranService;
+
+    public function __construct(SubKategoriAnggaranService $subKategoriAnggaranService)
+    {
+        $this->subKategoriAnggaranService = $subKategoriAnggaranService;
+    }
+
     public function index()
     {
         return view('pages.finance.anggaran.sub-kategori-anggaran');
@@ -19,178 +28,10 @@ class SubKategoriAnggaranController extends Controller
 
     public function data(Request $request)
     {
-        $start  = (int) $request->start;
-        $length = (int) $request->length;
-        $draw   = (int) $request->draw;
-        $search = $request->search['value'] ?? null;
+        $result = $this->subKategoriAnggaranService->datatable($request);
 
-        /*
-    |--------------------------------------------------------------------------
-    | BASE QUERY (DATA UTAMA)
-    |--------------------------------------------------------------------------
-    */
-        $baseQuery = DB::table('sub_kategori_anggaran')
-            ->join(
-                'kategori_anggaran',
-                'kategori_anggaran.id',
-                '=',
-                'sub_kategori_anggaran.kategori_anggaran_id'
-            )
-            ->leftJoin(
-                'mapping_sub_kategori_coa',
-                'sub_kategori_anggaran.id',
-                '=',
-                'mapping_sub_kategori_coa.sub_kategori_anggaran_id'
-            )
-            ->leftJoin(
-                'coa',
-                'coa.id',
-                '=',
-                'mapping_sub_kategori_coa.coa_id'
-            )
-            ->select(
-                'sub_kategori_anggaran.id',
-                'sub_kategori_anggaran.kode_sub_kategori',
-                'sub_kategori_anggaran.nama_sub_kategori',
-                'sub_kategori_anggaran.keterangan',
-                'sub_kategori_anggaran.created_at',
-                'kategori_anggaran.kode_kategori as kode_kategori_anggaran',
-                DB::raw("STRING_AGG(coa.kode_akun || ' | ' || coa.nama_akun, ',') as kode_akun_coa")
-            )
-            ->whereNull('sub_kategori_anggaran.deleted_at')
-            ->groupBy(
-                'sub_kategori_anggaran.id',
-                'sub_kategori_anggaran.kode_sub_kategori',
-                'sub_kategori_anggaran.nama_sub_kategori',
-                'sub_kategori_anggaran.keterangan',
-                'sub_kategori_anggaran.created_at',
-                'kategori_anggaran.kode_kategori'
-            );
-
-        /*
-    |--------------------------------------------------------------------------
-    | SEARCH FILTER
-    |--------------------------------------------------------------------------
-    */
-        if (!empty($search)) {
-            $baseQuery->where(function ($q) use ($search) {
-                $q->where('sub_kategori_anggaran.nama_sub_kategori', 'ILIKE', "%{$search}%")
-                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
-                    ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
-            });
-        }
-
-        /*
-    |--------------------------------------------------------------------------
-    | TOTAL RECORD (TANPA FILTER)
-    |--------------------------------------------------------------------------
-    */
-        $recordsTotal = DB::table('sub_kategori_anggaran')
-            ->whereNull('deleted_at')
-            ->distinct('id')
-            ->count('id');
-
-        /*
-    |--------------------------------------------------------------------------
-    | RECORDS FILTERED
-    |--------------------------------------------------------------------------
-    */
-        $filteredQuery = DB::table('sub_kategori_anggaran')
-            ->leftJoin(
-                'mapping_sub_kategori_coa',
-                'sub_kategori_anggaran.id',
-                '=',
-                'mapping_sub_kategori_coa.sub_kategori_anggaran_id'
-            )
-            ->leftJoin(
-                'coa',
-                'coa.id',
-                '=',
-                'mapping_sub_kategori_coa.coa_id'
-            )
-            ->whereNull('sub_kategori_anggaran.deleted_at');
-
-        if (!empty($search)) {
-            $filteredQuery->where(function ($q) use ($search) {
-                $q->where('sub_kategori_anggaran.nama_sub_kategori', 'ILIKE', "%{$search}%")
-                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
-                    ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
-            });
-        }
-
-        $recordsFiltered = $filteredQuery
-            ->distinct('sub_kategori_anggaran.id')
-            ->count('sub_kategori_anggaran.id');
-
-        /*
-    |--------------------------------------------------------------------------
-    | PAGINATION
-    |--------------------------------------------------------------------------
-    */
-        $data = $baseQuery
-            ->offset($start)
-            ->limit($length)
-            ->get();
-
-        /*
-    |--------------------------------------------------------------------------
-    | FORMAT DATA
-    |--------------------------------------------------------------------------
-    */
-        $result = [];
-        $no = $start + 1;
-
-        foreach ($data as $row) {
-
-            $coaHtml = '-';
-
-            if (!empty($row->kode_akun_coa)) {
-                $coaHtml = '<div class="d-flex flex-wrap">';
-                foreach (explode(',', $row->kode_akun_coa) as $item) {
-                    $coaHtml .= '<span class="badge bg-primary text-white m-1">'
-                        . e($item) .
-                        '</span>';
-                }
-                $coaHtml .= '</div>';
-            }
-
-            $action = '
-            <a class="badge bg-secondary text-white"
-                    data-id="' . $row->id . '"
-                    id="edit">
-                    <i class="bi bi-pencil"></i> Edit
-                   </a>
-            <a class="badge bg-secondary text-white"
-                    data-id="' . $row->id . '"
-                    id="hapus">
-                    <i class="bi bi-trash2"></i> Hapus
-                   </a>';
-
-            $result[] = [
-                'no'                     => $no++,
-                'id'                     => $row->id,
-                'kode'                   => $row->kode_sub_kategori,
-                'nama'                   => $row->nama_sub_kategori,
-                'keterangan'             => $row->keterangan,
-                'kode_kategori_anggaran' => $row->kode_kategori_anggaran,
-                'coa'                    => $coaHtml,
-                'action'                 => $action
-            ];
-        }
-
-        /*
-    |--------------------------------------------------------------------------
-    | RESPONSE
-    |--------------------------------------------------------------------------
-    */
-        return response()->json([
-            "draw"            => $draw,
-            "recordsTotal"    => $recordsTotal,
-            "recordsFiltered" => $recordsFiltered,
-            "data"            => $result
-        ]);
+        return response()->json($result);
     }
-
 
     public function listKategoriAnggaran(Request $request)
     {

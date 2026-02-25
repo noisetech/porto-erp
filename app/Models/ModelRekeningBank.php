@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class RekeningBank extends Model
+class ModelRekeningBank extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -20,14 +20,13 @@ class RekeningBank extends Model
         'mata_uang'
     ];
 
-
-    public function bank_master()
+    public function master_bank()
     {
-        return $this->belongsTo(MasterBank::class, 'bank_master_id', 'id');
+        return $this->belongsTo(ModelMasterBank::class, 'bank_master_id', 'id');
     }
 
     public function coa()
     {
-        return $this->belongsTo(COA::class, 'coa_id', 'id');
+        return $this->belongsTo(ModelCoa::class, 'coa_id', 'id');
     }
 }

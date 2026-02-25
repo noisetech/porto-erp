@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MasterBank extends Model
+class ModelKelompokAkunnCoa extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'bank_master';
+    protected $table = 'kelompok_akun_coa';
 
     protected $fillable = [
-        'kode_bank',
-        'nama_bank'
-     ];
+        'kode_kelompok',
+        'nama_kelompok',
+        'keterangan',
+        'akun_induk_id'
+    ];
 }
