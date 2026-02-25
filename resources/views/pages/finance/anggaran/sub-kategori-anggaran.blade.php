@@ -155,7 +155,9 @@
                 <form action="#" id="form-update" method="post">
                     @csrf
 
-                    <input type="hidden" name="id" class="form-control" id="id">
+                    <input type="text" name="id" class="form-control" id="id">
+                    <input type="hidden" name="_method" value="PUT">
+
 
                     <div class="row">
                         <div class="col-md-6">
@@ -295,6 +297,7 @@
         $('#form-simpan').on('submit', function(e) {
 
             e.preventDefault();
+
 
             let formData = new FormData(this);
 
@@ -468,8 +471,10 @@
 
         let formData = new FormData(this);
 
+        let id = $('#id').val();
+
         $.ajax({
-            url: '{{ route("finance.sub_kategori_anggaran.update") }}',
+            url: '/dashboard/finance/sub-kategori-anggaran/update/' + id,
             method: 'POST',
             data: formData,
             processData: false,
@@ -521,7 +526,7 @@
             if (result.value) {
                 $.ajax({
                     type: "DELETE",
-                    url: "{{ route('finance.sub_kategori_anggaran.hapus', ['id' => 'ID_PLACEHOLDER']) }}".replace('ID_PLACEHOLDER', id),
+                    url: '/dashboard/finance/sub-kategori-anggaran/hapus/' + id,
                     data: {
                         id: id,
                         _token: "{{ csrf_token() }}"

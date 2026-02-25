@@ -191,7 +191,7 @@ Route::prefix('/dashboard')->group(function () {
         ->name('finance.sub_kategori_anggaran.listKategoriAnggaran');
     Route::post('/finance/sub-kategori-anggaran/simpan', [SubKategoriAnggaranController::class, 'simpan'])
         ->name('finance.sub_kategori_anggaran.simpan');
-    Route::post('/finance/sub-kategori-anggaran/update', [SubKategoriAnggaranController::class, 'update'])
+    Route::put('/finance/sub-kategori-anggaran/update/{id}', [SubKategoriAnggaranController::class, 'update'])
         ->name('finance.sub_kategori_anggaran.update');
     Route::delete('/finance/sub-kategori-anggaran/hapus/{id}', [SubKategoriAnggaranController::class, 'hapus'])
         ->name('finance.sub_kategori_anggaran.hapus');

@@ -105,7 +105,28 @@ class SubKategoriAnggaranController extends Controller
         }
     }
 
-    public function update(SubKateogriAnggaranUpdateRequest $request, $id) {}
+    public function update(SubKateogriAnggaranUpdateRequest $request, $id)
+    {
+
+        try {
+
+            $bahan_id = (int) $id;
+
+            $result = $this->subKategoriAnggaranService
+                ->update($bahan_id, $request->validated());
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data disimpan',
+                'data' => $result
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     public function hapus($id)
     {
