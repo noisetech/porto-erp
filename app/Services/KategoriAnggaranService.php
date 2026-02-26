@@ -3,53 +3,29 @@
 namespace App\Services;
 
 use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
-use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
-use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
-use App\Repositories\LogKategoriAnggaranRepository;
+use App\UseCases\KategoriAnggaran\UseCaseCustomDataTable;
+use App\UseCases\KategoriAnggaran\UseCaseSimpanKategoriAnggaran;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+
 
 class KategoriAnggaranService
 {
-    protected KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
-    protected LogKategoriAnggaranRepository $logKategoriAnggaranRepository;
+    protected UseCaseSimpanKategoriAnggaran $UseCaseSimpanKategoriAnggaran;
+    protected UseCaseCustomDataTable $UseCaseCustomDataTable;
 
-    public function __construct(KategoriAnggaranRepositoryInterface $k, LogKategoriAnggaranRepository $l)
+    public function __construct(UseCaseSimpanKategoriAnggaran $k, UseCaseCustomDataTable $l)
     {
-        $this->kategoriAnggaranRepositoryInterface = $k;
-        $this->logKategoriAnggaranRepository = $l;
+        $this->UseCaseSimpanKategoriAnggaran = $k;
+        $this->UseCaseCustomDataTable = $l;
     }
 
     public function simpanDataKategoriAnggara(KategoriAnggaranDTO $dto)
     {
-        return DB::transaction(function () use ($dto) {
-            $kategori_anggaran = $this->kategoriAnggaranRepositoryInterface->simpan($dto);
-
-            $this->logKategoriAnggaranRepository->simpan(
-                new LogKategoriAnggaranDTO(
-                    user_id: Auth::user()->id,
-                    kategori_anggaran: $kategori_anggaran->id,
-                    keterangan: 'menambahkan data'
-                )
-            );
-            return $kategori_anggaran;
-        });
+        return $this->UseCaseSimpanKategoriAnggaran->execute($dto);
     }
 
-    public function dataTableTanpaLibrary(Request $request): array
+    public function dataTableTanpaLibrary(Request $request)
     {
-        $result = $this->kategoriAnggaranRepositoryInterface->customDataTable($request);
-
-        $response = [
-            'draw'            => $result['draw'],
-            'recordsTotal'    => $result['recordsTotal'],
-            'recordsFiltered' => $result['recordsFiltered'],
-            'data'            => $result['data'],
-            'status'          => 'success',
-            'message'         => 'Data berhasil diambil'
-        ];
-
-        return $response;
+        return $this->UseCaseCustomDataTable->execute($request);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Finance;
 use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KategoriAnggaransimpanRequet;
+use App\Http\Requests\kategoriAnggaranUpdateRequest;
 use App\Services\KategoriAnggaranService;
 use Illuminate\Http\Request;
 
@@ -37,6 +38,11 @@ class KategoriAnggaranController extends Controller
             'data' => $result
         ]);
     }
-    public function update($id) {}
+    public function update(kategoriAnggaranUpdateRequest $request, $id)
+    {
+        $data = array_merge($request->validated(), ['id' => $id]);
+
+        $dto = KategoriAnggaranDTO::formArray($data);
+    }
     public function hapus($id) {}
 }

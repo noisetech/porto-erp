@@ -20,7 +20,7 @@ class UseCaseSimpanKategoriAnggaran
         $this->logKategoriAnggaranRepository = $l;
     }
 
-    public function excute(KategoriAnggaranDTO $dto)
+    public function execute(KategoriAnggaranDTO $dto)
     {
         return DB::transaction(function () use ($dto) {
             $kategori_anggaran = $this->kategoriAnggaranRepositoryInterface->simpan($dto);

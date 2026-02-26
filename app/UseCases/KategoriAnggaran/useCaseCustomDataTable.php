@@ -14,7 +14,7 @@ class UseCaseCustomDataTable
         $this->kategoriAnggaranRepositoryInterface = $k;
     }
 
-    public function excute(Request $request): array
+    public function execute(Request $request): array
     {
         $result = $this->kategoriAnggaranRepositoryInterface->customDataTable($request);
 
