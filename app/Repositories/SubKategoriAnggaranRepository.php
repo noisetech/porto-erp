@@ -16,7 +16,7 @@ class SubKategoriAnggaranRepository implements SubKategoriAnggaranRepositoryInte
 
     public function simpanLog(array $data): LogSubKategoriAnggaran
     {
-        return  LogSubKategoriAnggaran::create(($data));
+        return  LogSubKategoriAnggaran::create($data);
     }
 
     public function simpanSubKategoriAnggaran(array $data): SubKategoriAnggaran

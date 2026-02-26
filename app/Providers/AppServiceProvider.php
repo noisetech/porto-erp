@@ -14,7 +14,13 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             \App\Repositories\Interfaces\SubKategoriAnggaranRepositoryInterface::class,
-            \App\Repositories\SubKategoriAnggaranRepository::class, // ← koma ini salah
+            \App\Repositories\SubKategoriAnggaranRepository::class
+        );
+
+        $this->app->bind(
+            \App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface::class,
+            \App\Repositories\KategoriAnggaranRepository::class
+
         );
     }
 

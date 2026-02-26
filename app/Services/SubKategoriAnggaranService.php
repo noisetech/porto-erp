@@ -39,7 +39,11 @@ class SubKategoriAnggaranService
 
     public function simpanDataKeperluanSubKategoriAnggaran(array $data)
     {
-        return  $this->repository->simpanSubKategoriAnggaran($data);
+        try {
+            return  $this->repository->simpanSubKategoriAnggaran($data);
+        } catch (\Throwable $e) {
+            throw $e; // atau custom exception
+        }
     }
 
     public function hapusDataSubKategoriAnggara(int $id)

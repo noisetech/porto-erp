@@ -35,20 +35,14 @@ class SubKategoriAnggaranController extends Controller
 
     public function simpan(SubKategoriAnggranSimpanRequest $request)
     {
-        try {
-            $result = $this->subKategoriAnggaranService
-                ->simpanDataKeperluanSubKategoriAnggaran($request->validated());
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Data disimpan',
-                'data' => $result
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $result = $this->subKategoriAnggaranService
+            ->simpanDataKeperluanSubKategoriAnggaran($request->validated());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data disimpan',
+            'data' => $result
+        ], 200);
     }
 
     public function getDataById($id)
