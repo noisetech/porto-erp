@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Query;
 
 use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
 use App\Models\LogKategoriAnggaran;
 
-class LogKategoriAnggaranRepository
+class QueryLogKategoriAnggaranRepository
 
 {
     public function simpan(LogKategoriAnggaranDTO $dto)

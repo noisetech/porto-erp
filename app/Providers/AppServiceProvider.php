@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
+use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
+use App\Repositories\Interfaces\SubKategoriAnggaranRepositoryInterface;
+use App\Repositories\Query\QueryKategoriAnggaranRepository;
+use App\Repositories\Query\QueryLogKategoriAnggaranRepository;
+use App\Repositories\Query\QuerySubKategoriAnggaranRepository;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,14 +19,17 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(
-            \App\Repositories\Interfaces\SubKategoriAnggaranRepositoryInterface::class,
-            \App\Repositories\SubKategoriAnggaranRepository::class
+            SubKategoriAnggaranRepositoryInterface::class,
+            QuerySubKategoriAnggaranRepository::class
         );
 
         $this->app->bind(
-            \App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface::class,
-            \App\Repositories\KategoriAnggaranRepository::class
+            KategoriAnggaranRepositoryInterface::class,
+            QueryKategoriAnggaranRepository::class
+        );
 
+        $this->app->bind(
+            QueryLogKategoriAnggaranRepository::class
         );
     }
 

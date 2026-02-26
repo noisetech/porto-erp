@@ -5,34 +5,34 @@ namespace App\UseCases\KategoriAnggaran;
 use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
 use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
 use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
-use App\Repositories\LogKategoriAnggaranRepository;
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\Query\QueryLogKategoriAnggaranRepository;
 use Illuminate\Support\Facades\DB;
 
-class UseCaseSimpanKategoriAnggaran
+class UseCaseUpdate
 {
     protected KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
-    protected LogKategoriAnggaranRepository $logKategoriAnggaranRepository;
+    protected QueryLogKategoriAnggaranRepository $logKategoriAnggaranRepository;
 
-    public function __construct(KategoriAnggaranRepositoryInterface $k, LogKategoriAnggaranRepository $l)
+    public function __construct(KategoriAnggaranRepositoryInterface $k, QueryLogKategoriAnggaranRepository $l)
     {
         $this->kategoriAnggaranRepositoryInterface = $k;
         $this->logKategoriAnggaranRepository = $l;
     }
 
-    public function execute(KategoriAnggaranDTO $dto)
+    public function execute(KategoriAnggaranDTO $dto, int $userId)
     {
-        return DB::transaction(function () use ($dto) {
-            $kategori_anggaran = $this->kategoriAnggaranRepositoryInterface->simpan($dto);
+        return DB::transaction(function () use ($dto, $userId) {
+            $kategori = $this->kategoriAnggaranRepositoryInterface->update($dto);
 
             $this->logKategoriAnggaranRepository->simpan(
                 new LogKategoriAnggaranDTO(
-                    user_id: Auth::id(),
-                    kategori_anggaran: $kategori_anggaran->id,
+                    user_id: $userId,
+                    kategori_anggaran: $kategori->id,
                     keterangan: 'menambahkan data'
                 )
             );
-            return $kategori_anggaran;
+
+            return $kategori;
         });
     }
 }

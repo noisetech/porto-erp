@@ -4,28 +4,47 @@ namespace App\Services;
 
 use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
 use App\UseCases\KategoriAnggaran\UseCaseCustomDataTable;
-use App\UseCases\KategoriAnggaran\UseCaseSimpanKategoriAnggaran;
+use App\UseCases\KategoriAnggaran\UseCaseHapus;
+use App\UseCases\KategoriAnggaran\UseCaseSimpan;
+use App\UseCases\KategoriAnggaran\UseCaseUpdate;
 use Illuminate\Http\Request;
-
 
 class KategoriAnggaranService
 {
-    protected UseCaseSimpanKategoriAnggaran $UseCaseSimpanKategoriAnggaran;
+    protected UseCaseSimpan $UseCaseSimpanKategoriAnggaran;
+    protected UseCaseUpdate $UseCaseUpdateKategoriAnggaran;
     protected UseCaseCustomDataTable $UseCaseCustomDataTable;
+    protected UseCaseHapus $UseCaseHapusKategoriAnggaran;
 
-    public function __construct(UseCaseSimpanKategoriAnggaran $k, UseCaseCustomDataTable $l)
+
+    public function __construct(
+        UseCaseSimpan $useCaseSimpan,
+        UseCaseCustomDataTable $customTable,
+        UseCaseUpdate $useCaseUpdate,
+        UseCaseHapus $useCaseHapus
+    ) {
+        $this->UseCaseSimpanKategoriAnggaran = $useCaseSimpan;
+        $this->UseCaseCustomDataTable = $customTable;
+        $this->UseCaseUpdateKategoriAnggaran = $useCaseUpdate;
+        $this->UseCaseHapusKategoriAnggaran = $useCaseHapus;
+    }
+    public function simpanDataKategoriAnggaran(KategoriAnggaranDTO $dto, int $userId)
     {
-        $this->UseCaseSimpanKategoriAnggaran = $k;
-        $this->UseCaseCustomDataTable = $l;
+        return $this->UseCaseSimpanKategoriAnggaran->execute($dto, $userId);
     }
 
-    public function simpanDataKategoriAnggara(KategoriAnggaranDTO $dto)
+    public function hapus(int $id, $userId)
     {
-        return $this->UseCaseSimpanKategoriAnggaran->execute($dto);
+        return $this->UseCaseHapusKategoriAnggaran->execute($id, $userId);
     }
 
     public function dataTableTanpaLibrary(Request $request)
     {
         return $this->UseCaseCustomDataTable->execute($request);
+    }
+
+    public function update(KategoriAnggaranDTO $dto, int $userId)
+    {
+        return $this->UseCaseUpdateKategoriAnggaran->execute($dto, $userId);
     }
 }

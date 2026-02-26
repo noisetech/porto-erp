@@ -8,7 +8,7 @@ use App\Http\Requests\KategoriAnggaransimpanRequet;
 use App\Http\Requests\kategoriAnggaranUpdateRequest;
 use App\Services\KategoriAnggaranService;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 class KategoriAnggaranController extends Controller
 {
@@ -31,18 +31,33 @@ class KategoriAnggaranController extends Controller
     {
         $dto = KategoriAnggaranDTO::formArray($request->validated());
 
-        $result = $this->service->simpanDataKategoriAnggara($dto);
+        $result = $this->service->simpanDataKategoriAnggaran($dto, Auth::id());
 
         return response()->json([
             'status' => 'success',
+            'message' => 'Data disimpan',
             'data' => $result
-        ]);
+        ], 200);
     }
     public function update(kategoriAnggaranUpdateRequest $request, $id)
     {
-        $data = array_merge($request->validated(), ['id' => $id]);
+        $dto = KategoriAnggaranDTO::formArray($request->validated());
 
-        $dto = KategoriAnggaranDTO::formArray($data);
+        $result = $this->service->update($dto, Auth::id());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data diubah',
+            'data' => $result
+        ]);
     }
-    public function hapus($id) {}
+    public function hapus($id)
+    {
+        $this->service->hapus($id, Auth::id());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data dihapus'
+        ]);
+    }
 }

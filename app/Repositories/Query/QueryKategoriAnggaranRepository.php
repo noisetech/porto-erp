@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Query;
 
 use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
-use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
 use App\Models\KategoriAnggaran;
-use App\Models\LogKategoriAnggaran;
 use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class KategoriAnggaranRepository implements KategoriAnggaranRepositoryInterface
+class QueryKategoriAnggaranRepository implements KategoriAnggaranRepositoryInterface
 {
 
     public function simpan(KategoriAnggaranDTO $dto): KategoriAnggaran
@@ -21,6 +19,36 @@ class KategoriAnggaranRepository implements KategoriAnggaranRepositoryInterface
             'keterangan' => $dto->keterangan
         ]);
     }
+
+
+    public function update(KategoriAnggaranDTO $dto): KategoriAnggaran
+    {
+        $kategori = KategoriAnggaran::find($dto->id);
+
+        $kategori->update([
+            'kode_kategori' => $dto->kode_kategori,
+            'nama_kategori' => $dto->nama_kategori,
+            'keterangan' => $dto->kode_kategori,
+        ]);
+
+        return $kategori;
+    }
+
+    public function hapus(int $id): bool
+    {
+        $kategori_anggarran =  KategoriAnggaran::find($id);
+
+        $kategori_anggarran->delete();
+
+        return true;
+    }
+
+
+    public function getDataById(int $id): ?KategoriAnggaran
+    {
+        return  KategoriAnggaran::find($id);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Bagian Khusus Custom Datatable Tanpa Library

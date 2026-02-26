@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Query;
 
 use App\Models\KategoriAnggaran;
 use App\Models\LogSubKategoriAnggaran;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class SubKategoriAnggaranRepository implements SubKategoriAnggaranRepositoryInterface
+class QuerySubKategoriAnggaranRepository implements SubKategoriAnggaranRepositoryInterface
 {
 
     public function simpanLog(array $data): LogSubKategoriAnggaran

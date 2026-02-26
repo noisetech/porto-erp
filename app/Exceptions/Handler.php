@@ -28,32 +28,34 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
-    }
 
-    public function render($request, Throwable $e)
-    {
-        if ($request->expectsJson()) {
-
-            if ($e instanceof ModelNotFoundException) {
+        $this->renderable(function (ValidationException $e, $request) {
+            if ($request->expectsJson()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Data tidak ditemukan'
-                ], 404);
-            }
-
-            if ($e instanceof ValidationException) {
-                return response()->json([
-                    'status' => 'error',
-                    'errors' => $e->errors()
+                    'errors' => $e->errors(),
                 ], 422);
             }
+        });
 
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan pada server',
-            ], 500);
-        }
+        // Tangani ModelNotFoundException
+        $this->renderable(function (ModelNotFoundException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Data tidak ditemukan',
+                ], 404);
+            }
+        });
 
-        return parent::render($request, $e);
+        // Tangani Exception umum
+        $this->renderable(function (Throwable $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Terjadi kesalahan pada server',
+                ], 500);
+            }
+        });
     }
 }
