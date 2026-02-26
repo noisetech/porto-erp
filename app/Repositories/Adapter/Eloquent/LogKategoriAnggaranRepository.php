@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Adapter;
+namespace App\Repositories\Adapter\Eloquent;
 
 use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
 use App\Models\LogKategoriAnggaran;

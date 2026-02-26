@@ -4,7 +4,7 @@ namespace App\UseCases\KategoriAnggaran;
 
 use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
 use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
-use App\Repositories\Adapter\LogKategoriAnggaranRepository;
+use App\Repositories\Adapter\Eloquent\LogKategoriAnggaranRepository;
 use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 

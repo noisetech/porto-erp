@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-use App\Repositories\Adapter\KategoriAnggaranRepository;
+use App\Repositories\Adapter\Eloquent\KategoriAnggaranRepository;
+use App\Repositories\Adapter\Eloquent\LogKategoriAnggaranRepository;
+use App\Repositories\Adapter\Query\KategoriAnggaranQueryRepository;
 use App\Repositories\Adapter\SubKategoriAnggaranRepository;
+use App\Repositories\Interfaces\KategoriAnggaranQueryRepositoryInterface;
 use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
 use App\Repositories\Interfaces\SubKategoriAnggaranRepositoryInterface;
 use Carbon\Carbon;
@@ -21,9 +24,19 @@ class AppServiceProvider extends ServiceProvider
             SubKategoriAnggaranRepositoryInterface::class,
             SubKategoriAnggaranRepository::class
         );
+
         $this->app->bind(
             KategoriAnggaranRepositoryInterface::class,
             KategoriAnggaranRepository::class
+        );
+
+        $this->app->bind(
+            KategoriAnggaranQueryRepositoryInterface::class,
+            KategoriAnggaranQueryRepository::class
+        );
+
+        $this->app->bind(
+            LogKategoriAnggaranRepository::class
         );
     }
 

@@ -18,15 +18,7 @@ class KategoriAnggaranController extends Controller
     {
         $this->service = $kategoriAnggaranService;
     }
-    public function index()
-    {
-        return view('pages.finance.anggaran.kategori-anggaran');
-    }
-    public function data(Request $request)
-    {
-        $result = $this->service->dataTableTanpaLibrary($request);
-        return response()->json($result, 200);
-    }
+
     public function simpan(KategoriAnggaransimpanRequet $request)
     {
         $dto = KategoriAnggaranDTO::formArray($request->validated());
@@ -64,5 +56,16 @@ class KategoriAnggaranController extends Controller
             'message' => 'Data disimpan',
             'data' => $result
         ], 200);
+    }
+
+
+    public function index()
+    {
+        return view('pages.finance.anggaran.kategori-anggaran');
+    }
+    public function data(Request $request)
+    {
+        $result = $this->service->dataTableTanpaLibrary($request);
+        return response()->json($result, 200);
     }
 }

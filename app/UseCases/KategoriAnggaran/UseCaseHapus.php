@@ -4,14 +4,14 @@
 namespace App\UseCases\KategoriAnggaran;
 
 use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
-use App\Repositories\Adapter\LogKategoriAnggaranRepository;
+use App\Repositories\Adapter\Eloquent\LogKategoriAnggaranRepository;
 use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
 class UseCaseHapus
 {
-    protected KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
-    protected LogKategoriAnggaranRepository $logKategoriAnggaranRepository;
+    private KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
+    private LogKategoriAnggaranRepository $logKategoriAnggaranRepository;
 
     public function __construct(KategoriAnggaranRepositoryInterface $k, LogKategoriAnggaranRepository $l)
     {

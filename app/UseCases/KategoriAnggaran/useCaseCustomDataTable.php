@@ -2,21 +2,21 @@
 
 namespace App\UseCases\KategoriAnggaran;
 
-use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
+use App\Repositories\Interfaces\KategoriAnggaranQueryRepositoryInterface;
 use Illuminate\Http\Request;
 
 class UseCaseCustomDataTable
 {
-    private KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
+    private KategoriAnggaranQueryRepositoryInterface $kategoriAnggaranQueryRepositoryInterface;
 
-    public function __construct(KategoriAnggaranRepositoryInterface $k)
+    public function __construct(KategoriAnggaranQueryRepositoryInterface $k)
     {
-        $this->kategoriAnggaranRepositoryInterface = $k;
+        $this->kategoriAnggaranQueryRepositoryInterface = $k;
     }
 
     public function execute(Request $request): array
     {
-        $result = $this->kategoriAnggaranRepositoryInterface->customDataTable($request);
+        $result = $this->kategoriAnggaranQueryRepositoryInterface->customDataTable($request);
 
         $response = [
             'draw'            => $result['draw'],
