@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class KategoriAnggaranController extends Controller
 {
-    protected KategoriAnggaranService $service;
+    private KategoriAnggaranService $service;
 
     public function __construct(KategoriAnggaranService $kategoriAnggaranService)
     {
@@ -39,25 +39,30 @@ class KategoriAnggaranController extends Controller
             'data' => $result
         ], 200);
     }
+
     public function update(kategoriAnggaranUpdateRequest $request, $id)
     {
         $dto = KategoriAnggaranDTO::formArray($request->validated());
+
+        $dto->id = $id;
 
         $result = $this->service->update($dto, Auth::id());
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data diubah',
+            'message' => 'Data disimpan',
             'data' => $result
-        ]);
+        ], 200);
     }
+
     public function hapus($id)
     {
-        $this->service->hapus($id, Auth::id());
+        $result = $this->service->hapus($id, Auth::id());
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data dihapus'
-        ]);
+            'message' => 'Data disimpan',
+            'data' => $result
+        ], 200);
     }
 }

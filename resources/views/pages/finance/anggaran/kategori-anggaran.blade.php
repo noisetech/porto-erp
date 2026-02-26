@@ -243,8 +243,8 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        type: "POST",
-                        url: "{{ route('finance.kategori_anggaran.hapus') }}",
+                        type: "DELETE",
+                        url: '/dashboard/finance/kategori-anggaran/hapus/' + id,
                         data: {
                             id: id,
                             _token: "{{ csrf_token() }}"

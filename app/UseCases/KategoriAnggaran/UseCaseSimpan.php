@@ -4,16 +4,16 @@ namespace App\UseCases\KategoriAnggaran;
 
 use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
 use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
+use App\Repositories\Adapter\LogKategoriAnggaranRepository;
 use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
-use App\Repositories\Query\QueryLogKategoriAnggaranRepository;
 use Illuminate\Support\Facades\DB;
 
 class UseCaseSimpan
 {
     protected KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
-    protected QueryLogKategoriAnggaranRepository $logKategoriAnggaranRepository;
+    protected LogKategoriAnggaranRepository $logKategoriAnggaranRepository;
 
-    public function __construct(KategoriAnggaranRepositoryInterface $k, QueryLogKategoriAnggaranRepository $l)
+    public function __construct(KategoriAnggaranRepositoryInterface $k, LogKategoriAnggaranRepository $l)
     {
         $this->kategoriAnggaranRepositoryInterface = $k;
         $this->logKategoriAnggaranRepository = $l;

@@ -4,16 +4,16 @@
 namespace App\UseCases\KategoriAnggaran;
 
 use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
+use App\Repositories\Adapter\LogKategoriAnggaranRepository;
 use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
-use App\Repositories\Query\QueryLogKategoriAnggaranRepository;
 use Illuminate\Support\Facades\DB;
 
 class UseCaseHapus
 {
     protected KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
-    protected QueryLogKategoriAnggaranRepository $logKategoriAnggaranRepository;
+    protected LogKategoriAnggaranRepository $logKategoriAnggaranRepository;
 
-    public function __construct(KategoriAnggaranRepositoryInterface $k, QueryLogKategoriAnggaranRepository $l)
+    public function __construct(KategoriAnggaranRepositoryInterface $k, LogKategoriAnggaranRepository $l)
     {
         $this->kategoriAnggaranRepositoryInterface = $k;
         $this->logKategoriAnggaranRepository = $l;
@@ -22,14 +22,16 @@ class UseCaseHapus
     public function execute(int $id, $userId): bool
     {
         return DB::transaction(function () use ($id, $userId) {
-            $this->logKategoriAnggaranRepository->simpan(
-                new LogKategoriAnggaranDTO(
-                    user_id: $userId,
-                    kategori_anggaran: $id,
-                    keterangan: 'menghapus data'
+            return tap(
+                $this->kategoriAnggaranRepositoryInterface->hapus($id),
+                fn($deleted) => $this->logKategoriAnggaranRepository->simpan(
+                    new LogKategoriAnggaranDTO(
+                        user_id: $userId,
+                        kategori_anggaran: $id,
+                        keterangan: 'menghapus data'
+                    )
                 )
             );
-            $this->kategoriAnggaranRepositoryInterface->hapus($id);
         });
     }
 }

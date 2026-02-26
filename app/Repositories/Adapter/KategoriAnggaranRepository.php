@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Query;
+namespace App\Repositories\Adapter;
 
 use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
 use App\Models\KategoriAnggaran;
@@ -8,7 +8,8 @@ use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class QueryKategoriAnggaranRepository implements KategoriAnggaranRepositoryInterface
+
+class KategoriAnggaranRepository implements KategoriAnggaranRepositoryInterface
 {
 
     public function simpan(KategoriAnggaranDTO $dto): KategoriAnggaran

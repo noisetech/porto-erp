@@ -3,7 +3,6 @@
 namespace App\Repositories\Interfaces;
 
 use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
-use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
 use App\Models\KategoriAnggaran;
 use Illuminate\Http\Request;
 

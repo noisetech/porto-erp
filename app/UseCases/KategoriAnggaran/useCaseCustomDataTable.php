@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class UseCaseCustomDataTable
 {
-    protected KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
+    private KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
 
     public function __construct(KategoriAnggaranRepositoryInterface $k)
     {

@@ -169,7 +169,7 @@ Route::prefix('/dashboard')->group(function () {
         ->name('finance.kategori_anggaran.data');
     Route::post('/finance/kategori-anggaran/simpan', [KategoriAnggaranController::class, 'simpan'])
         ->name('finance.kategori_anggaran.simpan');
-    Route::post('/finance/kategori-anggaran/hapus', [KategoriAnggaranController::class, 'hapus'])
+    Route::delete('/finance/kategori-anggaran/hapus/{id}', [KategoriAnggaranController::class, 'hapus'])
         ->name('finance.kategori_anggaran.hapus');
 
 

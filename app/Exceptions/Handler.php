@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
             if ($request->expectsJson()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Terjadi kesalahan pada server',
+                    'message' => 'Terjadi kesalahan pada server' . $e,
                 ], 500);
             }
         });

@@ -11,10 +11,10 @@ use Illuminate\Http\Request;
 
 class KategoriAnggaranService
 {
-    protected UseCaseSimpan $UseCaseSimpanKategoriAnggaran;
-    protected UseCaseUpdate $UseCaseUpdateKategoriAnggaran;
-    protected UseCaseCustomDataTable $UseCaseCustomDataTable;
-    protected UseCaseHapus $UseCaseHapusKategoriAnggaran;
+    private UseCaseSimpan $UseCaseSimpanKategoriAnggaran;
+    private UseCaseUpdate $UseCaseUpdateKategoriAnggaran;
+    private UseCaseCustomDataTable $UseCaseCustomDataTable;
+    private UseCaseHapus $UseCaseHapusKategoriAnggaran;
 
 
     public function __construct(
