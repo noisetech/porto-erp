@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO\KategoriAnggaran;
+namespace App\Domain\KategoriAnggaran\DTO\KategoriAnggaran;
 
 class KategoriAnggaranDTO
 {

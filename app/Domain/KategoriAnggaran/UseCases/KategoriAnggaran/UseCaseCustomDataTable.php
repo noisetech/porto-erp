@@ -1,8 +1,7 @@
 <?php
+namespace App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran;
 
-namespace App\UseCases\KategoriAnggaran;
-
-use App\Repositories\Interfaces\KategoriAnggaranQueryRepositoryInterface;
+use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranQueryRepositoryInterface;
 use Illuminate\Http\Request;
 
 class UseCaseCustomDataTable

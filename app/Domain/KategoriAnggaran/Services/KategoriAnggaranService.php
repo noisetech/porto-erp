@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services;
+namespace App\Domain\KategoriAnggaran\Services;
 
-use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
-use App\UseCases\KategoriAnggaran\UseCaseCustomDataTable;
-use App\UseCases\KategoriAnggaran\UseCaseHapus;
-use App\UseCases\KategoriAnggaran\UseCaseSimpan;
-use App\UseCases\KategoriAnggaran\UseCaseUpdate;
-use Illuminate\Http\Request;
+use App\Domain\KategoriAnggaran\DTO\KategoriAnggaran\KategoriAnggaranDTO;
+use App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran\UseCaseCustomDataTable;
+use App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran\UseCaseHapus;
+use App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran\UseCaseSimpan;
+use App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran\UseCaseUpdate;
+use Symfony\Component\HttpFoundation\Request;
 
 class KategoriAnggaranService
 {
@@ -33,14 +33,14 @@ class KategoriAnggaranService
         return $this->UseCaseSimpanKategoriAnggaran->execute($dto, $userId);
     }
 
-    public function hapus(int $id, $userId)
-    {
-        return $this->UseCaseHapusKategoriAnggaran->execute($id, $userId);
-    }
-
     public function dataTableTanpaLibrary(Request $request)
     {
         return $this->UseCaseCustomDataTable->execute($request);
+    }
+
+    public function hapus(int $id, $userId)
+    {
+        return $this->UseCaseHapusKategoriAnggaran->execute($id, $userId);
     }
 
     public function update(KategoriAnggaranDTO $dto, int $userId)

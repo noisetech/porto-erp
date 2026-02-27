@@ -1,17 +1,17 @@
 <?php
 
-namespace App\UseCases\KategoriAnggaran;
+namespace App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran;
 
-use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
-use App\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
-use App\Repositories\Adapter\Eloquent\LogKategoriAnggaranRepository;
-use App\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
-use Illuminate\Support\Facades\DB;
+use App\Domain\KategoriAnggaran\DTO\KategoriAnggaran\KategoriAnggaranDTO;
+use App\Domain\KategoriAnggaran\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
+use App\Domain\KategoriAnggaran\Repositories\Adapter\Eloquent\LogKategoriAnggaranRepository;
+use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
 
 class UseCaseUpdate
 {
     private KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
-    private LogKategoriAnggaranRepository $logKategoriAnggaranRepository;
+    private LogKategoriAnggaranRepository
+     $logKategoriAnggaranRepository;
 
     public function __construct(KategoriAnggaranRepositoryInterface $k, LogKategoriAnggaranRepository $l)
     {

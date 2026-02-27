@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories\Interfaces;
+namespace App\Domain\KategoriAnggaran\Repositories\Interfaces;
 
-use App\DTO\KategoriAnggaran\KategoriAnggaranDTO;
+use App\Domain\KategoriAnggaran\DTO\KategoriAnggaran\KategoriAnggaranDTO;
 use App\Models\KategoriAnggaran;
 
 interface KategoriAnggaranRepositoryInterface

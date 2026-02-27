@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Repositories\Adapter\Query;
-use App\Repositories\Interfaces\KategoriAnggaranQueryRepositoryInterface;
+namespace App\Domain\KategoriAnggaran\Repositories\Adapter\Query;
+
+use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranQueryRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -69,7 +70,7 @@ class KategoriAnggaranQueryRepository implements KategoriAnggaranQueryRepository
                 'id' => $row->id,
                 'kode_kategori' => $row->kode_kategori,
                 'nama_kategori' => $row->nama_kategori,
-                'aktif' => $row->aktif,
+                'aktif' => $row->aktif ? 'Aktif' : 'Tidak Aktif',
                 'keterangan' => $row->keterangan,
                 'action' => $this->actionButton($row->id)
             ];
