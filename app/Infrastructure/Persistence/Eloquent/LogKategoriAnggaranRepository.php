@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\KategoriAnggaran\Repositories\Adapter\Eloquent;
+namespace App\Infrastructure\Persistence\Eloquent;
 
-use App\Domain\KategoriAnggaran\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
+use App\Applications\KategoriAnggaran\DTO\LogKategoriAnggaranDTO;
 use App\Models\LogKategoriAnggaran;
 
 class LogKategoriAnggaranRepository

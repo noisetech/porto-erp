@@ -2,7 +2,7 @@
 
 namespace App\Domain\KategoriAnggaran\Repositories\Interfaces;
 
-use App\Domain\KategoriAnggaran\DTO\KategoriAnggaran\KategoriAnggaranDTO;
+use App\Applications\KategoriAnggaran\DTO\KategoriAnggaranDTO;
 use App\Models\KategoriAnggaran;
 
 interface KategoriAnggaranRepositoryInterface

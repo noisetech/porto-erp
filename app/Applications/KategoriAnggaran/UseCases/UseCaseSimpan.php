@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran;
+namespace App\Applications\KategoriAnggaran\UseCases;
 
-use App\Domain\KategoriAnggaran\DTO\KategoriAnggaran\KategoriAnggaranDTO;
-use App\Domain\KategoriAnggaran\DTO\KategoriAnggaran\LogKategoriAnggaranDTO;
-use App\Domain\KategoriAnggaran\Repositories\Adapter\Eloquent\LogKategoriAnggaranRepository;
+use App\Applications\KategoriAnggaran\DTO\KategoriAnggaranDTO;
+use App\Applications\KategoriAnggaran\DTO\LogKategoriAnggaranDTO;
 use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
+use App\Infrastructure\Persistence\Eloquent\LogKategoriAnggaranRepository;
 use Illuminate\Support\Facades\DB;
 
 class UseCaseSimpan

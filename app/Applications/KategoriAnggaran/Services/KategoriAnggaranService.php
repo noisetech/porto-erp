@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Domain\KategoriAnggaran\Services;
+namespace App\Applications\KategoriAnggaran\Services;
 
-use App\Domain\KategoriAnggaran\DTO\KategoriAnggaran\KategoriAnggaranDTO;
-use App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran\UseCaseCustomDataTable;
-use App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran\UseCaseHapus;
-use App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran\UseCaseSimpan;
-use App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran\UseCaseUpdate;
-use Symfony\Component\HttpFoundation\Request;
+use App\Applications\KategoriAnggaran\DTO\KategoriAnggaranDTO;
+use App\Applications\KategoriAnggaran\UseCases\UseCaseCustomDataTable;
+use App\Applications\KategoriAnggaran\UseCases\UseCaseHapus;
+use App\Applications\KategoriAnggaran\UseCases\UseCaseSimpan;
+use App\Applications\KategoriAnggaran\UseCases\UseCaseUpdate;
+use Illuminate\Http\Request;
 
 class KategoriAnggaranService
 {

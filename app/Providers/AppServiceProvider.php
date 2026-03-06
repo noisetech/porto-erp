@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Domain\KategoriAnggaran\Repositories\Adapter\Eloquent\KategoriAnggaranRepository;
-use App\Domain\KategoriAnggaran\Repositories\Adapter\Eloquent\LogKategoriAnggaranRepository;
-use App\Domain\KategoriAnggaran\Repositories\Adapter\Query\KategoriAnggaranQueryRepository;
 use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranQueryRepositoryInterface;
 use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
+use App\Infrastructure\Persistence\Eloquent\KategoriAnggaranRepository;
+use App\Infrastructure\Persistence\Eloquent\LogKategoriAnggaranRepository;
+use App\Infrastructure\Persistence\QueryBuilder\KategoriAnggaranQueryRepository;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 

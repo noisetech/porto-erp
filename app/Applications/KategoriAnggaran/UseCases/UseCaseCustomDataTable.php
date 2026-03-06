@@ -1,5 +1,6 @@
 <?php
-namespace App\Domain\KategoriAnggaran\UseCases\KategoriAnggaran;
+
+namespace App\Applications\KategoriAnggaran\UseCases;
 
 use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranQueryRepositoryInterface;
 use Illuminate\Http\Request;
