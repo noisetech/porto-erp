@@ -11,7 +11,7 @@ class kategoriAnggaranUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -19,10 +19,22 @@ class kategoriAnggaranUpdateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
         return [
-            //
+            'nama_kategori' => 'required',
+            'kode_kategori' => 'required',
+            'keterangan' => 'required'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nama_kategori.required' => 'Nama kategori tidak boleh kosong',
+            'kode_kategori' => 'Kode kategori tidak boleh kosong',
+            'keterangan.required' => 'Keterangan tidak boleh kosong'
         ];
     }
 }

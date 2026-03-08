@@ -171,6 +171,8 @@ Route::prefix('/dashboard')->group(function () {
         ->name('finance.kategori_anggaran.simpan');
     Route::get('/finance/kategori-anggaran/getDataById/{id}', [KategoriAnggaranController::class, 'getDataById'])
         ->name('finance.kategori_anggaran_get_data_by_id');
+    Route::put('/finance/kategori-anggaran/update/{id}', [KategoriAnggaranController::class, 'update'])
+        ->name('finance.kategori_anggaran.update');
     Route::delete('/finance/kategori-anggaran/hapus/{id}', [KategoriAnggaranController::class, 'hapus'])
         ->name('finance.kategori_anggaran.hapus');
 

@@ -111,32 +111,41 @@
     </div>
 </div>
 
+
+
 <div class="modal fade" id="modalEdit" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Kategori Anggaran</h5>
-                <button type="button" class="btn-close TutupModalTambah"></button>
+                <button type="button" class="btn-close TutupModalEdit"></button>
             </div>
             <div class="modal-body">
-                <form action="#" id="form-simpan" method="post">
+                <form action="#" id="form-update" method="post">
                     @csrf
+
+                    <input type="text" name="id" class="form-control" id="id">
+                    <input type="hidden" name="_method" value="PUT">
+
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Kode Kategori:</label>
-                                <input name="kode_kategori" class="form-control" placeholder="Masukan kode kategori"></input>
-                                <span id="kode_kategori_error" class="text-danger error-text my-2">
+                                <input name="kode_kategori" id="kode" class="form-control" placeholder="Masukan Kode Kategori"></input>
+                                <span id="kode_kategori_error_edit" class="text-danger error-text my-2 text-sm">
                                 </span>
                             </div>
                         </div>
 
                         <div class="col-md-6">
+
+
+
                             <div class="form-group">
                                 <label for="">Nama Kategori:</label>
-                                <input name="nama_kategori" class="form-control" placeholder="Masukan nama kategori"></input>
-                                <span id="nama_kategori_error" class="text-danger error-text my-2">
+                                <input name="nama_kategori" id="nama_dapertemen" class="form-control" placeholder="Masukan Nama Kategori"></input>
+                                <span id="nama_kategori_error_edit" class="text-danger error-text my-2 text-sm">
                                 </span>
                             </div>
                         </div>
@@ -144,13 +153,14 @@
 
                     <div class="form-group">
                         <label for="">Keterangan:</label>
-                        <textarea name="keterangan" class="form-control" style="height: 200px !important;" placeholder="Masukan keterangan" id=""></textarea>
-                        <span id="keterangan_error" class="text-danger error-text my-2">
+                        <textarea name="keterangan" class="form-control" id="" placeholder="Masukan keterangan" style="height: 200px !important;"></textarea>
+                        <span id="keterangan_error_edit" class="text-danger error-text my-2 text-sm">
                         </span>
                     </div>
 
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalTambah">Tutup</button>
+                        <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalEdit">Tutup</button>
                         <button type="submit" class="btn btn-primary btn-sm  px-2">Simpan</button>
                     </div>
                 </form>
@@ -159,6 +169,7 @@
         </div>
     </div>
 </div>
+
 
 
 @endsection
@@ -274,7 +285,6 @@
             });
         });
 
-
         $(document).on('click', '#edit', function(e) {
             e.preventDefault();
             let id = $(this).attr('data-id');
@@ -284,10 +294,57 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-    
+                    console.log(response);
+                    $('#modalEdit').modal('show');
+                    $('#id').val(response.id);
                 },
             })
         });
+
+
+        $('#form-update').on('submit', function(e) {
+
+            e.preventDefault();
+
+            let id = $('#id').val();
+
+            console.log(id);
+
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: '/dashboard/finance/kategori-anggaran/update/' + id,
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            title: 'Berhasil',
+                            text: 'Data diubah',
+                            icon: 'success',
+                            timer: 3000,
+                        });
+                        $('#modalEdit').modal('hide');
+                        $('#form-update')[0].reset();
+                        $('#kode_error').text('');
+                        $('#nama_dapertemen_error').text('');
+                        $('#datatable').DataTable().ajax.reload();
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            $('#' + key + '_error' + '_edit').text(value);
+                        });
+                    }
+                }
+            });
+        });
+
 
 
         $(document).on('click', '#hapus', function(e) {

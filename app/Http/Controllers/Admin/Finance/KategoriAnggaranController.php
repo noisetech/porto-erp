@@ -43,6 +43,9 @@ class KategoriAnggaranController extends Controller
 
     public function update(kategoriAnggaranUpdateRequest $request, $id)
     {
+
+        // dd($request->all());
+
         $dto = KategoriAnggaranDTO::formArray($request->validated());
 
         $dto->id = $id;

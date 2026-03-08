@@ -25,7 +25,7 @@ class KategoriAnggaranRepository implements KategoriAnggaranRepositoryInterface
         $kategori->update([
             'kode_kategori' => $dto->kode_kategori,
             'nama_kategori' => $dto->nama_kategori,
-            'keterangan' => $dto->kode_kategori,
+            'keterangan' => $dto->keterangan,
         ]);
 
         return $kategori;
