@@ -77,7 +77,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Kode Kategori:</label>
-                                <input name="kode_kategori" class="form-control" placeholder="Masukan kode kategori"></input>
+                                <input name="kode_kategori" class="form-control kode_kategori" placeholder="Masukan kode kategori"></input>
                                 <span id="kode_kategori_error" class="text-danger error-text my-2">
                                 </span>
                             </div>
@@ -86,7 +86,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Nama Kategori:</label>
-                                <input name="nama_kategori" class="form-control" placeholder="Masukan nama kategori"></input>
+                                <input name="nama_kategori" class="form-control nama_kategori" placeholder="Masukan nama kategori"></input>
                                 <span id="nama_kategori_error" class="text-danger error-text my-2">
                                 </span>
                             </div>
@@ -95,7 +95,7 @@
 
                     <div class="form-group">
                         <label for="">Keterangan:</label>
-                        <textarea name="keterangan" class="form-control" style="height: 200px !important;" placeholder="Masukan keterangan" id=""></textarea>
+                        <textarea name="keterangan" class="form-control keterangan" style="height: 200px !important;" placeholder="Masukan keterangan" id=""></textarea>
                         <span id="keterangan_error" class="text-danger error-text my-2">
                         </span>
                     </div>
@@ -124,7 +124,7 @@
                 <form action="#" id="form-update" method="post">
                     @csrf
 
-                    <input type="text" name="id" class="form-control" id="id">
+                    <input type="hidden" name="id" class="form-control" id="id">
                     <input type="hidden" name="_method" value="PUT">
 
 
@@ -132,7 +132,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Kode Kategori:</label>
-                                <input name="kode_kategori" id="kode" class="form-control" placeholder="Masukan Kode Kategori"></input>
+                                <input name="kode_kategori" class="form-control" placeholder="Masukan Kode Kategori" id="kode_kategori"></input>
                                 <span id="kode_kategori_error_edit" class="text-danger error-text my-2 text-sm">
                                 </span>
                             </div>
@@ -140,11 +140,9 @@
 
                         <div class="col-md-6">
 
-
-
                             <div class="form-group">
                                 <label for="">Nama Kategori:</label>
-                                <input name="nama_kategori" id="nama_dapertemen" class="form-control" placeholder="Masukan Nama Kategori"></input>
+                                <input name="nama_kategori" class="form-control" placeholder="Masukan Nama Kategori" id="nama_kategori"></input>
                                 <span id="nama_kategori_error_edit" class="text-danger error-text my-2 text-sm">
                                 </span>
                             </div>
@@ -153,7 +151,7 @@
 
                     <div class="form-group">
                         <label for="">Keterangan:</label>
-                        <textarea name="keterangan" class="form-control" id="" placeholder="Masukan keterangan" style="height: 200px !important;"></textarea>
+                        <textarea name="keterangan" class="form-control" id="keterangan" placeholder="Masukan keterangan" style="height: 200px !important;"></textarea>
                         <span id="keterangan_error_edit" class="text-danger error-text my-2 text-sm">
                         </span>
                     </div>
@@ -285,6 +283,16 @@
             });
         });
 
+
+        $(document).on('click', '.TutupModalTambah', function() {
+            $('#modalTambah').modal('hide');
+            $('#form-simpan')[0].reset();
+            $('#kode_kategori_error').text('');
+            $('#nama_kategori_error').text('');
+            $('#keterangan_error').text('');
+        });
+
+
         $(document).on('click', '#edit', function(e) {
             e.preventDefault();
             let id = $(this).attr('data-id');
@@ -297,6 +305,9 @@
                     console.log(response);
                     $('#modalEdit').modal('show');
                     $('#id').val(response.id);
+                    $('#kode_kategori').val(response.kode_kategori);
+                    $('#nama_kategori').val(response.nama_kategori);
+                    $('#keterangan').val(response.keterangan);
                 },
             })
         });
@@ -307,9 +318,6 @@
             e.preventDefault();
 
             let id = $('#id').val();
-
-            console.log(id);
-
 
             let formData = new FormData(this);
 
@@ -386,7 +394,6 @@
                 }
             });
         });
-
 
     });
 </script>
