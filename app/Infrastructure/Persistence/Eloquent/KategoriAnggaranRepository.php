@@ -31,6 +31,11 @@ class KategoriAnggaranRepository implements KategoriAnggaranRepositoryInterface
         return $kategori;
     }
 
+    public function getDataById(int $id): ?KategoriAnggaran
+    {
+        return KategoriAnggaran::find($id);
+    }
+
     public function hapus(int $id): bool
     {
         $kategori_anggarran =  KategoriAnggaran::find($id);
@@ -38,11 +43,5 @@ class KategoriAnggaranRepository implements KategoriAnggaranRepositoryInterface
         $kategori_anggarran->delete();
 
         return true;
-    }
-
-
-    public function getDataById(int $id): ?KategoriAnggaran
-    {
-        return  KategoriAnggaran::find($id);
     }
 }

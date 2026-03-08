@@ -111,6 +111,55 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalEdit" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Kategori Anggaran</h5>
+                <button type="button" class="btn-close TutupModalTambah"></button>
+            </div>
+            <div class="modal-body">
+                <form action="#" id="form-simpan" method="post">
+                    @csrf
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Kode Kategori:</label>
+                                <input name="kode_kategori" class="form-control" placeholder="Masukan kode kategori"></input>
+                                <span id="kode_kategori_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Nama Kategori:</label>
+                                <input name="nama_kategori" class="form-control" placeholder="Masukan nama kategori"></input>
+                                <span id="nama_kategori_error" class="text-danger error-text my-2">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Keterangan:</label>
+                        <textarea name="keterangan" class="form-control" style="height: 200px !important;" placeholder="Masukan keterangan" id=""></textarea>
+                        <span id="keterangan_error" class="text-danger error-text my-2">
+                        </span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-sm  px-22 TutupModalTambah">Tutup</button>
+                        <button type="submit" class="btn btn-primary btn-sm  px-2">Simpan</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 @endsection
 
@@ -225,6 +274,20 @@
             });
         });
 
+
+        $(document).on('click', '#edit', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+            $.ajax({
+                url: '/dashboard/finance/kategori-anggaran/getDataById/' + id,
+                method: "GET",
+                processData: false,
+                contentType: false,
+                success: function(response) {
+    
+                },
+            })
+        });
 
 
         $(document).on('click', '#hapus', function(e) {

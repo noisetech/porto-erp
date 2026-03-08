@@ -6,6 +6,7 @@ use App\Applications\KategoriAnggaran\DTO\KategoriAnggaranDTO;
 use App\Applications\KategoriAnggaran\DTO\LogKategoriAnggaranDTO;
 use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
 use App\Infrastructure\Persistence\Eloquent\LogKategoriAnggaranRepository;
+use Illuminate\Support\Facades\DB;
 
 class UseCaseUpdate
 {

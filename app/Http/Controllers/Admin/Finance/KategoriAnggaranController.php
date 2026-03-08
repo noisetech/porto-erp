@@ -32,6 +32,15 @@ class KategoriAnggaranController extends Controller
         ], 200);
     }
 
+
+    public function getDataById($id)
+    {
+        $data = $this->service->getDataById($id);
+
+        return response()->json($data);
+    }
+
+
     public function update(kategoriAnggaranUpdateRequest $request, $id)
     {
         $dto = KategoriAnggaranDTO::formArray($request->validated());
