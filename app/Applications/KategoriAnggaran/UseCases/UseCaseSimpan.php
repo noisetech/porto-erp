@@ -19,6 +19,7 @@ class UseCaseSimpan
     public function execute(KategoriAnggaranDTO $dto, int $userId): KategoriAnggaranEntity
     {
         return DB::transaction(function () use ($dto, $userId) {
+
             $entity = new KategoriAnggaranEntity(
                 id: null,
                 kode_kategori: $dto->kode_kategori,
@@ -26,17 +27,18 @@ class UseCaseSimpan
                 keterangan: $dto->keterangan
             );
 
-            $kategori = $this->repository->simpan($entity);
-
-            $this->logRepository->simpan(
-                new LogKategoriAnggaranDTO(
-                    user_id: $userId,
-                    kategori_anggaran: $kategori->id,
-                    keterangan: 'Menambahkan kategori anggaran'
-                )
+            return tap(
+                $this->repository->simpan($entity),
+                function ($kategori) use ($userId) {
+                    $this->logRepository->simpan(
+                        new LogKategoriAnggaranDTO(
+                            user_id: $userId,
+                            kategori_anggaran: $kategori->id,
+                            keterangan: 'Menambahkan kategori anggaran'
+                        )
+                    );
+                }
             );
-
-            return $kategori;
         });
     }
 }

@@ -43,9 +43,6 @@ class KategoriAnggaranController extends Controller
 
     public function update(kategoriAnggaranUpdateRequest $request, $id)
     {
-
-        // dd($request->all());
-
         $dto = KategoriAnggaranDTO::formArray($request->validated());
 
         $dto->id = $id;
@@ -78,6 +75,13 @@ class KategoriAnggaranController extends Controller
     public function data(Request $request)
     {
         $result = $this->service->dataTableTanpaLibrary($request);
-        return response()->json($result, 200);
+        return response()->json([
+            'draw' => $result['draw'],
+            'recordsTotal' => $result['recordsTotal'],
+            'recordsFiltered' => $result['recordsFiltered'],
+            'data' => $result['data'],
+            'status' => 'success',
+            'message' => 'Data berhasil diambil'
+        ], 200);
     }
 }
