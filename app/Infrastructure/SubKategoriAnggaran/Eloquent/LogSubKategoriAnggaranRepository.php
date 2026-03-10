@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Infrastructure\SubKategoriAnggaran\Eloquent;
+namespace App\Infrastructure\KategoriAnggaran\Eloquent;
 
-use App\Applications\SubKategoriAnggaran\DTO\LogSubKategoriAnggaranDTO;
+use App\Domain\KategoriAnggaran\Entities\LogKategoriAnggaranEntity;
 use App\Domain\SubKategoriAnggaran\Repositories\LogSubKategoriAnggaranRepositoryInterface;
-use App\Models\LogKategoriAnggaran;
+use App\Models\LogSubKategoriAnggaran;
 
 class LogSubKategoriAnggaranRepository implements LogSubKategoriAnggaranRepositoryInterface
 {
-    public function simpan(LogSubKategoriAnggaranDTO $dto): void
+    public function simpan(LogKategoriAnggaranEntity $log): void
     {
-        LogKategoriAnggaran::create([
-            'user_id' => $dto->user_id,
-            'kategori_anggaran_id' => $dto->kategori_anggaran,
-            'keterangan' => $dto->keterangan
+        LogSubKategoriAnggaran::create([
+            'user_id' => $log->user_id,
+            'kategori_anggaran_id' => $log->kategori_anggaran_id,
+            'keterangan' => $log->keterangan
         ]);
     }
 }

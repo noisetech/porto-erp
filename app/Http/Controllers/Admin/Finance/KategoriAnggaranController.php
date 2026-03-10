@@ -32,6 +32,19 @@ class KategoriAnggaranController extends Controller
         ], 200);
     }
 
+    public function data(Request $request)
+    {
+        $result = $this->service->dataTableTanpaLibrary($request);
+        return response()->json([
+            'draw' => $result['draw'],
+            'recordsTotal' => $result['recordsTotal'],
+            'recordsFiltered' => $result['recordsFiltered'],
+            'data' => $result['data'],
+            'status' => 'success',
+            'message' => 'Data berhasil diambil'
+        ], 200);
+    }
+
 
     public function getDataById($id)
     {
@@ -71,17 +84,5 @@ class KategoriAnggaranController extends Controller
     public function index()
     {
         return view('pages.finance.anggaran.kategori-anggaran');
-    }
-    public function data(Request $request)
-    {
-        $result = $this->service->dataTableTanpaLibrary($request);
-        return response()->json([
-            'draw' => $result['draw'],
-            'recordsTotal' => $result['recordsTotal'],
-            'recordsFiltered' => $result['recordsFiltered'],
-            'data' => $result['data'],
-            'status' => 'success',
-            'message' => 'Data berhasil diambil'
-        ], 200);
     }
 }

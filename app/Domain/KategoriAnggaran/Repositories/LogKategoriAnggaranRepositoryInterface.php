@@ -2,9 +2,9 @@
 
 namespace App\Domain\KategoriAnggaran\Repositories;
 
-use App\Applications\KategoriAnggaran\DTO\LogKategoriAnggaranDTO;
+use App\Domain\KategoriAnggaran\Entities\LogKategoriAnggaranEntity;
 
 interface LogKategoriAnggaranRepositoryInterface
 {
-    public function simpan(LogKategoriAnggaranDTO $log): void;
+    public function simpan(LogKategoriAnggaranEntity $log): void;
 }

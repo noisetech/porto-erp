@@ -2,7 +2,7 @@
 
 namespace App\Applications\KategoriAnggaran\UseCases;
 
-use App\Applications\KategoriAnggaran\DTO\LogKategoriAnggaranDTO;
+use App\Domain\KategoriAnggaran\Entities\LogKategoriAnggaranEntity;
 use App\Domain\KategoriAnggaran\Repositories\KategoriAnggaranRepositoryInterface;
 use App\Infrastructure\KategoriAnggaran\Eloquent\LogKategoriAnggaranRepository;
 use Illuminate\Support\Facades\DB;
@@ -18,19 +18,22 @@ class UseCaseHapus
         $this->logKategoriAnggaranRepository = $l;
     }
 
-    public function execute(int $id, $userId): bool
+    public function execute(int $id, int $userId): bool
     {
         return DB::transaction(function () use ($id, $userId) {
-            return tap(
-                $this->kategoriAnggaranRepositoryInterface->hapus($id),
-                fn($deleted) => $this->logKategoriAnggaranRepository->simpan(
-                    new LogKategoriAnggaranDTO(
-                        user_id: $userId,
-                        kategori_anggaran: $id,
-                        keterangan: 'menghapus data'
-                    )
-                )
+
+            $deleted = $this->kategoriAnggaranRepositoryInterface->hapus($id);
+
+            $log = new LogKategoriAnggaranEntity(
+                id: null,
+                user_id: $userId,
+                kategori_anggaran_id: $id,
+                keterangan: 'Menghapus kategori anggaran'
             );
+
+            $this->logKategoriAnggaranRepository->simpan($log);
+
+            return $deleted;
         });
     }
 }

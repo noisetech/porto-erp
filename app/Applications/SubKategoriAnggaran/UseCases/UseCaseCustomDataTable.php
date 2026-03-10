@@ -16,17 +16,6 @@ class UseCaseCustomDataTable
 
     public function execute(Request $request): array
     {
-        $result = $this->subKategoriAnggaranQueryRepository->customDataTable($request);
-
-        $response = [
-            'draw'            => $result['draw'],
-            'recordsTotal'    => $result['recordsTotal'],
-            'recordsFiltered' => $result['recordsFiltered'],
-            'data'            => $result['data'],
-            'status'          => 'success',
-            'message'         => 'Data berhasil ditampilkan'
-        ];
-
-        return $response;
+        return $this->subKategoriAnggaranQueryRepository->customDataTable($request);
     }
 }

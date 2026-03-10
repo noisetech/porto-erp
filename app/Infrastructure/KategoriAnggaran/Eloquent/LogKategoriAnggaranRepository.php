@@ -2,18 +2,18 @@
 
 namespace App\Infrastructure\KategoriAnggaran\Eloquent;
 
+use App\Domain\KategoriAnggaran\Entities\LogKategoriAnggaranEntity;
 use App\Domain\KategoriAnggaran\Repositories\LogKategoriAnggaranRepositoryInterface;
-use App\Applications\KategoriAnggaran\DTO\LogKategoriAnggaranDTO;
 use App\Models\LogKategoriAnggaran;
 
 class LogKategoriAnggaranRepository implements LogKategoriAnggaranRepositoryInterface
 {
-    public function simpan(LogKategoriAnggaranDTO $dto): void
+    public function simpan(LogKategoriAnggaranEntity $log): void
     {
         LogKategoriAnggaran::create([
-            'user_id' => $dto->user_id,
-            'kategori_anggaran_id' => $dto->kategori_anggaran,
-            'keterangan' => $dto->keterangan
+            'user_id' => $log->user_id,
+            'kategori_anggaran_id' => $log->kategori_anggaran_id,
+            'keterangan' => $log->keterangan
         ]);
     }
 }

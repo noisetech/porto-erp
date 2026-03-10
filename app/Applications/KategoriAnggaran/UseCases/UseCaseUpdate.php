@@ -3,8 +3,8 @@
 namespace App\Applications\KategoriAnggaran\UseCases;
 
 use App\Applications\KategoriAnggaran\DTO\KategoriAnggaranDTO;
-use App\Applications\KategoriAnggaran\DTO\LogKategoriAnggaranDTO;
 use App\Domain\KategoriAnggaran\Entities\KategoriAnggaranEntity;
+use App\Domain\KategoriAnggaran\Entities\LogKategoriAnggaranEntity;
 use App\Domain\KategoriAnggaran\Repositories\KategoriAnggaranRepositoryInterface;
 use App\Infrastructure\KategoriAnggaran\Eloquent\LogKategoriAnggaranRepository;
 use Illuminate\Support\Facades\DB;
@@ -22,27 +22,27 @@ class UseCaseUpdate
         $this->logRepository = $logRepository;
     }
 
-    public function execute(KategoriAnggaranDTO $dto, int $userId)
+    public function execute(KategoriAnggaranDTO $dto, int $userId): KategoriAnggaranEntity
     {
         return DB::transaction(function () use ($dto, $userId) {
 
-            // DTO → Entity
-            $entity = new KategoriAnggaranEntity(
+            $entityKategoriAnggaran = new KategoriAnggaranEntity(
                 id: $dto->id,
                 kode_kategori: $dto->kode_kategori,
                 nama_kategori: $dto->nama_kategori,
                 keterangan: $dto->keterangan
             );
 
-            $kategori = $this->kategoriRepository->update($entity);
+            $kategori = $this->kategoriRepository->update($entityKategoriAnggaran);
 
-            $this->logRepository->simpan(
-                new LogKategoriAnggaranDTO(
-                    user_id: $userId,
-                    kategori_anggaran: $kategori->id,
-                    keterangan: 'Mengubah kategori anggaran'
-                )
+            $entityLogKategoriAnggaran = new LogKategoriAnggaranEntity(
+                id: null,
+                user_id: $userId,
+                kategori_anggaran_id: $kategori->id,
+                keterangan: 'Mengubah kategori anggaran'
             );
+
+            $this->logRepository->simpan($entityLogKategoriAnggaran);
 
             return $kategori;
         });

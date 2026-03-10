@@ -24,14 +24,23 @@ class SubKategoriAnggaranController extends Controller
     {
         $result = $this->service->dataTableTanpaLibrary($request);
 
-        return response()->json($result, 200);
+        return response()->json([
+            'draw' => $result['draw'],
+            'recordsTotal' => $result['recordsTotal'],
+            'recordsFiltered' => $result['recordsFiltered'],
+            'data' => $result['data'],
+            'status' => 'success',
+            'message' => 'Data berhasil diambil'
+        ], 200);
+    }
+
+    public function listCoa(Request $request){
+
     }
 
     public function simpan(SubKategoriAnggaranSimpanRequest $request)
     {
         $dto = SubKategoriAnggaranDTO::formArray($request->validated());
-
-        
     }
 
     public function index()
