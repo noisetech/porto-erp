@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\KategoriAnggaran\Repositories\Interfaces;
+namespace App\Domain\KategoriAnggaran\Repositories;
 
 use Illuminate\Http\Request;
 

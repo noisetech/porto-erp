@@ -2,7 +2,7 @@
 
 namespace App\Applications\KategoriAnggaran\UseCases;
 
-use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
+use App\Domain\KategoriAnggaran\Repositories\KategoriAnggaranRepositoryInterface;
 use Illuminate\Http\Request;
 
 class UseCaseGetDataById

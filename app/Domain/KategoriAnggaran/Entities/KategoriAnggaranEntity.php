@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Domain\KategoriAnggaran\Entities;
 
-use App\Domain\KategoriAnggaran\Exceptions\KategoriAnggaranException;
+namespace App\Domain\KategoriAnggaran\Entities;
 
 class KategoriAnggaranEntity
 {
@@ -13,11 +12,8 @@ class KategoriAnggaranEntity
         public string $keterangan
     ) {}
 
-    public function update(
-        string $kode,
-        string $nama,
-        string $keterangan
-    ): void {
+    public function update(string $kode, string $nama, string $keterangan): void
+    {
         $this->kode_kategori = $kode;
         $this->nama_kategori = $nama;
         $this->keterangan = $keterangan;

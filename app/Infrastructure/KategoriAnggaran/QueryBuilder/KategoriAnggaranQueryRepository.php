@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Infrastructure\Persistence\QueryBuilder;
+namespace App\Infrastructure\KategoriAnggaran\QueryBuilder;
 
-use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranQueryRepositoryInterface;
+use App\Domain\KategoriAnggaran\Repositories\KategoriAnggaranQueryRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

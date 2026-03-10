@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Applications\KategoriAnggaran\UseCases;
+
 use App\Applications\KategoriAnggaran\DTO\LogKategoriAnggaranDTO;
-use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
-use App\Infrastructure\Persistence\Eloquent\LogKategoriAnggaranRepository;
+use App\Domain\KategoriAnggaran\Repositories\KategoriAnggaranRepositoryInterface;
+use App\Infrastructure\KategoriAnggaran\Eloquent\LogKategoriAnggaranRepository;
 use Illuminate\Support\Facades\DB;
 
 class UseCaseHapus

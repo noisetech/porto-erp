@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
-use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranQueryRepositoryInterface;
-use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
-use App\Infrastructure\Persistence\Eloquent\KategoriAnggaranRepository;
-use App\Infrastructure\Persistence\Eloquent\LogKategoriAnggaranRepository;
-use App\Infrastructure\Persistence\QueryBuilder\KategoriAnggaranQueryRepository;
+use App\Domain\KategoriAnggaran\Repositories\KategoriAnggaranQueryRepositoryInterface;
+use App\Domain\KategoriAnggaran\Repositories\KategoriAnggaranRepositoryInterface;
+use App\Infrastructure\KategoriAnggaran\Eloquent\KategoriAnggaranRepository;
+use App\Infrastructure\KategoriAnggaran\QueryBuilder\KategoriAnggaranQueryRepository;
+use App\Domain\KategoriAnggaran\Repositories\LogKategoriAnggaranRepositoryInterface;
+use App\Infrastructure\KategoriAnggaran\Eloquent\LogKategoriAnggaranRepository;
+
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,7 +31,9 @@ class AppServiceProvider extends ServiceProvider
             KategoriAnggaranRepository::class
 
         );
+
         $this->app->bind(
+            LogKategoriAnggaranRepositoryInterface::class,
             LogKategoriAnggaranRepository::class
         );
     }

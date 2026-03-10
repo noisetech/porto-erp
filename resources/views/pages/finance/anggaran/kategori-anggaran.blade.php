@@ -195,24 +195,29 @@
                 },
                 {
                     data: 'kode_kategori',
-                    name: 'kode_kategori'
+                    name: 'kode_kategori',
+                    orderable: false
                 },
                 {
                     data: 'nama_kategori',
-                    name: 'nama_kategori'
+                    name: 'nama_kategori',
+                    orderable: false
                 },
                 {
                     data: 'aktif',
-                    name: 'aktif'
+                    name: 'aktif',
+                    orderable: false
                 },
                 {
                     data: 'keterangan',
-                    name: 'keterangan'
+                    name: 'keterangan',
+                    orderable: false
                 },
 
                 {
                     data: 'action',
-                    name: 'action'
+                    name: 'action',
+                    orderable: false
                 },
             ],
             pagingType: "full_numbers",
@@ -292,6 +297,14 @@
             $('#keterangan_error').text('');
         });
 
+        $('#modalTambah').on('hidden.bs.modal', function(e) {
+            $('#modalTambah').modal('hide');
+            $('#form-simpan')[0].reset();
+            $('#kode_kategori_error').text('');
+            $('#nama_kategori_error').text('');
+            $('#keterangan_error').text('');
+        });
+
 
 
         $(document).on('click', '#edit', function(e) {
@@ -315,12 +328,21 @@
 
 
         $(document).on('click', '.TutupModalEdit', function() {
-            $('#TutupModalEdit').modal('hide');
+            $('#modalEdit').modal('hide');
             $('#form-update')[0].reset();
             $('#kode_kategori_error_edit').text('');
             $('#nama_kategori_error_edit').text('');
             $('#keterangan_error_edit').text('');
         });
+
+        $('#modalEdit').on('hidden.bs.modal', function(e) {
+            $('#modalEdit').modal('hide');
+            $('#form-update')[0].reset();
+            $('#kode_kategori_error_edit').text('');
+            $('#nama_kategori_error_edit').text('');
+            $('#keterangan_error_edit').text('');
+        });
+
 
 
         $('#form-update').on('submit', function(e) {

@@ -4,32 +4,35 @@ namespace App\Applications\KategoriAnggaran\UseCases;
 
 use App\Applications\KategoriAnggaran\DTO\KategoriAnggaranDTO;
 use App\Applications\KategoriAnggaran\DTO\LogKategoriAnggaranDTO;
-use App\Domain\KategoriAnggaran\Repositories\Interfaces\KategoriAnggaranRepositoryInterface;
-use App\Infrastructure\Persistence\Eloquent\LogKategoriAnggaranRepository;
+use App\Domain\KategoriAnggaran\Entities\KategoriAnggaranEntity;
+use App\Domain\KategoriAnggaran\Repositories\KategoriAnggaranRepositoryInterface;
+use App\Domain\KategoriAnggaran\Repositories\LogKategoriAnggaranRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
 class UseCaseSimpan
 {
-    private KategoriAnggaranRepositoryInterface $kategoriAnggaranRepositoryInterface;
-    private LogKategoriAnggaranRepository $logKategoriAnggaranRepository;
+    public function __construct(
+        private KategoriAnggaranRepositoryInterface $repository,
+        private LogKategoriAnggaranRepositoryInterface $logRepository
+    ) {}
 
-    public function __construct(KategoriAnggaranRepositoryInterface $k, LogKategoriAnggaranRepository $l)
-    {
-        $this->kategoriAnggaranRepositoryInterface = $k;
-        $this->logKategoriAnggaranRepository = $l;
-    }
-
-    public function execute(KategoriAnggaranDTO $dto, int $userId)
+    public function execute(KategoriAnggaranDTO $dto, int $userId): KategoriAnggaranEntity
     {
         return DB::transaction(function () use ($dto, $userId) {
+            $entity = new KategoriAnggaranEntity(
+                id: null,
+                kode_kategori: $dto->kode_kategori,
+                nama_kategori: $dto->nama_kategori,
+                keterangan: $dto->keterangan
+            );
 
-            $kategori = $this->kategoriAnggaranRepositoryInterface->simpan($dto);
+            $kategori = $this->repository->simpan($entity);
 
-            $this->logKategoriAnggaranRepository->simpan(
+            $this->logRepository->simpan(
                 new LogKategoriAnggaranDTO(
                     user_id: $userId,
                     kategori_anggaran: $kategori->id,
-                    keterangan: 'menambahkan data'
+                    keterangan: 'Menambahkan kategori anggaran'
                 )
             );
 
