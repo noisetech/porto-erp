@@ -293,6 +293,7 @@
         });
 
 
+
         $(document).on('click', '#edit', function(e) {
             e.preventDefault();
             let id = $(this).attr('data-id');
@@ -310,6 +311,15 @@
                     $('#keterangan').val(response.keterangan);
                 },
             })
+        });
+
+
+        $(document).on('click', '.TutupModalEdit', function() {
+            $('#TutupModalEdit').modal('hide');
+            $('#form-update')[0].reset();
+            $('#kode_kategori_error_edit').text('');
+            $('#nama_kategori_error_edit').text('');
+            $('#keterangan_error_edit').text('');
         });
 
 

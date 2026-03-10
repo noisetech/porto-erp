@@ -2,7 +2,7 @@
 
 namespace App\Domain\KategoriAnggaran\Entities;
 
-class LogKategoriAnggaran
+class LogKategoriAnggaranEntity
 {
     public function __construct(
         private int $userId,
