@@ -3,11 +3,58 @@
 namespace App\Infrastructure\SubKategoriAnggaran\QueryBuilder;
 
 use App\Domain\SubKategoriAnggaran\Repositories\SubKategoriAnggaranQueryRepositoryInterface;
+use App\Models\KategoriAnggaran;
+use App\Models\ModelCoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepositoryInterface
 {
+
+
+    public function listCoa(?string $search = null): array
+    {
+        $query = ModelCoa::query()
+            ->select('id', 'kode_akun', 'nama_akun')
+            ->whereNull('deleted_at');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_akun', 'LIKE', "%{$search}%")
+                    ->orWhere('nama_akun', 'LIKE', "%{$search}%");
+            });
+        }
+
+        return $query->get()->map(function ($coa) {
+            return [
+                'id' => $coa->id,
+                'text' => $coa->kode_akun . ' | ' . $coa->nama_akun
+            ];
+        })->toArray();
+    }
+
+
+    public function listKategoriAnggaran(?string $search = null): array
+    {
+        $query = KategoriAnggaran::query()
+            ->select('id', 'kode_kategori', 'nama_kategori')
+            ->whereNull('deleted_at');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_kategori', 'LIKE', "%{$search}%")
+                    ->orWhere('nama_kategori', 'LIKE', "%{$search}%");
+            });
+        }
+
+        return $query->get()->map(function ($kategori_anggaran) {
+            return [
+                'id' => $kategori_anggaran->id,
+                'text' => $kategori_anggaran->kode_kategori . ' | ' . $kategori_anggaran->nama_kategori
+            ];
+        })->toArray();
+    }
+
     public function customDataTable(Request $request): array
     {
         $start  = (int) $request->start;

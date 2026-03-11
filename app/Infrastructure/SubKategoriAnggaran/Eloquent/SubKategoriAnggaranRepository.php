@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Infrastructure\SubKategoriAnggaran\Eloquent;
+
 use App\Domain\SubKategoriAnggaran\Entities\SubKategoriAnggaranEntity;
 use App\Domain\SubKategoriAnggaran\Repositories\SubKategoriAnggaranRepositoryInterface;
 use App\Models\SubKategoriAnggaran;
@@ -12,52 +13,28 @@ class SubKategoriAnggaranRepository implements SubKategoriAnggaranRepositoryInte
     {
         return new SubKategoriAnggaranEntity(
             id: $model->id,
-            kode_kategori: $model->kode_kategori,
-            nama_kategori: $model->nama_kategori,
-            keterangan: $model->keterangan
+            kategori_anggaran_id: $model->kategori_anggaran_id,
+            kode_sub_kategori: $model->kode_sub_kategori,
+            nama_sub_kategori: $model->nama_sub_kategori,
+            keterangan: $model->keterangan,
+            coa_ids: $model->coa->pluck('id')->toArray()
         );
     }
-
 
     public function simpan(SubKategoriAnggaranEntity $entity): SubKategoriAnggaranEntity
     {
         $model = SubKategoriAnggaran::create([
-            'kode_kategori' => $entity->kode_kategori,
-            'nama_kategori' => $entity->nama_kategori,
-            'keterangan'   => $entity->keterangan
+            'kategori_anggaran_id' => $entity->kategori_anggaran_id,
+            'kode_sub_kategori' => $entity->kode_sub_kategori,
+            'nama_sub_kategori' => $entity->nama_sub_kategori,
+            'keterangan' => $entity->keterangan
         ]);
 
-        return $this->mapToEntity($model);
-    }
+        $model->coa()->sync($entity->coa_ids);
 
-    public function update(SubKategoriAnggaranEntity $entity): SubKategoriAnggaranEntity
-    {
-        $model = SubKategoriAnggaran::findOrFail($entity->id);
-
-        $model->update([
-            'kode_kategori' => $entity->kode_kategori,
-            'nama_kategori' => $entity->nama_kategori,
-            'keterangan'    => $entity->keterangan
-        ]);
+        $model->load('coa');
 
         return $this->mapToEntity($model);
-    }
-
-    public function getDataById(int $id): ?SubKategoriAnggaranEntity
-    {
-        $model = SubKategoriAnggaran::find($id);
-
-        if (!$model) {
-            return null;
-        }
-
-        return $this->mapToEntity($model);
-    }
-
-    public function hapus(int $id): bool
-    {
-        $model = SubKategoriAnggaran::findOrFail($id);
-
-        return (bool) $model->delete();
     }
 }
+    

@@ -340,11 +340,6 @@
                 dropdownParent: $(parent),
                 placeholder: placeholderText,
                 multiple: isMultiple,
-                language: {
-                    inputTooShort: function(args) {
-                        return 'Silakan ketik minimal ' + args.minimum + ' karakter';
-                    }
-                },
                 allowClear: !isMultiple,
                 ajax: {
                     url: route,

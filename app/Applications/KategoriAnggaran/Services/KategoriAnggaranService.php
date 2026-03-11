@@ -9,7 +9,6 @@ use App\Applications\KategoriAnggaran\UseCases\UseCaseHapus;
 use App\Applications\KategoriAnggaran\UseCases\UseCaseSimpan;
 use App\Applications\KategoriAnggaran\UseCases\UseCaseUpdate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class KategoriAnggaranService
 {
@@ -19,7 +18,6 @@ class KategoriAnggaranService
     private UseCaseHapus $UseCaseHapusKategoriAnggaran;
 
     private UseCaseGetDataById $useCaseGetDataById;
-
 
 
     public function __construct(
