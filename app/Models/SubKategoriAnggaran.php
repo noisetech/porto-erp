@@ -19,7 +19,7 @@ class SubKategoriAnggaran extends Model
         'keterangan'
     ];
 
-    public function kategoriAnggaran()
+    public function kategori_anggaran()
     {
         return $this->belongsTo(
             KategoriAnggaran::class,

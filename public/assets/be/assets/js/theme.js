@@ -1,6 +1,6 @@
 (function ($) {
 	'use strict';
-	jQuery(document).ready(function () {		
+	jQuery(document).ready(function () {
 		// Preloader
 		// setTimeout(function() {
 			$('#preloader').addClass('hide');
@@ -16,15 +16,15 @@
     	function formatState (state) {
 			if (!state.id) {
 				return state.text;
-			}		
+			}
 			var baseUrl = "assets/img/svg/flags";
 			var $state = $(
 				'<span><img class="img-flag" /> <span></span></span>'
-			);		
+			);
 			// Use .text() instead of HTML string concatenation to avoid script injection issues
 			$state.find("span").text(state.text);
 			$state.find("img").attr("src", baseUrl + "/" + state.element.value.toLowerCase() + ".jpg");
-			
+
 			return $state;
 		};
 
@@ -59,7 +59,7 @@
 				// alter the remote JSON data, except to indicate that infinite
 				// scrolling can be used
 				params.page = params.page || 1;
-		  
+
 				return {
 				  results: data.items,
 				  pagination: {
@@ -74,12 +74,12 @@
 			templateResult: formatRepo,
 			templateSelection: formatRepoSelection
 		});
-		  
+
 		function formatRepo (repo) {
 			if (repo.loading) {
 			  return repo.text;
 			}
-		  
+
 			var $container = $(
 			  "<div class='select2-result-repository clearfix'>" +
 				"<div class='select2-result-repository__avatar'><img src='" + repo.owner.avatar_url + "' /></div>" +
@@ -94,16 +94,16 @@
 				"</div>" +
 			  "</div>"
 			);
-		  
+
 			$container.find(".select2-result-repository__title").text(repo.full_name);
 			$container.find(".select2-result-repository__description").text(repo.description);
 			$container.find(".select2-result-repository__forks").append(repo.forks_count + " Forks");
 			$container.find(".select2-result-repository__stargazers").append(repo.stargazers_count + " Stars");
 			$container.find(".select2-result-repository__watchers").append(repo.watchers_count + " Watchers");
-		  
+
 			return $container;
 		}
-		  
+
 		function formatRepoSelection (repo) {
 			return repo.full_name || repo.text;
 		}
@@ -122,22 +122,22 @@
     	function emailto (state) {
 			if (!state.id) {
 				return state.text;
-			}		
+			}
 			var baseUrl = "assets/img/clients";
 			var $state = $(
 				'<span><img class="avatar" /> <span></span></span>'
-			);		
+			);
 			// Use .text() instead of HTML string concatenation to avoid script injection issues
 			$state.find("span").text(state.text);
 			$state.find("img").attr("src", baseUrl + "/" + state.element.value.toLowerCase() + ".jpg");
-			
+
 			return $state;
 		};
 		$(".kleon-select-email").select2({
 			templateSelection: emailto
 		});
 
-		// Select2 End 
+		// Select2 End
 
 
         // Add Menu Item Current Class Auto
@@ -161,7 +161,7 @@
 				selector.find("li").eq(0).addClass("active");
 			}
 		}
-		
+
 		if ($('.kleon-vertical-nav .kleon-navmenu .main-menu').length) {
 			dynamicCurrentMenuClass($('.kleon-vertical-nav .kleon-navmenu .main-menu'));
 		}
@@ -179,7 +179,7 @@
 			e.stopPropagation();
 			e.preventDefault();
 		});
-	
+
 		$('.kleon-mobile-menu-opener').on('click', function(e) {
 			$('body').toggleClass('kleon-vertical-nav--active');
 			e.stopPropagation();
@@ -216,7 +216,7 @@
 				selector.find("li").eq(0).addClass("active");
 			}
 		}
-		
+
 		if ($('.kleon-vertical-nav .kleon-navmenu .main-menu').length) {
 			dynamicCurrentMenuClass($('.kleon-vertical-nav .kleon-navmenu .main-menu'));
 		}
@@ -229,7 +229,7 @@
             },
 		});
 
-		// Form Control Repeater 
+		// Form Control Repeater
 		$(".email-repeater, .file-repeater").repeater({
 			show: function () {
                 $(this).slideDown();
@@ -256,24 +256,24 @@
 		});
 
 
-		
+
 
 
 		// Basic Form Wizard / Multistep Form
         var tabcount = 0;
-       
+
         $('.form-wizard-block #wizard-next').on('click', function(e) {
             e.preventDefault();
 
             $(this).parents('.form-wizard-block').next().addClass('active');
             $(this).parents('.form-wizard-block').removeClass('active');
-            
+
             tabcount+=1;
         })
-   
+
         $('.form-wizard-block #wizard-prev').on('click', function(e) {
             e.preventDefault();
-        
+
             $(this).parents('.form-wizard-block').prev().addClass('active');
             $(this).parents('.form-wizard-block').removeClass('active');
 
@@ -333,7 +333,7 @@
 			const nextTab = new bootstrap.Tab(nextTabLinkEl);
 			nextTab.show();
 		});
-	
+
 		$(".tabstyle-form-wizard-block #wizard-prev").on('click', function() {
 			const prevTabLinkEl = $(".nav-tabs .active")
 				.closest("li")
@@ -341,7 +341,7 @@
 				.find("a")[0];
 			const prevTab = new bootstrap.Tab(prevTabLinkEl);
 			prevTab.show();
-		});	
+		});
 
 
 		// TinyMCE
@@ -351,8 +351,8 @@
 			toolbar_location: 'bottom',
 			toolbar_sticky: false,
 		});
-		
-			
+
+
 		// Color Switcher
 		var colorSwitcher = false;
 		$("#colorSwitch, #colorSwitch2, #colorSwitch3, #colorSwitch4").on('change', function() {
@@ -373,15 +373,15 @@
 			if (e.currentTarget.value == "vertical") {
 				$('body').addClass('layout-vertical-nav');
 				$('body').removeClass('layout-horizontal-nav layout-combo-nav kleon-vertical-nav--collapse');
-		  
+
 			} else if (e.currentTarget.value == "horizontal") {
 				$('body').addClass('layout-horizontal-nav');
 				$('body').removeClass('layout-vertical-nav layout-combo-nav kleon-vertical-nav--collapse');
-		  
+
 			} else if (e.currentTarget.value == "combo") {
 				$('body').addClass('layout-combo-nav kleon-vertical-nav--collapse');
 				$('body').removeClass('layout-vertical-nav layout-horizontal-nav');
-		  
+
 			}
 		});
 
@@ -390,7 +390,7 @@
 			if (e.currentTarget.value == "fullwidth") {
 				$('body').addClass('kleon-vertical-nav--fullwidth');
 				$('body').removeClass('kleon-vertical-nav--collapse');
-		  
+
 			} else if (e.currentTarget.value == "collapse") {
 				$('body').addClass('kleon-vertical-nav--collapse');
 				$('body').removeClass('kleon-vertical-nav--fullwidth');
@@ -403,7 +403,7 @@
 			if (e.currentTarget.value == "scrollable") {
 				$('body').addClass('forScrollableNav');
 				$('body').removeClass('forFixedNav');
-		  
+
 			} else if (e.currentTarget.value == "fixed") {
 				$('body').addClass('forFixedNav');
 				$('body').removeClass('forScrollableNav');
@@ -428,7 +428,7 @@
 			inline: true, // Display the calendar in an always-open state with the inline option.
 			// enableTime: true,
 		});
-		
+
 
 		// Bootstrap Form Validation
         var forms = document.querySelectorAll('.needs-validation')
@@ -491,12 +491,12 @@
 			cursorborderradius: "5px",
 
 			// animation speed of smooth scroll
-			scrollspeed: 100,   
+			scrollspeed: 100,
 			autohidemode: true,
 
 		});
 
-	});	
+	});
 })(jQuery);
 
 // Invoice Print
@@ -517,23 +517,3 @@ const horizontalnav = document.querySelector(".kleon-horizontal-nav");
 const scrollUp = "top-up";
 let lastScroll = 500;
 
-window.addEventListener("scroll", () => {
-    const currentScroll = window.pageYOffset;
-    if (currentScroll <= 500) {
-        nav.classList.remove(scrollUp);
-        horizontalnav.classList.remove(scrollUp);
-        return;
-    }
-    
-    if (currentScroll > lastScroll) {
-        // down
-        nav.classList.add(scrollUp);        
-        horizontalnav.classList.add(scrollUp);  
-
-    } else if (currentScroll < lastScroll) {
-        // up
-        nav.classList.remove(scrollUp);        
-        horizontalnav.classList.remove(scrollUp); 
-    }
-    lastScroll = currentScroll;
-});

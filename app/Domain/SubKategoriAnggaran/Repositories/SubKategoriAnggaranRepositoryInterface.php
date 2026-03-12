@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Domain\SubKategoriAnggaran\Repositories; ;
-
+namespace App\Domain\SubKategoriAnggaran\Repositories;
 use App\Domain\SubKategoriAnggaran\Entities\SubKategoriAnggaranEntity;
 
 interface SubKategoriAnggaranRepositoryInterface
 {
-    public function simpan(SubKategoriAnggaranEntity $entity): SubKategoriAnggaranEntity;
+    public function simpan(SubKategoriAnggaranEntity $dto): SubKategoriAnggaranEntity;
 }

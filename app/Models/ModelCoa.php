@@ -35,6 +35,11 @@ class ModelCoa extends Model
 
     public function sub_kategori_anggaran()
     {
-        return $this->belongsToMany(SubKategoriAnggaran::class, 'mapping_sub_kategori_coa', 'sub_kategori_anggaran_id', 'coa_id');
+        return $this->belongsToMany(
+            SubKategoriAnggaran::class,
+            'mapping_sub_kategori_coa',
+            'sub_kategori_anggaran_id',
+            'coa_id'
+        );
     }
 }

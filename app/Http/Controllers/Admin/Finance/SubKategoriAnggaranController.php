@@ -20,6 +20,19 @@ class SubKategoriAnggaranController extends Controller
         $this->service = $subKategoriAnggaranService;
     }
 
+    public function simpan(SubKategoriAnggaranSimpanRequest $request)
+    {
+        $dto = SubKategoriAnggaranDTO::fromArray($request->validated());
+
+        $result = $this->service->simpanDataSubKategoriAnggaran($dto, Auth::id());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data disimpan',
+            'data' => $result
+        ], 201);
+    }
+
     public function data(Request $request)
     {
         $result = $this->service->dataTableTanpaLibrary($request);
@@ -56,19 +69,18 @@ class SubKategoriAnggaranController extends Controller
         ]);
     }
 
-
-    public function simpan(SubKategoriAnggaranSimpanRequest $request)
+    public function update()
     {
-        $dto = SubKategoriAnggaranDTO::fromArray($request->validated());
-
-        $result = $this->service->simpanDataSubKategoriAnggaran($dto, Auth::id());
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data disimpan',
-            'data' => $result
-        ], 200);
+        
     }
+
+    public function hapus($id)
+    {
+
+    }
+
+
+
 
 
     public function index()

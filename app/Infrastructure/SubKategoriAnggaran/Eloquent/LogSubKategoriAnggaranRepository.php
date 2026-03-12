@@ -8,12 +8,12 @@ use App\Models\LogSubKategoriAnggaran;
 
 class LogSubKategoriAnggaranRepository implements LogSubKategoriAnggaranRepositoryInterface
 {
-    public function simpan(LogSubKategoriAnggaranEntity $log): void
+    public function simpan(LogSubKategoriAnggaranEntity $entity): void
     {
-        LogSubKategoriAnggaran::create([
-            'user_id' => $log->user_id,
-            'sub_kategori_anggaran_id' => $log->sub_kategori_anggaran_id,
-            'keterangan' => $log->keterangan
+        $model = LogSubKategoriAnggaran::create([
+            'user_id' => $entity->userId(),
+            'sub_kategori_anggaran_id' => $entity->subKategoriAnggaranId(),
+            'keterangan' => $entity->keterangan()
         ]);
     }
 }

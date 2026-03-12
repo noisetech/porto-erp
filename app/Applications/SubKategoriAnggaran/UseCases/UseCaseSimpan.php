@@ -22,24 +22,25 @@ class UseCaseSimpan
         return DB::transaction(function () use ($dto, $userId) {
 
             $entity = new SubKategoriAnggaranEntity(
-                id: null,
-                kategori_anggaran_id: $dto->kategori_anggaran_id,
-                kode_sub_kategori: $dto->kode_sub_kategori,
-                nama_sub_kategori: $dto->nama_sub_kategori,
-                keterangan: $dto->keterangan,
-                coa_ids: $dto->coa_ids
+                null,
+                $dto->kategori_anggaran_id,
+                $dto->kode_sub_kategori,
+                $dto->nama_sub_kategori,
+                $dto->keterangan
             );
+
+            $entity->setCoaIds($dto->coa_ids);
 
             $sub_kategori_anggaran = $this->repository->simpan($entity);
 
             $log = new LogSubKategoriAnggaranEntity(
-                id: null,
-                user_id: $userId,
-                sub_kategori_anggaran_id: $sub_kategori_anggaran->id,
-                keterangan: 'Menambahkan kategori anggaran'
+                null,
+                $userId,
+                $sub_kategori_anggaran->id(),
+                LogSubKategoriAnggaranEntity::ACTION_CREATE
             );
 
-           $this->logRepository->simpan($log);
+            $this->logRepository->simpan($log);
 
             return $sub_kategori_anggaran;
         });

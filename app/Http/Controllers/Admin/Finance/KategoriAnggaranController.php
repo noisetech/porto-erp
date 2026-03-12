@@ -41,7 +41,7 @@ class KategoriAnggaranController extends Controller
             'recordsFiltered' => $result['recordsFiltered'],
             'data' => $result['data'],
             'status' => 'success',
-            'message' => 'Data berhasil diambil'
+            'message' => 'Data berhasil ditampilkan'
         ], 200);
     }
 

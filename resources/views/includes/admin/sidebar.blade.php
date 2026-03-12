@@ -1,25 +1,19 @@
 <!-- Vertical Nav -->
 <div class="kleon-vertical-nav">
     <!-- Logo  -->
-    <div class="logo d-flex align-items-center justify-content-between">
+    <div class="logo d-flex align-items-center justify-content-center">
         <a href="index.html" class="d-flex align-items-center gap-3 flex-shrink-0">
             <!-- <img src="{{ asset('assets/be/assets/img/logo-icon.svg') }}" alt="logo"> -->
-            <div class="position-absolute flex-shrink-0">
-                <!-- <img src="{{ asset('assets/be/assets/img/logo-text.svg') }}" alt="" class="logo-text">
-                <img src="{{ asset('assets/be/assets/img/logo-text-white.svg') }}" alt="" class="logo-text-white"> -->
-                <center>
-                    <h6>ERP NOISHETECH</h6>
-                </center>
-            </div>
+            <img src="{{ asset('assets/fe-login/images/logo-hdo-1.png') }}" alt="" height="200">
         </a>
-        <button type="button" class="kleon-vertical-nav-toggle"><i class="bi bi-list"></i></button>
+        <!-- <button type="button" class="kleon-vertical-nav-toggle"><i class="bi bi-list"></i></button> -->
     </div>
 
-    <div class="kleon-navmenu">
+    <div class="kleon-navmenu" style="margin-top: -50px !important;">
 
         <ul class="main-menu">
 
-            <li class="menu-section-title text-gray ff-heading fs-16 fw-bold text-uppercase mt-4 mb-2"><span>Home</span></li>
+            <li class="menu-section-title text-gray ff-heading fs-16 fw-bold text-uppercase mb-2"><span>Home</span></li>
             <li class="menu-item menu-item-has-children"><a href="#"> <span class="nav-icon flex-shrink-0"><i class="bi bi-speedometer fs-18"></i></span> <span class="nav-text">Dashboards</span></a>
                 <ul class="sub-menu">
                     <li class="menu-item"><a href="index.html">Invoice Management</a></li>
