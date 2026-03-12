@@ -2,15 +2,17 @@
 
 namespace App\Infrastructure\SubKategoriAnggaran\QueryBuilder;
 
+use App\Applications\SubKategoriAnggaran\DTO\SubKategoriAnggaranDataTableDTO;
+use App\Applications\SubKategoriAnggaran\Mappers\SubKategoriAnggaranMapper;
+use App\Domain\SubKategoriAnggaran\Entities\SubKategoriAnggaranEntity;
 use App\Domain\SubKategoriAnggaran\Repositories\SubKategoriAnggaranQueryRepositoryInterface;
 use App\Models\KategoriAnggaran;
 use App\Models\ModelCoa;
-use Illuminate\Http\Request;
+use App\Models\SubKategoriAnggaran;
 use Illuminate\Support\Facades\DB;
 
 class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepositoryInterface
 {
-
 
     public function listCoa(?string $search = null): array
     {
@@ -21,7 +23,7 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('kode_akun', 'LIKE', "%{$search}%")
-                    ->orWhere('nama_akun', 'LIKE', "%{$search}%");
+                  ->orWhere('nama_akun', 'LIKE', "%{$search}%");
             });
         }
 
@@ -34,6 +36,18 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
     }
 
 
+    public function getDataById(int $id): ?SubKategoriAnggaranEntity
+    {
+        $model = SubKategoriAnggaran::with(['coa', 'kategori_anggaran'])->find($id);
+
+        if (!$model) {
+            return null;
+        }
+
+        return SubKategoriAnggaranMapper::toEntity($model);
+    }
+
+
     public function listKategoriAnggaran(?string $search = null): array
     {
         $query = KategoriAnggaran::query()
@@ -43,30 +57,33 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('kode_kategori', 'LIKE', "%{$search}%")
-                    ->orWhere('nama_kategori', 'LIKE', "%{$search}%");
+                  ->orWhere('nama_kategori', 'LIKE', "%{$search}%");
             });
         }
 
-        return $query->get()->map(function ($kategori_anggaran) {
+        return $query->get()->map(function ($kategori) {
             return [
-                'id' => $kategori_anggaran->id,
-                'text' => $kategori_anggaran->kode_kategori . ' | ' . $kategori_anggaran->nama_kategori
+                'id' => $kategori->id,
+                'text' => $kategori->kode_kategori . ' | ' . $kategori->nama_kategori
             ];
         })->toArray();
     }
 
-    public function customDataTable(Request $request): array
+
+    public function customDataTable(SubKategoriAnggaranDataTableDTO $dto): array
     {
-        $start  = (int) $request->start;
-        $length = (int) $request->length;
-        $draw   = (int) $request->draw;
-        $search = $request->search['value'] ?? null;
+
+        $start  = $dto->start;
+        $length = $dto->length;
+        $draw   = $dto->draw;
+        $search = $dto->search;
 
         /*
         |--------------------------------------------------------------------------
         | BASE QUERY
         |--------------------------------------------------------------------------
         */
+
         $baseQuery = DB::table('sub_kategori_anggaran')
             ->join(
                 'kategori_anggaran',
@@ -108,11 +125,12 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         | SEARCH
         |--------------------------------------------------------------------------
         */
+
         if ($search) {
             $baseQuery->where(function ($q) use ($search) {
                 $q->where('sub_kategori_anggaran.nama_sub_kategori', 'ILIKE', "%{$search}%")
-                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
-                    ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
+                  ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
+                  ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
             });
         }
 
@@ -121,6 +139,7 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         | RECORDS TOTAL
         |--------------------------------------------------------------------------
         */
+
         $recordsTotal = DB::table('sub_kategori_anggaran')
             ->whereNull('deleted_at')
             ->count();
@@ -130,6 +149,7 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         | RECORDS FILTERED
         |--------------------------------------------------------------------------
         */
+
         $recordsFiltered = $this->countFiltered($search);
 
         /*
@@ -137,24 +157,21 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         | PAGINATION
         |--------------------------------------------------------------------------
         */
-        $data = $baseQuery
+
+        $rows = $baseQuery
             ->offset($start)
             ->limit($length)
             ->get();
 
         return [
-            'draw'            => $draw,
-            'recordsTotal'    => $recordsTotal,
+            'draw' => $draw,
+            'recordsTotal' => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
-            'data'            => $this->formatData($data, $start)
+            'data' => $this->formatData($rows, $start)
         ];
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | HELPER: COUNT FILTERED
-    |--------------------------------------------------------------------------
-    */
+
     private function countFiltered(?string $search): int
     {
         $query = DB::table('sub_kategori_anggaran')
@@ -175,8 +192,8 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('sub_kategori_anggaran.nama_sub_kategori', 'ILIKE', "%{$search}%")
-                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
-                    ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
+                  ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
+                  ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
             });
         }
 
@@ -184,11 +201,7 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
             ->count('sub_kategori_anggaran.id');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | HELPER: FORMAT DATA
-    |--------------------------------------------------------------------------
-    */
+
     private function formatData($rows, int $start): array
     {
         $result = [];
@@ -199,29 +212,34 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
             $coaHtml = '-';
 
             if ($row->kode_akun_coa) {
+
                 $coaHtml = '<div class="d-flex flex-wrap">';
+
                 foreach (explode(',', $row->kode_akun_coa) as $item) {
+
                     $coaHtml .= '<span class="badge bg-primary text-white m-1">'
                         . e($item) .
                         '</span>';
                 }
+
                 $coaHtml .= '</div>';
             }
 
             $result[] = [
-                'no'     => $no++,
-                'id'     => $row->id,
-                'kode'   => $row->kode_sub_kategori,
-                'nama'   => $row->nama_sub_kategori,
+                'no' => $no++,
+                'id' => $row->id,
+                'kode' => $row->kode_sub_kategori,
+                'nama' => $row->nama_sub_kategori,
                 'keterangan' => $row->keterangan,
                 'kode_kategori_anggaran' => $row->kode_kategori_anggaran,
-                'coa'    => $coaHtml,
+                'coa' => $coaHtml,
                 'action' => $this->actionButton($row->id)
             ];
         }
 
         return $result;
     }
+
 
     private function actionButton(int $id): string
     {

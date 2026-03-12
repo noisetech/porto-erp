@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\SubKategoriAnggaran\Mapper;
+namespace App\Applications\SubKategoriAnggaran\Mappers;
 
 use App\Domain\SubKategoriAnggaran\Entities\SubKategoriAnggaranEntity;
 use App\Models\SubKategoriAnggaran;

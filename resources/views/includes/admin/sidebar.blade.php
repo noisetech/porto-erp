@@ -1,7 +1,7 @@
 <!-- Vertical Nav -->
 <div class="kleon-vertical-nav">
     <!-- Logo  -->
-    <div class="logo d-flex align-items-center justify-content-center">
+    <div class="logo d-flex align-items-center justify-content-center" style="margin-top:  -40px !important;">
         <a href="index.html" class="d-flex align-items-center gap-3 flex-shrink-0">
             <!-- <img src="{{ asset('assets/be/assets/img/logo-icon.svg') }}" alt="logo"> -->
             <img src="{{ asset('assets/fe-login/images/logo-hdo-1.png') }}" alt="" height="200">

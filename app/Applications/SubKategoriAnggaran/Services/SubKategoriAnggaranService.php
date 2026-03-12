@@ -2,6 +2,7 @@
 
 namespace App\Applications\SubKategoriAnggaran\Services;
 
+use App\Applications\SubKategoriAnggaran\DTO\SubKategoriAnggaranDataTableDTO;
 use App\Applications\SubKategoriAnggaran\DTO\SubKategoriAnggaranDTO;
 use App\Applications\SubKategoriAnggaran\UseCases\UseCaseCustomDataTable;
 use App\Applications\SubKategoriAnggaran\UseCases\UseCaseListCoa;
@@ -31,9 +32,9 @@ class SubKategoriAnggaranService
     }
 
 
-    public function dataTableTanpaLibrary(Request $request)
+    public function dataTableTanpaLibrary(SubKategoriAnggaranDataTableDTO $dto): array
     {
-        return $this->UseCaseCustomDataTable->execute($request);
+        return $this->UseCaseCustomDataTable->execute($dto);
     }
 
     public function select2ListCoa(?string $search = null): array

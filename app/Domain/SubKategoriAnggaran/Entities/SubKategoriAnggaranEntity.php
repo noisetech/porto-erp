@@ -2,19 +2,9 @@
 
 namespace App\Domain\SubKategoriAnggaran\Entities;
 
-use JsonSerializable;
-use DomainException;
-
-class SubKategoriAnggaranEntity implements JsonSerializable
+class SubKategoriAnggaranEntity
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Catatan
-    |--------------------------------------------------------------------------
-    | coaIds digunakan untuk keperluan sync many-to-many di Infrastructure
-    | coa digunakan untuk response relasi COA
-    |--------------------------------------------------------------------------
-    */
+
 
     private ?int $id;
     private int $kategoriAnggaranId;
@@ -22,9 +12,9 @@ class SubKategoriAnggaranEntity implements JsonSerializable
     private string $namaSubKategori;
     private string $keterangan;
 
-    private array $coaIds = [];
-    private array $coa = [];
-    private ?array $kategoriAnggaran = null;
+    private array $coaIds = []; //dipakai untuk memanggil relasi many to many
+    private array $coa = []; // dipakai untuk reponse json relasi sub kategori anggaran dengan master coa
+    private ?array $kategoriAnggaran = null; // dipanggil untuk response relasi sub kategori anggaran dengan kategori anggaran
 
     public function __construct(
         ?int $id,
@@ -80,23 +70,30 @@ class SubKategoriAnggaranEntity implements JsonSerializable
 
     public function setCoaIds(array $ids): void
     {
-        $this->coaIds = $ids;  // menyimpan id coa yang dipilih
+        $this->coaIds = $ids;  // menyimpan daftar ID COA yang dipilih
     }
 
     public function coaIds(): array
     {
-        return $this->coaIds; //mengambil id coa yang tersimpan dalam array digunakan oleh reposity
+        return $this->coaIds; //mengambil ID COA dari entity
     }
 
     public function setCoa(array $coa): void
     {
-        $this->coa = $coa;
+        $this->coa = $coa;  //menyimpan data COA lengkap biasanya dipanggil di Mapper setelah mengambil data dari databas
     }
 
     public function coa(): array
     {
-        return $this->coa;
+        return $this->coa;  //menyimpan data COA lengkap biasanya dipanggil di Mapper setelah mengambil data dari database biasanya digunakan saat mengembalikan response API.
+
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kategori anggaran relation
+    |--------------------------------------------------------------------------
+    */
 
     public function setKategoriAnggaran(?array $kategori): void
     {
@@ -106,24 +103,5 @@ class SubKategoriAnggaranEntity implements JsonSerializable
     public function kategoriAnggaran(): ?array
     {
         return $this->kategoriAnggaran;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | JSON Response
-    |--------------------------------------------------------------------------
-    */
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->id,
-            'kategori_anggaran_id' => $this->kategoriAnggaranId,
-            'kode_sub_kategori' => $this->kodeSubKategori,
-            'nama_sub_kategori' => $this->namaSubKategori,
-            'keterangan' => $this->keterangan,
-            'coa' => $this->coa,
-            'kategori_anggaran' => $this->kategoriAnggaran,
-        ];
     }
 }

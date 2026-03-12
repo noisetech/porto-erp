@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Finance;
 
+use App\Applications\SubKategoriAnggaran\DTO\SubKategoriAnggaranDataTableDTO;
 use App\Applications\SubKategoriAnggaran\DTO\SubKategoriAnggaranDTO;
 use App\Http\Controllers\Controller;
 
 use App\Applications\SubKategoriAnggaran\Services\SubKategoriAnggaranService;
 use App\Http\Requests\SubKategoriAnggaranSimpanRequest;
+use App\Http\Resources\SubKategoriAnggaranDatatableResource;
+use App\Http\Resources\SubKategoriAnggaranResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,28 +26,17 @@ class SubKategoriAnggaranController extends Controller
     public function simpan(SubKategoriAnggaranSimpanRequest $request)
     {
         $dto = SubKategoriAnggaranDTO::fromArray($request->validated());
-
         $result = $this->service->simpanDataSubKategoriAnggaran($dto, Auth::id());
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data disimpan',
-            'data' => $result
-        ], 201);
+        return new SubKategoriAnggaranResource(true, 'Data disimpan', $result);
     }
 
     public function data(Request $request)
     {
-        $result = $this->service->dataTableTanpaLibrary($request);
+        $dto = SubKategoriAnggaranDataTableDTO::fromRequest($request);
 
-        return response()->json([
-            'draw' => $result['draw'],
-            'recordsTotal' => $result['recordsTotal'],
-            'recordsFiltered' => $result['recordsFiltered'],
-            'data' => $result['data'],
-            'status' => 'success',
-            'message' => 'Data berhasil diambil'
-        ], 200);
+        $result = $this->service->dataTableTanpaLibrary($dto);
+
+        return new SubKategoriAnggaranDatatableResource(true, 'Berhasil menampilkan data', $result);
     }
 
     public function listKategoriAnggaran(Request $request)
@@ -68,17 +60,6 @@ class SubKategoriAnggaranController extends Controller
             'data' => $data
         ]);
     }
-
-    public function update()
-    {
-        
-    }
-
-    public function hapus($id)
-    {
-
-    }
-
 
 
 

@@ -8,7 +8,7 @@ class UseeCaseListKategoriAnggaran
 {
     public function __construct(
         private SubKategoriAnggaranQueryRepositoryInterface $queryRepository
-    ) {}
+    ) {}    
 
     public function execute(?string $search = null): array
     {

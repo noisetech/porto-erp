@@ -6,18 +6,7 @@
 
            <div class="header-right-part d-flex align-items-center flex-shrink-0">
                <ul class="nav-elements d-flex align-items-center list-unstyled m-0 p-0">
-                   <li class="nav-item nav-color-switch d-flex align-items-center gap-3">
-                       <div class="sun"><img src="{{ asset('assets/be/assets/img/sun.svg') }}" alt="img"></div>
-                       <div class="switch">
-                           <input type="checkbox" id="colorSwitch" value="false" name="defaultMode">
-                           <div class="shutter">
-                               <span class="lbl-off"></span>
-                               <span class="lbl-on"></span>
-                               <div class="slider bg-primary"></div>
-                           </div>
-                       </div>
-                       <div class="moon"><img src="{{ asset('assets/be/assets/img/moon.svg') }}" alt="img"></div>
-                   </li>
+
 
 
                    <li class="nav-item nav-notification dropdown">
@@ -64,11 +53,6 @@
                        </div>
                    </li>
 
-                   <li class="nav-item nav-settings">
-                       <a href="#" class="nav-toggler">
-                           <img src="{{ asset('assets/be/assets/img/svg/settings.svg') }}" alt="img">
-                       </a>
-                   </li>
 
                    <li class="nav-item nav-author">
                        <a href="#" class="nav-toggler" data-bs-toggle="dropdown" aria-expanded="false">

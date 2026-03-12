@@ -230,8 +230,6 @@
             fixedHeader: true,
             responsive: true,
             autoWidth: false,
-            pageLength: 5,
-
             order: [],
             ajax: {
                 url: "{{ route('finance.sub_kategori_anggaran.data') }}",
@@ -275,7 +273,6 @@
                 },
             ],
             pagingType: "full_numbers",
-            lengthMenu: [5, 10, 25, 50],
             language: {
                 info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
                 infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
@@ -322,8 +319,6 @@
                     }
                 },
                 error: function(xhr) {
-                    console.log(xhr);
-
                     if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
                         $.each(errors, function(key, value) {

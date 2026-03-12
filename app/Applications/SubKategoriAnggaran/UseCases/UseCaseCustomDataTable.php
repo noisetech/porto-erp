@@ -2,6 +2,7 @@
 
 namespace App\Applications\SubKategoriAnggaran\UseCases;
 
+use App\Applications\SubKategoriAnggaran\DTO\SubKategoriAnggaranDataTableDTO;
 use App\Infrastructure\SubKategoriAnggaran\QueryBuilder\SubKategoriAnggaranQueryRepository;
 use Illuminate\Http\Request;
 
@@ -14,8 +15,8 @@ class UseCaseCustomDataTable
         $this->subKategoriAnggaranQueryRepository = $k;
     }
 
-    public function execute(Request $request): array
+   public function execute(SubKategoriAnggaranDataTableDTO $dto): array
     {
-        return $this->subKategoriAnggaranQueryRepository->customDataTable($request);
+        return $this->subKategoriAnggaranQueryRepository->customDataTable($dto);
     }
 }

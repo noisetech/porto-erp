@@ -10,7 +10,7 @@ class LogSubKategoriAnggaranRepository implements LogSubKategoriAnggaranReposito
 {
     public function simpan(LogSubKategoriAnggaranEntity $entity): void
     {
-        $model = LogSubKategoriAnggaran::create([
+        LogSubKategoriAnggaran::create([
             'user_id' => $entity->userId(),
             'sub_kategori_anggaran_id' => $entity->subKategoriAnggaranId(),
             'keterangan' => $entity->keterangan()
