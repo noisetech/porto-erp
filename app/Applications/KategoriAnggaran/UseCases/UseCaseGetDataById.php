@@ -3,8 +3,6 @@
 namespace App\Applications\KategoriAnggaran\UseCases;
 
 use App\Domain\KategoriAnggaran\Repositories\KategoriAnggaranRepositoryInterface;
-use Illuminate\Http\Request;
-
 class UseCaseGetDataById
 {
     private KategoriAnggaranRepositoryInterface $repository;

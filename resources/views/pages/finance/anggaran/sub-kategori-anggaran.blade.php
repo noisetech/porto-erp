@@ -155,7 +155,7 @@
                 <form action="#" id="form-update" method="post">
                     @csrf
 
-                    <input type="text" name="id" class="form-control" id="id">
+                    <input type="hidden" name="id" class="form-control" id="id">
                     <input type="hidden" name="_method" value="PUT">
 
 

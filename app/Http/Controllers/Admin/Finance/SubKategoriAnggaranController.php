@@ -39,6 +39,15 @@ class SubKategoriAnggaranController extends Controller
         return new SubKategoriAnggaranDatatableResource(true, 'Berhasil menampilkan data', $result);
     }
 
+    public function getDataById($id)
+    {
+        $result = $this->service->getDataById($id);
+
+
+        return new SubKategoriAnggaranResource(true, 'Data ditampilkan', $result);
+    }
+
+
     public function listKategoriAnggaran(Request $request)
     {
         $search = $request->get('q');

@@ -23,7 +23,7 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('kode_akun', 'LIKE', "%{$search}%")
-                  ->orWhere('nama_akun', 'LIKE', "%{$search}%");
+                    ->orWhere('nama_akun', 'LIKE', "%{$search}%");
             });
         }
 
@@ -57,7 +57,7 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('kode_kategori', 'LIKE', "%{$search}%")
-                  ->orWhere('nama_kategori', 'LIKE', "%{$search}%");
+                    ->orWhere('nama_kategori', 'LIKE', "%{$search}%");
             });
         }
 
@@ -129,8 +129,8 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         if ($search) {
             $baseQuery->where(function ($q) use ($search) {
                 $q->where('sub_kategori_anggaran.nama_sub_kategori', 'ILIKE', "%{$search}%")
-                  ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
-                  ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
+                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
+                    ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
             });
         }
 
@@ -192,8 +192,8 @@ class SubKategoriAnggaranQueryRepository implements SubKategoriAnggaranQueryRepo
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('sub_kategori_anggaran.nama_sub_kategori', 'ILIKE', "%{$search}%")
-                  ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
-                  ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
+                    ->orWhere('coa.kode_akun', 'ILIKE', "%{$search}%")
+                    ->orWhere('coa.nama_akun', 'ILIKE', "%{$search}%");
             });
         }
 

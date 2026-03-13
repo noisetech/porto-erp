@@ -2,53 +2,58 @@
 
 namespace App\Applications\SubKategoriAnggaran\Services;
 
+use App\Applications\SubKategoriAnggaran\UseCases\UseCaseGetDataById;
 use App\Applications\SubKategoriAnggaran\DTO\SubKategoriAnggaranDataTableDTO;
 use App\Applications\SubKategoriAnggaran\DTO\SubKategoriAnggaranDTO;
+use App\Applications\SubKategoriAnggaran\Mappers\SubKategoriAnggaranResponseMapper;
 use App\Applications\SubKategoriAnggaran\UseCases\UseCaseCustomDataTable;
 use App\Applications\SubKategoriAnggaran\UseCases\UseCaseListCoa;
 use App\Applications\SubKategoriAnggaran\UseCases\UseCaseSimpan;
 use App\Applications\SubKategoriAnggaran\UseCases\UseeCaseListKategoriAnggaran;
-use Illuminate\Http\Request;
 
 class SubKategoriAnggaranService
 {
-
-    private UseCaseCustomDataTable $UseCaseCustomDataTable;
-    private UseCaseListCoa $useCaseListCoa;
-
-    private UseeCaseListKategoriAnggaran $useeCaseListKategoriAnggaran;
-    private UseCaseSimpan $useCaseSimpan;
-
     public function __construct(
-        UseCaseCustomDataTable $customTable,
-        UseCaseListCoa $useCaseListCoa,
-        UseeCaseListKategoriAnggaran $useeCaseListKategoriAnggaran,
-        UseCaseSimpan $useCaseSimpan
-    ) {
-        $this->UseCaseCustomDataTable = $customTable;
-        $this->useCaseListCoa = $useCaseListCoa;
-        $this->useeCaseListKategoriAnggaran = $useeCaseListKategoriAnggaran;
-        $this->useCaseSimpan = $useCaseSimpan;
-    }
-
+        private UseCaseCustomDataTable $customDataTable,
+        private UseCaseListCoa $listCoa,
+        private UseeCaseListKategoriAnggaran $listKategoriAnggaran,
+        private UseCaseSimpan $simpan,
+        private UseCaseGetDataById $getDataById
+    ) {}
 
     public function dataTableTanpaLibrary(SubKategoriAnggaranDataTableDTO $dto): array
     {
-        return $this->UseCaseCustomDataTable->execute($dto);
+        return $this->customDataTable->execute($dto);
     }
 
     public function select2ListCoa(?string $search = null): array
     {
-        return $this->useCaseListCoa->execute($search);
+        return $this->listCoa->execute($search);
     }
 
     public function select2ListKategoriAnggaran(?string $search = null): array
     {
-        return $this->useeCaseListKategoriAnggaran->execute($search);
+        return $this->listKategoriAnggaran->execute($search);
     }
 
+    public function getDataById(int $id): ?array
+    {
+        $entity = $this->getDataById->execute($id);
+
+        if (!$entity) {
+            return null;
+        }
+
+        return SubKategoriAnggaranResponseMapper::map($entity);
+    }
     public function simpanDataSubKategoriAnggaran(SubKategoriAnggaranDTO $dto, int $userId)
     {
-        return $this->useCaseSimpan->execute($dto, $userId);
+        $entity = $this->simpan->execute($dto, $userId);
+
+        if (!$entity) {
+            return null;
+        }
+
+        return SubKategoriAnggaranResponseMapper::map($entity);
     }
 }

@@ -17,8 +17,19 @@ class SubKategoriAnggaranMapper
             $model->keterangan
         );
 
-        $entity->setCoa($model->coa->makeHidden('pivot')->toArray());
-        $entity->setKategoriAnggaran($model->kategori_anggaran?->toArray());
+        // mapping coa
+        if ($model->relationLoaded('coa') && $model->coa) {
+            $entity->setCoa(
+                $model->coa->makeHidden('pivot')->toArray()
+            );
+        }
+
+        // mapping kategori anggaran
+        if ($model->relationLoaded('kategori_anggaran') && $model->kategori_anggaran) {
+            $entity->setKategoriAnggaran(
+                $model->kategori_anggaran->toArray()
+            );
+        }
 
         return $entity;
     }

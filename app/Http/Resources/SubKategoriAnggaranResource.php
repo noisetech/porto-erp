@@ -30,7 +30,7 @@ class SubKategoriAnggaranResource extends JsonResource
         return [
             'status' => $this->status ? 'success' : 'error',
             'message' => $this->message,
-            'data' => SubKategoriAnggaranResponseMapper::map($this->resource)
+            'data' => $this->resource
         ];
     }
 }

@@ -11,9 +11,11 @@ class SubKategoriAnggaranResponseMapper
         return [
             'id' => $entity->id(),
             'kategori_anggaran_id' => $entity->kategoriAnggaranId(),
-            'kode_sub_kategori' => $entity->kode(),
-            'nama_sub_kategori' => $entity->nama(),
+            'kode_sub_kategori' => $entity->kodeSubKategori(),
+            'nama_sub_kategori' => $entity->namaSubKategori(),
             'keterangan' => $entity->keterangan(),
+
+            // relasi
             'coa' => $entity->coa(),
             'kategori_anggaran' => $entity->kategoriAnggaran(),
         ];
